@@ -1,0 +1,10 @@
+/* 
+  Localizable.strings
+  Aquarius
+
+  Created by Crazy凡 on 2019/11/30.
+  Copyright © 2019 Crazy凡. All rights reserved.
+*/
+
+"Drag the Podfile.lock here!" = "将“Podfile.lock”拖到这里";
+"Nothing" = "什么也没有~~";
