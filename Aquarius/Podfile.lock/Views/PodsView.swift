@@ -20,10 +20,11 @@ struct PodsView: View {
         case .pod(let pod):
             return AnyView(HStack {
                 Text(pod.name)
+                    .font(.headline)
+                    .foregroundColor(.red)
                 Spacer()
                 Text(pod.info?.name ?? "")
-            }.font(.title)
-            )
+            })
         case .dependencie(let name):
             return AnyView(Text(name)
                 .onTapGesture {
