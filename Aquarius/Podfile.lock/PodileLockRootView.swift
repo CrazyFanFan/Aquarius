@@ -22,6 +22,9 @@ struct PodileLockRootView: View {
             List {
                 if data.lock.pods.isEmpty {
                     Text("Nothing")
+                } else {
+                    Text("Total: \(data.lock.pods.count)")
+                        .font(.title)
                 }
 
                 ForEach(data.lock.pods) { pod in
