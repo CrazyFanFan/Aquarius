@@ -6,12 +6,13 @@
 //  Copyright © 2019 Crazy凡. All rights reserved.
 //
 
+#if DEBUG
 import Foundation
 
 let testData = createTestData()
 func createTestData() -> UserData {
     let testData = UserData()
-    let testReader = DataReader(path: "Podfile.lock PATH")
+    let testReader = DataReader(path: Bundle.main.path(forResource: "Podfile", ofType: "lock"))
 
     if let lock = testReader.readData() {
         testData.lock = lock
@@ -21,3 +22,4 @@ func createTestData() -> UserData {
     }
     return testData
 }
+#endif

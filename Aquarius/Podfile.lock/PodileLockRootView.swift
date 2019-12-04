@@ -14,6 +14,7 @@ private let supportType: String = kUTTypeFileURL as String
 struct PodileLockRootView: View {
     @EnvironmentObject var data: UserData
     @State private var isPodViewShow: Bool = false
+    @State private var isRecursive: Bool = false
 
     var body: some View {
         HStack {
@@ -33,12 +34,18 @@ struct PodileLockRootView: View {
                                 .joined(separator: "\n")
                             Pasteboard.write(content)
                         }.font(.system(size: 10))
+
+                        Toggle(isOn: self.$isRecursive) { Text("Recursive") }
+                            .font(.system(size: 10))
                     }
                 }
 
                 ForEach(data.lock.pods) { pod in
                     PodInfo(pod: pod)
-                        .onTapGesture { self.data.onSelectd(pod: pod, with: 0) }
+                        .onTapGesture {
+                            self.data.isRecursive = self.isRecursive
+                            self.data.onSelectd(pod: pod, with: 0)
+                        }
                 }
             }.frame(minWidth: 400, maxWidth: 400, maxHeight: .infinity)
 

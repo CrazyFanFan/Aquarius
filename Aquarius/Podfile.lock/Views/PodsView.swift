@@ -12,10 +12,12 @@ struct PodsView: View {
     @EnvironmentObject var data: UserData
 
     var body: some View {
-        List(data.detail) { self.view(for: $0) }
+        return List(data.detail) {
+            self.view(for: $0)
+        }
     }
 
-    func view(for detail: Detail) -> some View {
+    private func view(for detail: Detail) -> some View {
         switch detail.content {
         case .pod(let pod):
             return AnyView(HStack {
@@ -26,11 +28,15 @@ struct PodsView: View {
                 Text(pod.info?.name ?? "")
             })
         case .dependencie(let name):
-            return AnyView(Text(name)
-                .onTapGesture {
-                    guard let pod = self.data.lock.pods.first(where: { $0.name == name }) else { return }
-                    self.data.onSelectd(pod: pod, with: detail.index + 1)
-            })
+            if self.data.isRecursive {
+                 return AnyView(Text(name))
+            } else {
+                return AnyView(Text(name)
+                    .onTapGesture {
+                        guard let pod = self.data.lock.pods.first(where: { $0.name == name }) else { return }
+                        self.data.onSelectd(pod: pod, with: detail.index + 1)
+                })
+            }
         }
     }
 }
