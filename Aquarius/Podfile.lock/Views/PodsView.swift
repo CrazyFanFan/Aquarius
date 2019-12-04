@@ -6,7 +6,6 @@
 //  Copyright © 2019 Crazy凡. All rights reserved.
 //
 
-import Grid
 import SwiftUI
 
 struct PodsView: View {
