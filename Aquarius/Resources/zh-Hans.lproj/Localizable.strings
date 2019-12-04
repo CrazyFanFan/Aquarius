@@ -9,3 +9,5 @@
 "Drag the Podfile.lock here!" = "将“Podfile.lock”拖到这里";
 "Nothing" = "什么也没有~~";
 "Total: %d" = "共计: %d";
+"Copy all" = "复制";
+"Copy" = "复制";

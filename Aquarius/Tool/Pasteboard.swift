@@ -13,6 +13,7 @@ class Pasteboard {
     private static let pasteboard = NSPasteboard.general
 
     static func write(_ string: String) {
+        pasteboard.declareTypes([.string], owner: nil)
         pasteboard.setString(string, forType: .string)
     }
 }
