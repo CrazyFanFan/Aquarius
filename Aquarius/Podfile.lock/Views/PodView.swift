@@ -8,19 +8,21 @@
 
 import SwiftUI
 
-struct PodInfo: View {
+struct PodView: View {
     var pod: Pod
     var body: some View {
         HStack {
             Text(pod.name)
             Spacer()
             Text(pod.info?.name ?? "")
+            Text("▶")
         }
+        .padding(2)
     }
 }
 
 struct PodInfo_Previews: PreviewProvider {
     static var previews: some View {
-        PodInfo(pod: Pod(podValue: "Test (1.2.3)"))
+        PodView(pod: Pod(podValue: "Test (1.2.3)"))
     }
 }

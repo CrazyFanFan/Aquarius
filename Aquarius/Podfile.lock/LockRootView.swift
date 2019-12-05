@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  LockRootView.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2019/11/29.
@@ -11,7 +11,7 @@ import SwiftUI
 
 private let supportType: String = kUTTypeFileURL as String
 
-struct PodileLockRootView: View {
+struct LockRootView: View {
     @EnvironmentObject var data: UserData
     @State private var isPodViewShow: Bool = false
 
@@ -28,6 +28,6 @@ struct PodileLockRootView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        PodileLockRootView()
+        LockRootView()
     }
 }

@@ -8,9 +8,15 @@
 
 import Combine
 class UserData: ObservableObject {
-    @Published var lock: PodfileLock = PodfileLock()
+    @Published var lock: Lock = Lock()
     @Published var detail: [Detail] = []
-    @Published var isRecursive: Bool = false
+    @Published var isRecursive: Bool = false {
+        didSet {
+            if let pod = seletedPods.first {
+                onSelectd(pod: pod, with: 0)
+            }
+        }
+    }
 
     private var seletedPods: [Pod] = []
 

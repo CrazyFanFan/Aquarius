@@ -16,7 +16,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
         #if DEBUG
-        let contentView = PodileLockRootView()
+        let contentView = LockRootView()
             .environmentObject(testData)
         #else
 

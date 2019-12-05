@@ -16,8 +16,8 @@ func createTestData() -> UserData {
 
     if let lock = testReader.readData() {
         testData.lock = lock
-        if let pod = lock.pods.first {
-            testData.detail = [Detail(index: 0, content: .pod(pod))]
+        if let pod = lock.pods.randomElement() {
+            testData.onSelectd(pod: pod, with: 0)
         }
     }
     return testData

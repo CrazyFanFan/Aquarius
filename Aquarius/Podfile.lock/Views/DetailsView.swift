@@ -29,12 +29,16 @@ struct DetailsView: View {
             })
         case .dependencie(let name):
             if self.data.isRecursive {
-                 return AnyView(Text(name))
+                return AnyView(Text(name))
             } else {
-                return AnyView(Text(name)
-                    .onTapGesture {
-                        guard let pod = self.data.lock.pods.first(where: { $0.name == name }) else { return }
-                        self.data.onSelectd(pod: pod, with: detail.index + 1)
+                return AnyView(HStack {
+                    Text(name)
+                        .onTapGesture {
+                            guard let pod = self.data.lock.pods.first(where: { $0.name == name }) else { return }
+                            self.data.onSelectd(pod: pod, with: detail.index + 1)
+                    }
+                    Spacer()
+                    Text("▼")
                 })
             }
         }

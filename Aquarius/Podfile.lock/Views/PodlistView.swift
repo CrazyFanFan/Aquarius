@@ -29,16 +29,18 @@ struct PodlistView: View {
 
                     Toggle(isOn: self.$data.isRecursive) { Text("Recursive") }
                         .font(.system(size: 10))
+                        .toggleStyle(SwitchToggleStyle())
                 }
             }
 
             ForEach(data.lock.pods) { pod in
-                PodInfo(pod: pod)
+                PodView(pod: pod)
                     .onTapGesture {
                         self.data.onSelectd(pod: pod, with: 0)
                 }
             }
         }.frame(minWidth: 400, maxWidth: 400, maxHeight: .infinity)
+            .listStyle(PlainListStyle())
     }
 }
 

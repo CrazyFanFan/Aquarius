@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum PodfileLockRootKey: String {
+enum LockRootKey: String {
     case pods = "PODS"
     case dependencies = "DEPENDENCIES"
     case specRepos = "SPEC REPOS"
@@ -18,7 +18,7 @@ enum PodfileLockRootKey: String {
     case cocoapods = "COCOAPODS"
 }
 
-struct PodfileLock {
+struct Lock {
     var pods: [Pod] = []
     var dependencies: [Pod] = []
     var specRepos: [SpecRepo] = []
