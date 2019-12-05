@@ -11,9 +11,9 @@ class UserData: ObservableObject {
     @Published var lock: PodfileLock = PodfileLock()
     @Published var detail: [Detail] = []
     @Published var isRecursive: Bool = false
-    
+
     private var seletedPods: [Pod] = []
-    
+
     func onSelectd(pod: Pod, with level: Int) {
         if seletedPods.count > level {
             seletedPods.removeSubrange(level...)
@@ -21,14 +21,14 @@ class UserData: ObservableObject {
         } else {
             seletedPods.append(pod)
         }
-        
+
         if level == 0, isRecursive {
             self.detail = recursive()
         } else {
             loadDetail()
         }
     }
-    
+
     private func loadDetail() {
         var result = [Detail]()
         for (index, pod) in seletedPods.enumerated() {
@@ -39,7 +39,7 @@ class UserData: ObservableObject {
         }
         detail = result
     }
-    
+
     private func recursive() -> [Detail] {
         guard let pod = seletedPods.first else { return [] }
         var result = [String]()
@@ -47,7 +47,7 @@ class UserData: ObservableObject {
         return [Detail(index: 0, content: .pod(pod))] +
             Array(Set(result)).sorted().map { Detail(index: 0, content: .dependencie($0)) }
     }
-    
+
     private func recursive(dependencie: [String]?, into result: inout [String]) {
         guard var dependencie = dependencie else { return }
         dependencie.removeAll(where: { result.contains($0) })
