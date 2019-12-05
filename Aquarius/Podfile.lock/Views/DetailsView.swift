@@ -1,5 +1,5 @@
 //
-//  PodsView.swift
+//  DetailsView.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2019/11/29.
@@ -8,13 +8,13 @@
 
 import SwiftUI
 
-struct PodsView: View {
+struct DetailsView: View {
     @EnvironmentObject var data: UserData
 
     var body: some View {
-        return List(data.detail) {
+        List(data.detail) {
             self.view(for: $0)
-        }
+        }.frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private func view(for detail: Detail) -> some View {
@@ -42,9 +42,9 @@ struct PodsView: View {
 }
 
 #if DEBUG
-struct PodsView_Previews: PreviewProvider {
+struct DetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        PodsView()
+        DetailsView()
             .environmentObject(testData)
     }
 }

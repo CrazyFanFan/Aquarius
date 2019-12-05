@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63259DED2398C981008ECE7B /* PodlistView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63259DEC2398C981008ECE7B /* PodlistView.swift */; };
 		633999DD23920F030003A206 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633999DC23920F030003A206 /* TestData.swift */; };
 		633999DF239212D10003A206 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633999DE239212D10003A206 /* Details.swift */; };
 		6339A5FD239256CA0003A206 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6339A5FF239256CA0003A206 /* Localizable.strings */; };
@@ -22,7 +23,7 @@
 		636D793F239107CB005672E7 /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D7939239107CB005672E7 /* Pod.swift */; };
 		636D7940239107CB005672E7 /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D793A239107CB005672E7 /* DataReader.swift */; };
 		636D7944239107EC005672E7 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 636D7943239107EC005672E7 /* Yams */; };
-		636D855B239143D6005672E7 /* PodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D855A239143D6005672E7 /* PodsView.swift */; };
+		636D855B239143D6005672E7 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D855A239143D6005672E7 /* DetailsView.swift */; };
 		636D855D239152C2005672E7 /* DropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D855C239152C2005672E7 /* DropView.swift */; };
 		636D855F23915A23005672E7 /* PodInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D855E23915A23005672E7 /* PodInfo.swift */; };
 		636D8561239183C6005672E7 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D8560239183C6005672E7 /* UserData.swift */; };
@@ -30,6 +31,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		63259DEC2398C981008ECE7B /* PodlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodlistView.swift; sourceTree = "<group>"; };
 		633999DC23920F030003A206 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		633999DE239212D10003A206 /* Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		633999E2239255CB0003A206 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -51,7 +53,7 @@
 		636D7939239107CB005672E7 /* Pod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pod.swift; sourceTree = "<group>"; };
 		636D793A239107CB005672E7 /* DataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataReader.swift; sourceTree = "<group>"; };
 		636D793C239107CB005672E7 /* Podfile.lock */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile.lock; sourceTree = "<group>"; };
-		636D855A239143D6005672E7 /* PodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodsView.swift; sourceTree = "<group>"; };
+		636D855A239143D6005672E7 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
 		636D855C239152C2005672E7 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
 		636D855E23915A23005672E7 /* PodInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodInfo.swift; sourceTree = "<group>"; };
 		636D8560239183C6005672E7 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
@@ -166,7 +168,8 @@
 				636D85632391880E005672E7 /* ActivityIndicator.swift */,
 				636D855C239152C2005672E7 /* DropView.swift */,
 				636D855E23915A23005672E7 /* PodInfo.swift */,
-				636D855A239143D6005672E7 /* PodsView.swift */,
+				636D855A239143D6005672E7 /* DetailsView.swift */,
+				63259DEC2398C981008ECE7B /* PodlistView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -259,12 +262,13 @@
 				636D793D239107CB005672E7 /* PodfileLock.swift in Sources */,
 				636D791223910796005672E7 /* PodileLockRootView.swift in Sources */,
 				636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */,
-				636D855B239143D6005672E7 /* PodsView.swift in Sources */,
+				636D855B239143D6005672E7 /* DetailsView.swift in Sources */,
 				633999DF239212D10003A206 /* Details.swift in Sources */,
 				636D793E239107CB005672E7 /* SpecRepo.swift in Sources */,
 				636D7940239107CB005672E7 /* DataReader.swift in Sources */,
 				636D791023910796005672E7 /* AppDelegate.swift in Sources */,
 				636D855F23915A23005672E7 /* PodInfo.swift in Sources */,
+				63259DED2398C981008ECE7B /* PodlistView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
