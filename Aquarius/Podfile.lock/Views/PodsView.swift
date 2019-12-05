@@ -41,9 +41,11 @@ struct PodsView: View {
     }
 }
 
+#if DEBUG
 struct PodsView_Previews: PreviewProvider {
     static var previews: some View {
         PodsView()
             .environmentObject(testData)
     }
 }
+#endif

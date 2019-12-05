@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		632FBA23239810EE00C487E9 /* Podfile.lock in Resources */ = {isa = PBXBuildFile; fileRef = 636D793C239107CB005672E7 /* Podfile.lock */; };
 		633999DD23920F030003A206 /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633999DC23920F030003A206 /* TestData.swift */; };
 		633999DF239212D10003A206 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633999DE239212D10003A206 /* Details.swift */; };
 		6339A5FD239256CA0003A206 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6339A5FF239256CA0003A206 /* Localizable.strings */; };
@@ -237,7 +236,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				632FBA23239810EE00C487E9 /* Podfile.lock in Resources */,
 				6339A5FD239256CA0003A206 /* Localizable.strings in Resources */,
 				6339A601239256D50003A206 /* InfoPlist.strings in Resources */,
 				636D791A23910798005672E7 /* Main.storyboard in Resources */,
