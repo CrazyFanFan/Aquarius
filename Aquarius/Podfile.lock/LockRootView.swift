@@ -16,13 +16,21 @@ struct LockRootView: View {
     @State private var isPodViewShow: Bool = false
 
     var body: some View {
-        HStack {
-            DropView().environmentObject(data)
-            PodlistView().environmentObject(data)
-            if !data.detail.isEmpty {
-                DetailsView().environmentObject(data)
+        ZStack {
+            HStack {
+                DropView().environmentObject(data)
+                PodlistView().environmentObject(data)
+                if !data.detail.isEmpty {
+                    DetailsView().environmentObject(data)
+                }
             }
-        }.frame(minHeight: 350, maxHeight: .infinity)
+
+            if data.isLoading {
+                ActivityIndicator()
+                    .frame(width: 300, height: 300, alignment: .center)
+            }
+        }
+        .frame(minHeight: 350, maxHeight: .infinity)
     }
 }
 

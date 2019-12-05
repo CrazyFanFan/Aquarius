@@ -18,11 +18,12 @@ struct DropView: View {
     var body: some View {
         Text("Drag the Podfile.lock here!")
             .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
-            .onDrop(of: [supportType], isTargeted: $isTargeted) { self.loadData(from: $0) }
+            .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) { self.loadData(from: $0) }
     }
 
     private func loadData(from items: [NSItemProvider]) -> Bool {
         guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
+        data.isLoading = true
         DispatchQueue.global().async {
             item.loadItem(forTypeIdentifier: supportType, options: nil) { (data, error) in
                 if let _ = error {
@@ -45,8 +46,9 @@ struct DropView: View {
                 let path = url.path
 
                 if let lock = DataReader(path: path).readData() {
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         self.data.lock = lock
+                        self.data.isLoading = false
                     }
                 }
             }

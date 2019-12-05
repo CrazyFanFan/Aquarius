@@ -21,6 +21,8 @@ class UserData: ObservableObject {
         }
     }
 
+    // is on processing
+    @Published var isLoading: Bool = false
 
     private var seletedPods: [Pod] = []
 
