@@ -76,9 +76,9 @@
 			isa = PBXGroup;
 			children = (
 				636D791323910798005672E7 /* Assets.xcassets */,
-				636D791823910798005672E7 /* Main.storyboard */,
-				6339A5FF239256CA0003A206 /* Localizable.strings */,
 				6339A603239256D50003A206 /* InfoPlist.strings */,
+				6339A5FF239256CA0003A206 /* Localizable.strings */,
+				636D791823910798005672E7 /* Main.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -121,13 +121,13 @@
 		636D790E23910796005672E7 /* Aquarius */ = {
 			isa = PBXGroup;
 			children = (
-				6339A609239275130003A206 /* Podfile.lock */,
-				6339A60623925A370003A206 /* Tool */,
 				636D791C23910798005672E7 /* Aquarius.entitlements */,
 				636D791B23910798005672E7 /* Info.plist */,
-				633999E5239256490003A206 /* Resources */,
 				636D790F23910796005672E7 /* AppDelegate.swift */,
+				6339A609239275130003A206 /* Podfile.lock */,
 				636D791523910798005672E7 /* Preview Content */,
+				633999E5239256490003A206 /* Resources */,
+				6339A60623925A370003A206 /* Tool */,
 			);
 			path = Aquarius;
 			sourceTree = "<group>";
@@ -166,9 +166,9 @@
 			isa = PBXGroup;
 			children = (
 				636D85632391880E005672E7 /* ActivityIndicator.swift */,
+				636D855A239143D6005672E7 /* DetailsView.swift */,
 				636D855C239152C2005672E7 /* DropView.swift */,
 				636D855E23915A23005672E7 /* PodInfo.swift */,
-				636D855A239143D6005672E7 /* DetailsView.swift */,
 				63259DEC2398C981008ECE7B /* PodlistView.swift */,
 			);
 			path = Views;
