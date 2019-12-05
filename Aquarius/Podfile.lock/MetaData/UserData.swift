@@ -7,16 +7,20 @@
 //
 
 import Combine
+
 class UserData: ObservableObject {
     @Published var lock: Lock = Lock()
     @Published var detail: [Detail] = []
-    @Published var isRecursive: Bool = false {
+
+    @UserDefault(.isRecursive, defaultValue: false)
+    var isRecursive: Bool {
         didSet {
             if let pod = seletedPods.first {
                 onSelectd(pod: pod, with: 0)
             }
         }
     }
+
 
     private var seletedPods: [Pod] = []
 
