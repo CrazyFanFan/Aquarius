@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             .environmentObject(testData)
         #else
 
-        let contentView = PodileLockRootView()
+        let contentView = LockRootView()
             .environmentObject(UserData())
         #endif
 
