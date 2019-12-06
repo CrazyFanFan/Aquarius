@@ -48,15 +48,27 @@ class DataReader {
 
     @discardableResult
     private func readPods(from pods: [Any], with lock: inout Lock) -> Bool {
+        var infecteds = [String: [String]]()
         for content in pods {
             if let string = content as? String {
                 lock.pods.append(Pod(podValue: string))
             } else if let map = content as? [String: [String]] {
                 if let pod = Pod(map: map) {
                     lock.pods.append(pod)
+                    pod.dependencies?.forEach { (name) in
+                        var content = infecteds[name] ?? []
+                        content.append(pod.name)
+                        infecteds[name] = content
+                    }
                 }
             } else {
                 print(content)
+            }
+        }
+
+        infecteds.forEach { arg in
+            if let index = lock.pods.firstIndex(where: { $0.name == arg.key }) {
+                lock.pods[index].infecteds = arg.value
             }
         }
         return true

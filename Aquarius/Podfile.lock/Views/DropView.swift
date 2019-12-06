@@ -16,9 +16,15 @@ struct DropView: View {
     @State private var isTargeted: Bool = false
 
     var body: some View {
-        Text("Drag the Podfile.lock here!")
-            .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
-            .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) { self.loadData(from: $0) }
+        VStack {
+            Text("Drag the Podfile.lock here!")
+                .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
+                .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) { self.loadData(from: $0) }
+
+            HStack {
+                Control().scaledToFill()
+            }
+        }
     }
 
     private func loadData(from items: [NSItemProvider]) -> Bool {
@@ -47,7 +53,14 @@ struct DropView: View {
 
                 if let lock = DataReader(path: path).readData() {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+
+                        // remove temp
+                        self.data.detail.removeAll()
+
+                        // update lock data
                         self.data.lock = lock
+
+                        // update status
                         self.data.isLoading = false
                     }
                 }

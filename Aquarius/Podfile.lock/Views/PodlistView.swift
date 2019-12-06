@@ -16,21 +16,8 @@ struct PodlistView: View {
             if data.lock.pods.isEmpty {
                 Text("Nothing")
             } else {
-                HStack {
-                    Text("Total: \(data.lock.pods.count)")
-                        .font(.title)
-
-                    Button("Copy all") {
-                        let content = self.data.lock.pods
-                            .map { $0.name }
-                            .joined(separator: "\n")
-                        Pasteboard.write(content)
-                    }.font(.system(size: 10))
-
-                    Toggle(isOn: self.$data.isRecursive) { Text("Recursive") }
-                        .font(.system(size: 10))
-                        .toggleStyle(SwitchToggleStyle())
-                }
+                Text("Total: \(data.lock.pods.count)")
+                    .font(.title)
             }
 
             ForEach(data.lock.pods) { pod in

@@ -10,7 +10,7 @@ import Foundation
 
 enum DetailContent {
     case pod(Pod)
-    case dependencie(String)
+    case nextLevel(String)
 }
 
 extension DetailContent {
@@ -18,7 +18,7 @@ extension DetailContent {
         switch self {
         case .pod(let pod):
             return pod.name
-        case .dependencie(let name):
+        case .nextLevel(let name):
             return name
         }
     }

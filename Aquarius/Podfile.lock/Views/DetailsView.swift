@@ -27,7 +27,7 @@ struct DetailsView: View {
                 Spacer()
                 Text(pod.info?.name ?? "")
             })
-        case .dependencie(let name):
+        case .nextLevel(let name):
             if self.data.isRecursive {
                 return AnyView(Text(name))
             } else {

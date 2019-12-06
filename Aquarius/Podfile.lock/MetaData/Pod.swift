@@ -34,6 +34,7 @@ struct Pod: Hashable, Codable, Identifiable {
     var name: String
     var info: Info?
     var dependencies: [String]?
+    var infecteds: [String]?
 
     init(podValue: String) {
         (name, info) = Self.format(podValue: podValue)
@@ -58,5 +59,11 @@ private extension Pod {
         } else {
             return (podValue, nil)
         }
+    }
+}
+
+extension Pod {
+    func nextLevel(_ isInfecteds: Bool) -> [String]? {
+        isInfecteds ? infecteds : dependencies
     }
 }

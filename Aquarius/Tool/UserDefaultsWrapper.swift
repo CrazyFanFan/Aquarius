@@ -11,6 +11,7 @@ import Foundation
 
 enum UserDefaultKey: String {
     case isRecursive
+    case isImpactMode
 }
 
 @propertyWrapper
