@@ -21,7 +21,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         #else
 
         let contentView = LockRootView()
-            .environmentObject(DataConfig())
+            .environmentObject(DataAndSettings())
         #endif
 
         // Create the window and set the content view.
