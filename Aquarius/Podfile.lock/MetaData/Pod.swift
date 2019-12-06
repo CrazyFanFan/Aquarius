@@ -63,7 +63,18 @@ private extension Pod {
 }
 
 extension Pod {
-    func nextLevel(_ isInfecteds: Bool) -> [String]? {
-        isInfecteds ? infecteds : dependencies
+    func nextLevel(_ isImpactMode: Bool) -> [String]? {
+        isImpactMode ? infecteds : dependencies
+    }
+}
+
+extension Pod {
+    func details(_ isImpactMode: Bool, index: Int) -> [Detail] {
+        let result = [Detail(index: index, content: .pod(self))]
+        if let nextLevel = self.nextLevel(isImpactMode) {
+            return result + nextLevel.map { Detail(index: index, content: .nextLevel($0)) }
+        } else {
+            return result
+        }
     }
 }

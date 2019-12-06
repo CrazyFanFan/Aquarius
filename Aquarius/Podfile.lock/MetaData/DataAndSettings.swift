@@ -1,5 +1,5 @@
 //
-//  Data.swift
+//  DataAndSettings.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2019/11/30.
@@ -10,7 +10,7 @@ import Combine
 
 class DataAndSettings: ObservableObject {
     @Published var lock: Lock = Lock()
-    @Published var detail: [Detail] = []
+    @Published var detail: [[Detail]] = []
 
     // is on processing
     @Published var isLoading: Bool = false
@@ -37,11 +37,24 @@ class DataAndSettings: ObservableObject {
 
     func tryUpdate() {
         if let pod = seletedPods.first {
-            onSelectd(pod: pod, with: 0)
+            onSelectd(pod: pod, with: 0, ignoreSameValueCheck: true)
         }
     }
 
-    func onSelectd(pod: Pod, with level: Int) {
+    func onSelectd(pod: Pod, with level: Int, ignoreSameValueCheck: Bool = false) {
+        if detail.count > level {
+            if !ignoreSameValueCheck, let content = detail[level].first?.content {
+                switch content {
+                case .pod:
+                    if content.name == pod.name { return }
+                default:
+                    break
+                }
+            }
+
+            detail.removeSubrange(level...)
+        }
+
         if seletedPods.count > level {
             seletedPods.removeSubrange(level...)
             seletedPods.append(pod)
@@ -49,33 +62,21 @@ class DataAndSettings: ObservableObject {
             seletedPods.append(pod)
         }
 
-        if level == 0, isRecursive {
-            self.detail = recursive()
+        if isRecursive {
+            detail.append(recursive(for: pod, at: level))
         } else {
-            loadDetail()
+            detail.append(pod.details(isImpactMode, index: level))
         }
     }
 }
 
-// load dependencies
+// load next level
 extension DataAndSettings {
-    private func loadDetail() {
-        var result = [Detail]()
-        for (index, pod) in seletedPods.enumerated() {
-            result.append(Detail(index: index, content: .pod(pod)))
-            if let nextLevel = pod.nextLevel(isImpactMode) {
-                result += nextLevel.map { Detail(index: index, content: .nextLevel($0)) }
-            }
-        }
-        detail = result
-    }
-
-    private func recursive() -> [Detail] {
-        guard let pod = seletedPods.first else { return [] }
+    private func recursive(for pod: Pod, at index: Int) -> [Detail] {
         var result = [String]()
         recursive(nextLevel: pod.nextLevel(isImpactMode), into: &result)
-        return [Detail(index: 0, content: .pod(pod))] +
-            Array(Set(result)).sorted().map { Detail(index: 0, content: .nextLevel($0)) }
+        return [Detail(index: index, content: .pod(pod))] +
+            Array(Set(result)).sorted().map { Detail(index: index, content: .nextLevel($0)) }
     }
 
     private func recursive(nextLevel: [String]?, into result: inout [String]) {

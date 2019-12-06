@@ -53,7 +53,6 @@ struct DropView: View {
 
                 if let lock = DataReader(path: path).readData() {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-
                         // remove temp
                         self.data.detail.removeAll()
 
