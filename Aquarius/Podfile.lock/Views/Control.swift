@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct Control: View {
-    @EnvironmentObject var data: UserData
+    @EnvironmentObject var data: DataAndSettings
 
     var body: some View {
         HStack {

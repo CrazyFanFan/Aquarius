@@ -8,7 +8,7 @@
 
 import Combine
 
-class UserData: ObservableObject {
+class DataAndSettings: ObservableObject {
     @Published var lock: Lock = Lock()
     @Published var detail: [Detail] = []
 
@@ -58,7 +58,7 @@ class UserData: ObservableObject {
 }
 
 // load dependencies
-extension UserData {
+extension DataAndSettings {
     private func loadDetail() {
         var result = [Detail]()
         for (index, pod) in seletedPods.enumerated() {

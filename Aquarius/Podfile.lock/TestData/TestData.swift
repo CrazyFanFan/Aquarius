@@ -10,8 +10,8 @@
 import Foundation
 
 let testData = createTestData()
-func createTestData() -> UserData {
-    let testData = UserData()
+func createTestData() -> DataAndSettings {
+    let testData = DataAndSettings()
     let testReader = DataReader(path: Bundle.main.path(forResource: "Podfile", ofType: "lock"))
 
     if let lock = testReader.readData() {

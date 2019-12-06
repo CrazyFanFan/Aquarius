@@ -12,7 +12,7 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct DropView: View {
-    @EnvironmentObject var data: UserData
+    @EnvironmentObject var data: DataAndSettings
     @State private var isTargeted: Bool = false
 
     var body: some View {

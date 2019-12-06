@@ -12,7 +12,7 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct LockRootView: View {
-    @EnvironmentObject var data: UserData
+    @EnvironmentObject var data: DataAndSettings
     @State private var isPodViewShow: Bool = false
 
     var body: some View {

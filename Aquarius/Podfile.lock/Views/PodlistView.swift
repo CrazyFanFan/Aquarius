@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct PodlistView: View {
-    @EnvironmentObject var data: UserData
+    @EnvironmentObject var data: DataAndSettings
 
     var body: some View {
         List {

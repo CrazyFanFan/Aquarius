@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct DetailsView: View {
-    @EnvironmentObject var data: UserData
+    @EnvironmentObject var data: DataAndSettings
 
     var body: some View {
         List(data.detail) {
