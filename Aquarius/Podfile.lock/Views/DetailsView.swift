@@ -19,7 +19,7 @@ struct DetailsView: View {
                 TextField("Type your search", text: $searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Button("X") { self.searchText = "" }
-            }
+            }.padding(5)
 
             List {
                 ForEach(data.detail.reduce([Detail](), +)) { self.view(for: $0) }
