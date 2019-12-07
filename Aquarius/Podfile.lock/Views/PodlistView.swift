@@ -10,24 +10,38 @@ import SwiftUI
 
 struct PodlistView: View {
     @EnvironmentObject var data: DataAndSettings
+    @State private var searchText: String = ""
 
     var body: some View {
-        List {
-            if data.lock.pods.isEmpty {
-                Text("Nothing")
-            } else {
-                Text("Total: \(data.lock.pods.count)")
-                    .font(.title)
+        VStack {
+            HStack {
+                TextField("Type your search", text: $searchText)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Button("X") { self.searchText = "" }
             }
+            
+            List {
 
-            ForEach(data.lock.pods) { pod in
-                PodView(pod: pod)
-                    .onTapGesture {
-                        self.data.onSelectd(pod: pod, with: 0)
+                if data.lock.pods.isEmpty {
+                    Text("Nothing")
+                } else {
+                    Text("Total: \(data.lock.pods.count)")
+                        .font(.title)
+                }
+
+                ForEach(data.lock.pods) { pod in
+                    if self.searchText.isEmpty || pod.name.lowercased().contains(self.searchText.lowercased()) {
+                        PodView(pod: pod)
+                            .onTapGesture {
+                                self.data.onSelectd(pod: pod, with: 0)
+                        }
+                    }
                 }
             }
+
         }.frame(minWidth: 400, maxWidth: 400, maxHeight: .infinity)
             .listStyle(PlainListStyle())
+
     }
 }
 
