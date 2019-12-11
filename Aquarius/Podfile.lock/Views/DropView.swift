@@ -20,10 +20,6 @@ struct DropView: View {
             Text("Drag the Podfile.lock here!")
                 .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
                 .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) { self.loadData(from: $0) }
-
-            HStack {
-                Control().scaledToFill()
-            }
         }
     }
 

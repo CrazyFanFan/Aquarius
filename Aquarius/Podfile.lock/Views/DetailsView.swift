@@ -13,13 +13,14 @@ struct DetailsView: View {
     @State private var searchText: String = ""
 
     var body: some View {
-        VStack{
-            
+        VStack {
             HStack {
                 TextField("Type your search", text: $searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 Button("X") { self.searchText = "" }
             }.padding(5)
+
+            DetailsControl()
 
             List {
                 ForEach(data.detail.reduce([Detail](), +)) { self.view(for: $0) }
@@ -42,7 +43,6 @@ struct DetailsView: View {
             }
         case .nextLevel(let name):
             if searchText.isEmpty || name.lowercased().contains(searchText.lowercased()) {
-
                 return AnyView(HStack {
                     Text(name)
                         .onTapGesture {
