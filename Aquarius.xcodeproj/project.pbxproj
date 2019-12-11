@@ -30,6 +30,7 @@
 		636D8561239183C6005672E7 /* DataAndSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D8560239183C6005672E7 /* DataAndSettings.swift */; };
 		636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D85632391880E005672E7 /* ActivityIndicator.swift */; };
 		639052F92399632400F4C672 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639052F82399632400F4C672 /* UserDefaultsWrapper.swift */; };
+		63DB9A0723A14769008C5FCE /* PodModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB9A0623A14769008C5FCE /* PodModifier.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +63,7 @@
 		636D8560239183C6005672E7 /* DataAndSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAndSettings.swift; sourceTree = "<group>"; };
 		636D85632391880E005672E7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		639052F82399632400F4C672 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
+		63DB9A0623A14769008C5FCE /* PodModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -171,11 +173,12 @@
 			isa = PBXGroup;
 			children = (
 				636D85632391880E005672E7 /* ActivityIndicator.swift */,
+				6350208E239A8D6100674B2F /* DetailsControl.swift */,
 				636D855A239143D6005672E7 /* DetailsView.swift */,
 				636D855C239152C2005672E7 /* DropView.swift */,
-				636D855E23915A23005672E7 /* PodView.swift */,
 				63259DEC2398C981008ECE7B /* PodlistView.swift */,
-				6350208E239A8D6100674B2F /* DetailsControl.swift */,
+				636D855E23915A23005672E7 /* PodView.swift */,
+				63DB9A0623A14769008C5FCE /* PodModifier.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -277,6 +280,7 @@
 				636D791023910796005672E7 /* AppDelegate.swift in Sources */,
 				636D855F23915A23005672E7 /* PodView.swift in Sources */,
 				63259DED2398C981008ECE7B /* PodlistView.swift in Sources */,
+				63DB9A0723A14769008C5FCE /* PodModifier.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

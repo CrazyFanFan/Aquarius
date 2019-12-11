@@ -11,6 +11,7 @@ import SwiftUI
 struct PodlistView: View {
     @EnvironmentObject var data: DataAndSettings
     @State private var searchText: String = ""
+    @State private var selectedPod: Pod? = nil
 
     var body: some View {
         VStack {
@@ -31,8 +32,7 @@ struct PodlistView: View {
                         .map { $0.name }
                         .joined(separator: "\n")
                     Pasteboard.write(content)
-                    }
-                    .font(.system(size: 10))
+                }.font(.system(size: 10))
                     .disabled(data.lock.pods.isEmpty)
             }.padding(5)
 
@@ -40,7 +40,9 @@ struct PodlistView: View {
                 ForEach(data.lock.pods) { pod in
                     if self.searchText.isEmpty || pod.name.lowercased().contains(self.searchText.lowercased()) {
                         PodView(pod: pod)
+                            .modifier(PodModifier(isSeleced: self.selectedPod == pod))
                             .onTapGesture {
+                                self.selectedPod = pod
                                 self.data.onSelectd(pod: pod, with: 0)
                             }
                     }

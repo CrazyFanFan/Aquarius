@@ -14,8 +14,7 @@ struct PodView: View {
         HStack {
             Text(pod.name)
             Spacer()
-            Text(pod.info?.name ?? "")
-            Text("▶")
+            Text(pod.info?.name ?? "") + Text("▶")
         }
         .padding(2)
     }
