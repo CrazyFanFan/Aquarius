@@ -30,6 +30,7 @@
 		636D8561239183C6005672E7 /* DataAndSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D8560239183C6005672E7 /* DataAndSettings.swift */; };
 		636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D85632391880E005672E7 /* ActivityIndicator.swift */; };
 		639052F92399632400F4C672 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639052F82399632400F4C672 /* UserDefaultsWrapper.swift */; };
+		63DB052223A24C48008C5FCE /* BookmarkTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB052123A24C48008C5FCE /* BookmarkTool.swift */; };
 		63DB9A0723A14769008C5FCE /* PodModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB9A0623A14769008C5FCE /* PodModifier.swift */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,7 @@
 		636D8560239183C6005672E7 /* DataAndSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAndSettings.swift; sourceTree = "<group>"; };
 		636D85632391880E005672E7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		639052F82399632400F4C672 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
+		63DB052123A24C48008C5FCE /* BookmarkTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkTool.swift; sourceTree = "<group>"; };
 		63DB9A0623A14769008C5FCE /* PodModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodModifier.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -94,6 +96,7 @@
 			children = (
 				6339A60723925A440003A206 /* Pasteboard.swift */,
 				639052F82399632400F4C672 /* UserDefaultsWrapper.swift */,
+				63DB052123A24C48008C5FCE /* BookmarkTool.swift */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -150,12 +153,12 @@
 		636D7936239107CB005672E7 /* MetaData */ = {
 			isa = PBXGroup;
 			children = (
+				636D8560239183C6005672E7 /* DataAndSettings.swift */,
 				636D793A239107CB005672E7 /* DataReader.swift */,
 				633999DE239212D10003A206 /* Details.swift */,
 				636D7937239107CB005672E7 /* Lock.swift */,
 				636D7939239107CB005672E7 /* Pod.swift */,
 				636D7938239107CB005672E7 /* SpecRepo.swift */,
-				636D8560239183C6005672E7 /* DataAndSettings.swift */,
 			);
 			path = MetaData;
 			sourceTree = "<group>";
@@ -213,7 +216,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1120;
-				LastUpgradeCheck = 1120;
+				LastUpgradeCheck = 1130;
 				ORGANIZATIONNAME = "Crazy凡";
 				TargetAttributes = {
 					636D790B23910796005672E7 = {
@@ -222,7 +225,7 @@
 				};
 			};
 			buildConfigurationList = 636D790723910796005672E7 /* Build configuration list for PBXProject "Aquarius" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 11.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -272,6 +275,7 @@
 				636D791223910796005672E7 /* LockRootView.swift in Sources */,
 				636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */,
 				6350208F239A8D6100674B2F /* DetailsControl.swift in Sources */,
+				63DB052223A24C48008C5FCE /* BookmarkTool.swift in Sources */,
 				636D855B239143D6005672E7 /* DetailsView.swift in Sources */,
 				633999DF239212D10003A206 /* Details.swift in Sources */,
 				636D793E239107CB005672E7 /* SpecRepo.swift in Sources */,
@@ -437,6 +441,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Aquarius/Aquarius.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Aquarius/Preview Content\"";
@@ -460,6 +465,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Aquarius/Aquarius.entitlements;
+				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Aquarius/Preview Content\"";

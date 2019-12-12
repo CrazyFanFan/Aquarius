@@ -12,14 +12,17 @@ import Foundation
 let testData = createTestData()
 func createTestData() -> DataAndSettings {
     let testData = DataAndSettings()
-    let testReader = DataReader(path: Bundle.main.path(forResource: "Podfile", ofType: "lock"))
+    if let path = Bundle.main.path(forResource: "Podfile", ofType: "lock") {
+        let testReader = DataReader(fileURL: URL(fileURLWithPath: path))
 
-    if let lock = testReader.readData() {
-        testData.lock = lock
-        if let pod = lock.pods.randomElement() {
-            testData.onSelectd(pod: pod, with: 0)
+        if let lock = testReader.readData(false) {
+            testData.lock = lock
+            if let pod = lock.pods.randomElement() {
+                testData.onSelectd(pod: pod, with: 0)
+            }
         }
     }
+
     return testData
 }
 #endif

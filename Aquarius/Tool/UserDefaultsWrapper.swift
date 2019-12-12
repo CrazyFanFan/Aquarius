@@ -12,6 +12,7 @@ import Foundation
 enum UserDefaultKey: String {
     case isRecursive
     case isImpactMode
+    case bookmark
 }
 
 @propertyWrapper

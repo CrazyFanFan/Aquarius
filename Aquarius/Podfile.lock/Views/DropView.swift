@@ -19,47 +19,48 @@ struct DropView: View {
         VStack {
             Text("Drag the Podfile.lock here!")
                 .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
-                .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) { self.loadData(from: $0) }
+                .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
+                    self.loadPath(from: $0)
+                }
+        }.onAppear {
+            // check bookmark
+            if let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
+                self.data.isFromBookMark = true
+                self.data.fileURL = url
+
+                // Bookmark is stale, need to save a new one...
+                if isStale, let bookmark = BookmarkTool.bookmark(for: url) {
+                    self.data.bookmark = bookmark
+                }
+            }
         }
     }
 
-    private func loadData(from items: [NSItemProvider]) -> Bool {
+    private func loadPath(from items: [NSItemProvider]) -> Bool {
         guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
-        data.isLoading = true
-        DispatchQueue.global().async {
-            item.loadItem(forTypeIdentifier: supportType, options: nil) { (data, error) in
-                if let _ = error {
-                    // TODO error
-                    return
-                }
-
-                guard let urlData = data as? Data,
-                    let urlString = String(data: urlData, encoding: .utf8),
-                    let url = URL(string: urlString) else {
-                        // TODO error
-                        return
-                }
-
-                guard url.lastPathComponent == "Podfile.lock" else {
-                    // TODO error
-                    return
-                }
-
-                let path = url.path
-
-                if let lock = DataReader(path: path).readData() {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                        // remove temp
-                        self.data.detail.removeAll()
-
-                        // update lock data
-                        self.data.lock = lock
-
-                        // update status
-                        self.data.isLoading = false
-                    }
-                }
+        item.loadItem(forTypeIdentifier: supportType, options: nil) { (data, error) in
+            if let _ = error {
+                // TODO error
+                return
             }
+
+            guard let urlData = data as? Data,
+                let urlString = String(data: urlData, encoding: .utf8),
+                let url = URL(string: urlString) else {
+                    // TODO error
+                    return
+            }
+
+            guard url.lastPathComponent == "Podfile.lock" else {
+                // TODO error
+                return
+            }
+
+            if let bookmark = BookmarkTool.bookmark(for: url) {
+                self.data.bookmark = bookmark
+            }
+            self.data.isFromBookMark = false
+            self.data.fileURL = url
         }
         return true
     }
