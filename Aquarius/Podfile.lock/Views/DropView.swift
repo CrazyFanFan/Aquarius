@@ -21,12 +21,11 @@ struct DropView: View {
                 .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
                 .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
                     self.loadPath(from: $0)
-                }
+            }
         }.onAppear {
             // check bookmark
             if let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
-                self.data.isFromBookMark = true
-                self.data.fileURL = url
+                self.data.lockFile = LockFile(isFromBookMark: true, url: url)
 
                 // Bookmark is stale, need to save a new one...
                 if isStale, let bookmark = BookmarkTool.bookmark(for: url) {
@@ -59,8 +58,8 @@ struct DropView: View {
             if let bookmark = BookmarkTool.bookmark(for: url) {
                 self.data.bookmark = bookmark
             }
-            self.data.isFromBookMark = false
-            self.data.fileURL = url
+
+            self.data.lockFile = LockFile(isFromBookMark: false, url: url)
         }
         return true
     }

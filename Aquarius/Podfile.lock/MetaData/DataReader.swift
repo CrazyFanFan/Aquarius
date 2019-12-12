@@ -10,28 +10,28 @@ import Foundation
 import Yams
 
 class DataReader {
-    private var fileURL: URL?
+    private var file: LockFile?
 
-    init(fileURL: URL?) {
-        self.fileURL = fileURL
+    init(file: LockFile?) {
+        self.file = file
     }
 
-    func readData(_ isFromBookMark: Bool) -> Lock? {
-        guard let fileURL = fileURL else { return nil }
+    func readData() -> Lock? {
+        guard let file = file else { return nil }
 
-        if isFromBookMark {
-            guard fileURL.startAccessingSecurityScopedResource() else { return nil }
+        if file.isFromBookMark {
+            guard file.url.startAccessingSecurityScopedResource() else { return nil }
         }
 
         defer {
-            if isFromBookMark {
-                fileURL.stopAccessingSecurityScopedResource()
+            if file.isFromBookMark {
+                file.url.stopAccessingSecurityScopedResource()
             }
         }
 
         let lockContent: String
         do {
-            lockContent = try String(contentsOf: fileURL)
+            lockContent = try String(contentsOf: file.url)
         } catch {
             print(error)
             return nil

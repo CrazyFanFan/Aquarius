@@ -37,12 +37,11 @@ class DataAndSettings: ObservableObject {
     @UserDefault(.bookmark, defaultValue: Data())
     var bookmark: Data
 
-    var isFromBookMark: Bool = false
-    var fileURL: URL? {
+    var lockFile: LockFile? {
         didSet {
-            checkShouldReloadData(oldURL: oldValue) { isNeedReloadData in
+            checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
                 if isNeedReloadData {
-                    self.loadData(by: self.fileURL)
+                    self.loadData()
                 }
             }
         }
@@ -109,23 +108,23 @@ extension DataAndSettings {
 }
 
 extension DataAndSettings {
-    private func checkShouldReloadData(oldURL: URL?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
+    private func checkShouldReloadData(oldLockFile: LockFile?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
         guard let completion = completion else { return }
 
-        // If the old and new path do not match, the data must be reloaded.
-        if fileURL != oldURL {
+        // If is form bookmark or the old and new path do not match, the data must be reloaded.
+        if lockFile?.isFromBookMark == true, self.lockFile != oldLockFile {
             completion(true)
             return
         }
 
         // The data needs to be reloaded. if new path is nil or empty.
-        guard let fileURL = fileURL, !fileURL.path.isEmpty else {
+        guard let file = lockFile, !file.url.path.isEmpty else {
             completion(false)
             return
         }
 
         // If read attributes fails, the data needs to be reloaded.
-        guard let attributes = try? FileManager.default.attributesOfItem(atPath: fileURL.path),
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: file.url.path),
             let fileModificationDate = attributes[.modificationDate] as? Date,
             let lastReadDataTime = self.lastReadDataTime else {
                 completion(true)
@@ -144,15 +143,15 @@ extension DataAndSettings {
         detail = []
     }
 
-    private func loadData(by fileURL: URL?) {
+    private func loadData() {
         DispatchQueue.main.async {
             self.resetSelectedData()
 
-            guard let fileURL = fileURL else { return }
+            guard let info = self.lockFile else { return }
             self.isLoading = true
             DispatchQueue.global().async {
                 self.lastReadDataTime = Date()
-                if let lock = DataReader(fileURL: fileURL).readData(self.isFromBookMark) {
+                if let lock = DataReader(file: info).readData() {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                         // update lock data
                         self.lock = lock

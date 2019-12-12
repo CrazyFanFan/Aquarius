@@ -13,9 +13,9 @@ let testData = createTestData()
 func createTestData() -> DataAndSettings {
     let testData = DataAndSettings()
     if let path = Bundle.main.path(forResource: "Podfile", ofType: "lock") {
-        let testReader = DataReader(fileURL: URL(fileURLWithPath: path))
+        let testReader = DataReader(file: LockFile(isFromBookMark: false, url: URL(fileURLWithPath: path)))
 
-        if let lock = testReader.readData(false) {
+        if let lock = testReader.readData() {
             testData.lock = lock
             if let pod = lock.pods.randomElement() {
                 testData.onSelectd(pod: pod, with: 0)
