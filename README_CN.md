@@ -22,7 +22,7 @@ open Aquarius.xcodeproj
 ```
 
 ## 作者
-crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
+Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 
 ## License
 [LICENSE](https://github.com/CrazyFanFan/Aquarius/blob/master/LICENSE)

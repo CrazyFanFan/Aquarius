@@ -15,7 +15,7 @@ open Aquarius.xcodeproj
 ```
 
 ## Author
-crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
+Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 
 ## License
 Aquarius is released under the MIT license. See [LICENSE](https://github.com/CrazyFanFan/Aquarius/blob/master/LICENSE) for details.
