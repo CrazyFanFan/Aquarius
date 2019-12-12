@@ -1,0 +1,28 @@
+# Aquarius
+[English](https://github.com/CrazyFanFan/Aquarius/blob/master/README.md)
+
+一个通过分析"Podfile.lock"获取各个库之间的依赖关系的工具。
+支持以下操作：
+- “依赖树”分析；
+- “影响树”分析；
+- 搜索
+- 复制
+
+"影响树"并非通用概念，而是我暂时这么称呼一种影响关系；有了解更好的名字的，欢迎留言。自上而下的看Podfile.lock记录了各模块之间的依赖关系；反之，自下而上的看，则可以推出每个库的变更最大的影响范围，我将其称之为"影响树"。其中根节点是变动的库，其子节点是依赖库的所有库，递归下去即可得到"影响树"。
+
+## 使用
+- 克隆这个仓库
+- 打开 **Aquarius.xcodeproj** （要求Xcode版本 ≥ 11.0）
+- 等待“Swift Packges”处理完， 按下`Command` + `R`即可。
+
+```shell
+git clone https://github.com/CrazyFanFan/Aquarius.git
+cd Aquarius
+open Aquarius.xcodeproj
+```
+
+## 作者
+crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
+
+## License
+[LICENSE](https://github.com/CrazyFanFan/Aquarius/blob/master/LICENSE)

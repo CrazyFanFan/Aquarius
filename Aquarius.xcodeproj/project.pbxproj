@@ -37,6 +37,8 @@
 
 /* Begin PBXFileReference section */
 		63259DEC2398C981008ECE7B /* PodlistView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodlistView.swift; sourceTree = "<group>"; };
+		6331278523A29925005BD0A8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		6331278623A2997E005BD0A8 /* README_CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
 		633999DC23920F030003A206 /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		633999DE239212D10003A206 /* Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		633999E2239255CB0003A206 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -119,6 +121,8 @@
 			children = (
 				636D790E23910796005672E7 /* Aquarius */,
 				636D790D23910796005672E7 /* Products */,
+				6331278623A2997E005BD0A8 /* README_CN.md */,
+				6331278523A29925005BD0A8 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -133,9 +137,9 @@
 		636D790E23910796005672E7 /* Aquarius */ = {
 			isa = PBXGroup;
 			children = (
+				636D790F23910796005672E7 /* AppDelegate.swift */,
 				636D791C23910798005672E7 /* Aquarius.entitlements */,
 				636D791B23910798005672E7 /* Info.plist */,
-				636D790F23910796005672E7 /* AppDelegate.swift */,
 				6339A609239275130003A206 /* Podfile.lock */,
 				636D791523910798005672E7 /* Preview Content */,
 				633999E5239256490003A206 /* Resources */,
