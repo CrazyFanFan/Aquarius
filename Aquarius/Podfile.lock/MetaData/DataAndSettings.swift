@@ -152,7 +152,7 @@ extension DataAndSettings {
             DispatchQueue.global().async {
                 self.lastReadDataTime = Date()
                 if let lock = DataReader(file: info).readData() {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.async {
                         // update lock data
                         self.lock = lock
 
