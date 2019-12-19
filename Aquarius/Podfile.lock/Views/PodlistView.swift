@@ -14,11 +14,7 @@ struct PodlistView: View {
 
     var body: some View {
         VStack {
-            HStack {
-                TextField("Type your search", text: $searchText)
-                    .textFieldStyle(RoundedBorderTextFieldStyle())
-                Button("X") { self.searchText = "" }
-            }.padding(5)
+            SearchBar(searchText: $searchText)
 
             HStack {
                 Text(data.lock.pods.isEmpty ? "Nothing" : "Total: \(data.lock.pods.count)")

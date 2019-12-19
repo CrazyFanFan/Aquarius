@@ -33,6 +33,7 @@
 		63DB052223A24C48008C5FCE /* BookmarkTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB052123A24C48008C5FCE /* BookmarkTool.swift */; };
 		63DB052623A25A96008C5FCE /* LockFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB052523A25A96008C5FCE /* LockFile.swift */; };
 		63DB9A0723A14769008C5FCE /* PodModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB9A0623A14769008C5FCE /* PodModifier.swift */; };
+		63F91C9423AB8A1400ABC694 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F91C9323AB8A0800ABC694 /* SearchBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		63DB052123A24C48008C5FCE /* BookmarkTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkTool.swift; sourceTree = "<group>"; };
 		63DB052523A25A96008C5FCE /* LockFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockFile.swift; sourceTree = "<group>"; };
 		63DB9A0623A14769008C5FCE /* PodModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodModifier.swift; sourceTree = "<group>"; };
+		63F91C9323AB8A0800ABC694 /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,8 +189,9 @@
 				636D855A239143D6005672E7 /* DetailsView.swift */,
 				636D855C239152C2005672E7 /* DropView.swift */,
 				63259DEC2398C981008ECE7B /* PodlistView.swift */,
-				636D855E23915A23005672E7 /* PodView.swift */,
 				63DB9A0623A14769008C5FCE /* PodModifier.swift */,
+				636D855E23915A23005672E7 /* PodView.swift */,
+				63F91C9323AB8A0800ABC694 /* SearchBar.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -287,6 +290,7 @@
 				636D855B239143D6005672E7 /* DetailsView.swift in Sources */,
 				633999DF239212D10003A206 /* Details.swift in Sources */,
 				636D793E239107CB005672E7 /* SpecRepo.swift in Sources */,
+				63F91C9423AB8A1400ABC694 /* SearchBar.swift in Sources */,
 				636D7940239107CB005672E7 /* DataReader.swift in Sources */,
 				639052F92399632400F4C672 /* UserDefaultsWrapper.swift in Sources */,
 				636D791023910796005672E7 /* AppDelegate.swift in Sources */,
