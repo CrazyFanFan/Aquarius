@@ -17,6 +17,19 @@ struct DropView: View {
 
     var body: some View {
         VStack {
+            VStack {
+                Toggle(isOn: self.$data.isBookmarkEnable) {
+                    Text("Bookmark")
+                }
+                .font(.system(size: 10))
+                .toggleStyle(SwitchToggleStyle())
+
+                Toggle(isOn: self.$data.isIgnoreLastModificationDate) {
+                    Text("Ignore Last Modification Date")
+                }
+                .font(.system(size: 10))
+                .toggleStyle(SwitchToggleStyle())
+            }
             Text("Drag the Podfile.lock here!")
                 .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
                 .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) {

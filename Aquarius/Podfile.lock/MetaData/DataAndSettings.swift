@@ -37,11 +37,21 @@ class DataAndSettings: ObservableObject {
     @UserDefault(.bookmark, defaultValue: Data())
     var bookmark: Data
 
+    @UserDefault(.isBookmarkEnable, defaultValue: true)
+    var isBookmarkEnable: Bool
+
+    @UserDefault(.isIgnoreLastModificationDate, defaultValue: false)
+    var isIgnoreLastModificationDate: Bool
+
     var lockFile: LockFile? {
         didSet {
-            checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
-                if isNeedReloadData {
-                    self.loadData()
+            if isIgnoreLastModificationDate {
+                self.loadData()
+            } else {
+                checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
+                    if isNeedReloadData {
+                        self.loadData()
+                    }
                 }
             }
         }
@@ -50,7 +60,9 @@ class DataAndSettings: ObservableObject {
     private var lastReadDataTime: Date?
 
     private(set) var seletedPods: [Pod] = []
+}
 
+extension DataAndSettings {
     func tryUpdate() {
         if let pod = seletedPods.first {
             onSelectd(pod: pod, with: 0, ignoreSameValueCheck: true)
