@@ -37,7 +37,7 @@ struct DropView: View {
             }
         }.onAppear {
             // check bookmark
-            if let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
+            if self.data.isBookmarkEnable, let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
                 self.data.lockFile = LockFile(isFromBookMark: true, url: url)
 
                 // Bookmark is stale, need to save a new one...
