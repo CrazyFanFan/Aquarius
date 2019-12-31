@@ -18,10 +18,10 @@ struct LockRootView: View {
     var body: some View {
         ZStack {
             HStack {
-                DropView().environmentObject(data)
-                PodlistView().environmentObject(data)
+                DropView()
+                PodlistView()
                 if !data.detail.isEmpty {
-                    DetailsView().environmentObject(data)
+                    DetailsView()
                 }
             }
 
