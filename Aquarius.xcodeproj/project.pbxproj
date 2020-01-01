@@ -29,11 +29,11 @@
 		636D855F23915A23005672E7 /* PodView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D855E23915A23005672E7 /* PodView.swift */; };
 		636D8561239183C6005672E7 /* DataAndSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D8560239183C6005672E7 /* DataAndSettings.swift */; };
 		636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D85632391880E005672E7 /* ActivityIndicator.swift */; };
-		639052F92399632400F4C672 /* UserDefaultsWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639052F82399632400F4C672 /* UserDefaultsWrapper.swift */; };
 		63DB052223A24C48008C5FCE /* BookmarkTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB052123A24C48008C5FCE /* BookmarkTool.swift */; };
 		63DB052623A25A96008C5FCE /* LockFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB052523A25A96008C5FCE /* LockFile.swift */; };
 		63DB9A0723A14769008C5FCE /* PodModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63DB9A0623A14769008C5FCE /* PodModifier.swift */; };
 		63F91C9423AB8A1400ABC694 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F91C9323AB8A0800ABC694 /* SearchBar.swift */; };
+		663B97B023BCAD1500A39712 /* SwiftyUserDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 663B97AF23BCAD1500A39712 /* SwiftyUserDefaults */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,7 +67,6 @@
 		636D855E23915A23005672E7 /* PodView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodView.swift; sourceTree = "<group>"; };
 		636D8560239183C6005672E7 /* DataAndSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataAndSettings.swift; sourceTree = "<group>"; };
 		636D85632391880E005672E7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
-		639052F82399632400F4C672 /* UserDefaultsWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsWrapper.swift; sourceTree = "<group>"; };
 		63DB052123A24C48008C5FCE /* BookmarkTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarkTool.swift; sourceTree = "<group>"; };
 		63DB052523A25A96008C5FCE /* LockFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockFile.swift; sourceTree = "<group>"; };
 		63DB9A0623A14769008C5FCE /* PodModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodModifier.swift; sourceTree = "<group>"; };
@@ -80,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				636D7944239107EC005672E7 /* Yams in Frameworks */,
+				663B97B023BCAD1500A39712 /* SwiftyUserDefaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -101,7 +101,6 @@
 			isa = PBXGroup;
 			children = (
 				6339A60723925A440003A206 /* Pasteboard.swift */,
-				639052F82399632400F4C672 /* UserDefaultsWrapper.swift */,
 				63DB052123A24C48008C5FCE /* BookmarkTool.swift */,
 			);
 			path = Tool;
@@ -214,6 +213,7 @@
 			name = Aquarius;
 			packageProductDependencies = (
 				636D7943239107EC005672E7 /* Yams */,
+				663B97AF23BCAD1500A39712 /* SwiftyUserDefaults */,
 			);
 			productName = Aquarius;
 			productReference = 636D790C23910796005672E7 /* Aquarius.app */;
@@ -246,6 +246,7 @@
 			mainGroup = 636D790323910796005672E7;
 			packageReferences = (
 				636D7942239107EC005672E7 /* XCRemoteSwiftPackageReference "Yams" */,
+				663B97AE23BCAD1500A39712 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */,
 			);
 			productRefGroup = 636D790D23910796005672E7 /* Products */;
 			projectDirPath = "";
@@ -292,7 +293,6 @@
 				636D793E239107CB005672E7 /* SpecRepo.swift in Sources */,
 				63F91C9423AB8A1400ABC694 /* SearchBar.swift in Sources */,
 				636D7940239107CB005672E7 /* DataReader.swift in Sources */,
-				639052F92399632400F4C672 /* UserDefaultsWrapper.swift in Sources */,
 				636D791023910796005672E7 /* AppDelegate.swift in Sources */,
 				636D855F23915A23005672E7 /* PodView.swift in Sources */,
 				63259DED2398C981008ECE7B /* PodlistView.swift in Sources */,
@@ -526,6 +526,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		663B97AE23BCAD1500A39712 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sunshinejr/SwiftyUserDefaults";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -533,6 +541,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 636D7942239107EC005672E7 /* XCRemoteSwiftPackageReference "Yams" */;
 			productName = Yams;
+		};
+		663B97AF23BCAD1500A39712 /* SwiftyUserDefaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 663B97AE23BCAD1500A39712 /* XCRemoteSwiftPackageReference "SwiftyUserDefaults" */;
+			productName = SwiftyUserDefaults;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

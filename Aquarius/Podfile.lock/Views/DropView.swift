@@ -17,34 +17,35 @@ struct DropView: View {
 
     var body: some View {
         VStack {
-            VStack {
-                Toggle(isOn: self.$data.isBookmarkEnable) {
-                    Text("Bookmark")
-                }
-                .font(.system(size: 10))
-                .toggleStyle(SwitchToggleStyle())
+            HStack {
+                VStack(alignment: .leading) {
+                    Toggle(isOn: self.$data.isBookmarkEnable) {
+                        Text("Bookmark")
+                    }
 
-                Toggle(isOn: self.$data.isIgnoreLastModificationDate) {
-                    Text("Ignore Last Modification Date")
-                }
-                .font(.system(size: 10))
-                .toggleStyle(SwitchToggleStyle())
-            }
+                    Toggle(isOn: self.$data.isIgnoreLastModificationDate) {
+                        Text("Ignore Last Modification Date")
+                    }
+                }.font(.system(size: 10))
+                Spacer()
+            }.padding()
+            Spacer()
             Text("Drag the Podfile.lock here!")
                 .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
                 .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
                     self.loadPath(from: $0)
             }
-        }.onAppear {
-            // check bookmark
-            if self.data.isBookmarkEnable, let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
-                self.data.lockFile = LockFile(isFromBookMark: true, url: url)
+        }.frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
+            .onAppear {
+                // check bookmark
+                if self.data.isBookmarkEnable, let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
+                    self.data.lockFile = LockFile(isFromBookMark: true, url: url)
 
-                // Bookmark is stale, need to save a new one...
-                if isStale, let bookmark = BookmarkTool.bookmark(for: url) {
-                    self.data.bookmark = bookmark
+                    // Bookmark is stale, need to save a new one...
+                    if isStale, let bookmark = BookmarkTool.bookmark(for: url) {
+                        self.data.bookmark = bookmark
+                    }
                 }
-            }
         }
     }
 
@@ -69,7 +70,9 @@ struct DropView: View {
             }
 
             if let bookmark = BookmarkTool.bookmark(for: url) {
-                self.data.bookmark = bookmark
+                DispatchQueue.main.async {
+                    self.data.bookmark = bookmark
+                }
             }
 
             self.data.lockFile = LockFile(isFromBookMark: false, url: url)

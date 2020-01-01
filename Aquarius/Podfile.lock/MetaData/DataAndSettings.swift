@@ -8,6 +8,29 @@
 
 import Combine
 import Foundation
+import SwiftyUserDefaults
+
+extension DefaultsKeys {
+    var isRecursive: DefaultsKey<Bool> {
+        .init("isRecursive", defaultValue: false)
+    }
+
+    var isImpactMode: DefaultsKey<Bool> {
+        .init("isImpactMode", defaultValue: false)
+    }
+
+    var bookmark: DefaultsKey<Data> {
+        .init("bookmark", defaultValue: Data())
+    }
+
+    var isBookmarkEnable: DefaultsKey<Bool> {
+        .init("isBookmarkEnable", defaultValue: true)
+    }
+
+    var isIgnoreLastModificationDate: DefaultsKey<Bool> {
+        .init("isIgnoreLastModificationDate", defaultValue: false)
+    }
+}
 
 class DataAndSettings: ObservableObject {
     @Published var lock: Lock = Lock()
@@ -16,8 +39,12 @@ class DataAndSettings: ObservableObject {
     // is on processing
     @Published var isLoading: Bool = false
 
-    @UserDefault(.isRecursive, defaultValue: false)
-    var isRecursive: Bool { didSet { tryUpdate() } }
+    @Published var isRecursive: Bool = Defaults[\.isRecursive] {
+        didSet {
+            Defaults[\.isRecursive] = isRecursive
+            tryUpdate()
+        }
+    }
 
     /// Mark is impact mode
     ///
@@ -31,17 +58,26 @@ class DataAndSettings: ObservableObject {
     /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
     /// 递归的找下去，会形成一棵树，我称之为”影响树“
     ///
-    @UserDefault(.isImpactMode, defaultValue: false)
-    var isImpactMode: Bool { didSet { tryUpdate() } }
+    @Published var isImpactMode: Bool = Defaults[\.isImpactMode] {
+        didSet {
+            Defaults[\.isImpactMode] = isImpactMode
+            tryUpdate()
+        }
+    }
 
-    @UserDefault(.bookmark, defaultValue: Data())
-    var bookmark: Data
+    var bookmark: Data = Defaults[\.bookmark] {
+        didSet { Defaults[\.bookmark] = bookmark }
+    }
 
-    @UserDefault(.isBookmarkEnable, defaultValue: true)
-    var isBookmarkEnable: Bool
+    @Published var isBookmarkEnable: Bool = Defaults[\.isBookmarkEnable] {
+        didSet { Defaults[\.isBookmarkEnable] = isBookmarkEnable }
+    }
 
-    @UserDefault(.isIgnoreLastModificationDate, defaultValue: false)
-    var isIgnoreLastModificationDate: Bool
+    @Published var isIgnoreLastModificationDate: Bool = Defaults[\.isIgnoreLastModificationDate] {
+        didSet {
+            Defaults[\.isIgnoreLastModificationDate] = isIgnoreLastModificationDate
+        }
+    }
 
     var lockFile: LockFile? {
         didSet {

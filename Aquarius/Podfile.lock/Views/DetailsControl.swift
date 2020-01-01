@@ -17,15 +17,12 @@ struct DetailsControl: View {
                 .font(.title)
             Spacer()
 
-            Toggle(isOn: self.$data.isRecursive) { Text("Recursive") }
-                .font(.system(size: 10))
-                .toggleStyle(SwitchToggleStyle())
-
-            Spacer()
-
-            Toggle(isOn: self.$data.isImpactMode) { Text("Impact") }
-                .font(.system(size: 10))
-                .toggleStyle(SwitchToggleStyle())
+            Group {
+                Toggle(isOn: self.$data.isRecursive) { Text("Recursive") }
+                Spacer()
+                Toggle(isOn: self.$data.isImpactMode) { Text("Impact") }
+                    .toggleStyle(SwitchToggleStyle())
+            }.font(.system(size: 10))
 
             Spacer()
 
@@ -35,8 +32,7 @@ struct DetailsControl: View {
                     .joined(separator: "\n")
                 Pasteboard.write(content)
             }.font(.system(size: 10))
-
-        }.padding(5)
+        }
     }
 }
 

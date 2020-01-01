@@ -21,7 +21,7 @@ struct PodlistView: View {
                     .font(.title)
 
                 Spacer()
-            
+
                 Button("Copy all") {
                     let content = self.data.lock.pods
                         .map { $0.name }
@@ -29,7 +29,7 @@ struct PodlistView: View {
                     Pasteboard.write(content)
                 }.font(.system(size: 10))
                     .disabled(data.lock.pods.isEmpty)
-            }.padding(5)
+            }
 
             List {
                 ForEach(data.lock.pods) { pod in
@@ -43,8 +43,8 @@ struct PodlistView: View {
                 }
             }
 
-        }.frame(minWidth: 400, maxWidth: 400, maxHeight: .infinity)
-            .listStyle(PlainListStyle())
+        }.padding([.top, .trailing], 8)
+            .frame(minWidth: 400, maxWidth: 400, maxHeight: .infinity)
     }
 }
 

@@ -18,11 +18,10 @@ struct DetailsView: View {
 
             DetailsControl()
 
-            List {
-                ForEach(data.detail.reduce([Detail](), +)) { self.view(for: $0) }
-            }
+            List { ForEach(data.detail.reduce([Detail](), +)) { self.view(for: $0) } }
 
-        }.frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
+        }.padding([.top, .trailing], 8)
+            .frame(minWidth: 400, maxWidth: .infinity, maxHeight: .infinity)
     }
 
     private func view(for detail: Detail) -> AnyView? {

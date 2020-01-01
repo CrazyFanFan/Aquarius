@@ -23,15 +23,14 @@ struct SearchBar: View {
             Button(action: {
                 self.searchText = ""
             }) {
-                Text("X")
-                    .font(.system(size: 12))
+                Text("×")
+                    .font(.system(size: 15))
                     .foregroundColor(.secondary)
             }
             .frame(width: 20, height: 20, alignment: .center)
             .cornerRadius(10)
             .disabled(searchText == "")
-
-        }.padding(.init(top: 8, leading: 0, bottom: 0, trailing: 8))
+        }
     }
 }
 
