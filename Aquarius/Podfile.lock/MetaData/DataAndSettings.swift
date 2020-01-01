@@ -10,13 +10,20 @@ import Combine
 import Foundation
 import SwiftyUserDefaults
 
+enum DetailMode: String, CaseIterable, Identifiable, DefaultsSerializable {
+    var id: String { self.rawValue }
+
+    case dependencies
+    case influence
+}
+
 extension DefaultsKeys {
     var isRecursive: DefaultsKey<Bool> {
         .init("isRecursive", defaultValue: false)
     }
 
-    var isImpactMode: DefaultsKey<Bool> {
-        .init("isImpactMode", defaultValue: false)
+    var detailMode: DefaultsKey<DetailMode> {
+        .init("detailMode", defaultValue: .dependencies)
     }
 
     var bookmark: DefaultsKey<Data> {
@@ -58,12 +65,12 @@ class DataAndSettings: ObservableObject {
     /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
     /// 递归的找下去，会形成一棵树，我称之为”影响树“
     ///
-    @Published var isImpactMode: Bool = Defaults[\.isImpactMode] {
-        didSet {
-            Defaults[\.isImpactMode] = isImpactMode
-            tryUpdate()
-        }
-    }
+    @Published var detailMode: DetailMode = Defaults[\.detailMode] {
+           didSet {
+               Defaults[\.detailMode] = detailMode
+               tryUpdate()
+           }
+       }
 
     var bookmark: Data = Defaults[\.bookmark] {
         didSet { Defaults[\.bookmark] = bookmark }
@@ -129,7 +136,7 @@ extension DataAndSettings {
         if isRecursive {
             detail.append(recursive(for: pod, at: level))
         } else {
-            detail.append(pod.details(isImpactMode, index: level))
+            detail.append(pod.details(detailMode == .influence, index: level))
         }
     }
 }
@@ -138,7 +145,7 @@ extension DataAndSettings {
 extension DataAndSettings {
     private func recursive(for pod: Pod, at index: Int) -> [Detail] {
         var result = [String]()
-        recursive(nextLevel: pod.nextLevel(isImpactMode), into: &result)
+        recursive(nextLevel: pod.nextLevel(detailMode == .influence), into: &result)
         return [Detail(index: index, content: .pod(pod))] +
             Array(Set(result)).sorted().map { Detail(index: index, content: .nextLevel($0)) }
     }
@@ -149,7 +156,7 @@ extension DataAndSettings {
         for dependency in nextLevel {
             if let pod = lock.pods.first(where: { $0.name == dependency }) {
                 result.append(dependency)
-                recursive(nextLevel: pod.nextLevel(isImpactMode), into: &result)
+                recursive(nextLevel: pod.nextLevel(detailMode == .influence), into: &result)
             }
         }
     }

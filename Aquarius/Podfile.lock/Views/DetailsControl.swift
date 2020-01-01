@@ -14,15 +14,22 @@ struct DetailsControl: View {
     var body: some View {
         HStack {
             Text("Total: \(data.detail.reduce(into: 0, { $0 += $1.count }))")
-                .font(.title)
+                .foregroundColor(.primary)
+                .font(.headline)
+
             Spacer()
 
-            Group {
-                Toggle(isOn: self.$data.isRecursive) { Text("Recursive") }
-                Spacer()
-                Toggle(isOn: self.$data.isImpactMode) { Text("Impact") }
-                    .toggleStyle(SwitchToggleStyle())
-            }.font(.system(size: 10))
+            Toggle(isOn: self.$data.isRecursive) { Text("Recursive") }
+
+            Spacer()
+
+            Picker("", selection: self.$data.detailMode) {
+                ForEach(DetailMode.allCases) {
+                    Text(NSLocalizedString($0.rawValue, comment: ""))
+                        .tag($0)
+                }
+            }.labelsHidden()
+                .scaledToFit()
 
             Spacer()
 
@@ -31,7 +38,7 @@ struct DetailsControl: View {
                     .map { $0.map { $0.content.name }.joined(separator: "\n") }
                     .joined(separator: "\n")
                 Pasteboard.write(content)
-            }.font(.system(size: 10))
+            }
         }
     }
 }

@@ -13,13 +13,7 @@ struct PodModifier: ViewModifier {
     var isSeleced: Bool
 
     func body(content: Self.Content) -> some View {
-        if isSeleced {
-            return AnyView(
-                content
-                    .foregroundColor(.red)
-                    .font(.subheadline)
-            )
-        }
-        return AnyView(content)
+        content
+            .foregroundColor(isSeleced ? .red : .primary)
     }
 }

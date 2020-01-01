@@ -12,7 +12,8 @@
 "Copy all" = "Copy all";
 "Copy" = "Copy";
 "Recursive" = "Recursive";
-"Impact" = "Impact";
+"dependencies" = "Dependencies";
+"influence" = "Influence";
 "Type your search" = "Type your search";
 "Bookmark" = "Bookmark";
 "Ignore Last Modification Date" = "Ignore Last Modification Date";

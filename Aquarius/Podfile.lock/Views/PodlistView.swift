@@ -18,7 +18,8 @@ struct PodlistView: View {
 
             HStack {
                 Text(data.lock.pods.isEmpty ? "Nothing" : "Total: \(data.lock.pods.count)")
-                    .font(.title)
+                    .foregroundColor(.primary)
+                    .font(.headline)
 
                 Spacer()
 
@@ -27,8 +28,7 @@ struct PodlistView: View {
                         .map { $0.name }
                         .joined(separator: "\n")
                     Pasteboard.write(content)
-                }.font(.system(size: 10))
-                    .disabled(data.lock.pods.isEmpty)
+                }.disabled(data.lock.pods.isEmpty)
             }
 
             List {
@@ -38,11 +38,11 @@ struct PodlistView: View {
                             .modifier(PodModifier(isSeleced: self.data.seletedPods.first == pod))
                             .onTapGesture {
                                 self.data.onSelectd(pod: pod, with: 0)
-                            }
+                        }
                     }
                 }
             }
-
+            
         }.padding([.top, .trailing], 8)
             .frame(minWidth: 400, maxWidth: 400, maxHeight: .infinity)
     }
