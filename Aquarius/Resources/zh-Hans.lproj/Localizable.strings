@@ -11,9 +11,14 @@
 "Total: %lld" = "共计: %lld";
 "Copy all" = "复制";
 "Copy" = "复制";
+"Copy child nodes"="复制子节点";
+"Copy child nodes (Recursive)"="复制子节点(递归)";
 "Recursive" = "递归";
 "dependencies" = "依赖树";
 "influence" = "影响树";
 "Type your search" = "请输入搜索内容";
 "Bookmark" = "书签";
 "Ignore Last Modification Date" = "忽略最后修改时间";
+"Displayed as a tree" = "以树形显示";
+"Ignore subnode deep" = "忽略子节点深度";
+"Cancel" = "取消";

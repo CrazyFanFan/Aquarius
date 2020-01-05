@@ -8,9 +8,7 @@
 
 import Foundation
 
-struct Pod: Hashable, Codable, Identifiable {
-    var id: String { self.name }
-
+struct Pod {
     enum Relation: Int, Codable {
         case equal
         case moreThan
@@ -48,6 +46,11 @@ struct Pod: Hashable, Codable, Identifiable {
             return nil
         }
     }
+}
+
+extension Pod: Hashable {}
+extension Pod: Identifiable {
+    var id: Int { self.hashValue }
 }
 
 private extension Pod {

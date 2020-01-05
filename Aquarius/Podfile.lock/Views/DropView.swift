@@ -12,20 +12,22 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct DropView: View {
-    @EnvironmentObject var data: DataAndSettings
+    @EnvironmentObject var data: DataManager
+    @EnvironmentObject  var setting: Setting
     @State private var isTargeted: Bool = false
 
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading) {
-                    Toggle(isOn: self.$data.isBookmarkEnable) {
+                    Toggle(isOn: $setting.isBookmarkEnable) {
                         Text("Bookmark")
                     }
 
-                    Toggle(isOn: self.$data.isIgnoreLastModificationDate) {
+                    Toggle(isOn: $setting.isIgnoreLastModificationDate) {
                         Text("Ignore Last Modification Date")
                     }
+
                 }.font(.system(size: 10))
                 Spacer()
             }.padding()
@@ -38,7 +40,7 @@ struct DropView: View {
         }.frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
             .onAppear {
                 // check bookmark
-                if self.data.isBookmarkEnable, let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
+                if self.setting.isBookmarkEnable, let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
                     self.data.lockFile = LockFile(isFromBookMark: true, url: url)
 
                     // Bookmark is stale, need to save a new one...

@@ -12,16 +12,15 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct LockRootView: View {
-    @EnvironmentObject var data: DataAndSettings
-    @State private var isPodViewShow: Bool = false
+    @EnvironmentObject var data: DataManager
 
     var body: some View {
         ZStack {
             HStack {
                 DropView()
-                PodlistView()
-                if !data.detail.isEmpty {
-                    DetailsView()
+
+                if data.lockFile != nil {
+                    TreeContent()
                 }
             }
 

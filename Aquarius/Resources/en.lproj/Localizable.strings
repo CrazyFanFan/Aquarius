@@ -11,9 +11,14 @@
 "Total: %lld" = "Total: %lld";
 "Copy all" = "Copy all";
 "Copy" = "Copy";
+"Copy child nodes"="Copy child nodes";
+"Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
 "Recursive" = "Recursive";
 "dependencies" = "Dependencies";
 "influence" = "Influence";
 "Type your search" = "Type your search";
 "Bookmark" = "Bookmark";
 "Ignore Last Modification Date" = "Ignore Last Modification Date";
+"Displayed as a tree" = "Displayed as a tree";
+"Ignore subnode deep" = "Ignore subnode deep";
+"Cancel" = "Cancel";

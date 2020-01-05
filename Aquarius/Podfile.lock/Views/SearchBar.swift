@@ -14,21 +14,16 @@ struct SearchBar: View {
 
     var body: some View {
         HStack {
-            Text("🔍")
-                .foregroundColor(.secondary)
-
             TextField("Type your search", text: $searchText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
 
             Button(action: {
                 self.searchText = ""
             }) {
-                Text("×")
+                Text("Cancel")
                     .font(.system(size: 15))
                     .foregroundColor(.secondary)
             }
-            .frame(width: 20, height: 20, alignment: .center)
-            .cornerRadius(10)
             .disabled(searchText == "")
         }
     }
