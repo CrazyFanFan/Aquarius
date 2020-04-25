@@ -96,7 +96,6 @@ private extension TreeData {
     }
 
     func getNextLevel(node: TreeNode, isImpactMode: Bool) {
-
         if !isImpactMode {
             node.dependencies = namesToNodes(deep: node.deep + 1, names: node.pod.dependencies)
         } else {

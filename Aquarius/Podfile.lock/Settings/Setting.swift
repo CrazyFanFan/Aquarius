@@ -16,7 +16,6 @@ enum DetailMode: String, CaseIterable, Identifiable, DefaultsSerializable {
     case influence
 }
 
-
 class Setting: ObservableObject {
     static var shared = Setting()
 

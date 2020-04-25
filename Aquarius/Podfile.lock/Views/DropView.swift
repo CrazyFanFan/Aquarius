@@ -13,7 +13,7 @@ private let supportType: String = kUTTypeFileURL as String
 
 struct DropView: View {
     @EnvironmentObject var data: DataManager
-    @EnvironmentObject  var setting: Setting
+    @EnvironmentObject var setting: Setting
     @State private var isTargeted: Bool = false
 
     var body: some View {

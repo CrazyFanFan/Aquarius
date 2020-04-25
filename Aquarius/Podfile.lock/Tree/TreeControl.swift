@@ -17,7 +17,6 @@ struct TreeControl: View {
             SearchBar(searchText: $data.treeData.searchText)
 
             HStack {
-
                 Text("Total: \(data.treeData.showNodes.filter { $0.deep == 0 }.count)")
                     .foregroundColor(.primary)
                     .font(.headline)
