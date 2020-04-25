@@ -3,6 +3,9 @@
 
 A tool to obtain dependencies by analyzing "Podfile.lock"
 
+## Preview
+![Image](./Screenshots/s_1.jpg)
+
 ## Usage
 - clone this repo
 - open **Aquarius.xcodeproj** by Xcode(Version >= 11.0)
