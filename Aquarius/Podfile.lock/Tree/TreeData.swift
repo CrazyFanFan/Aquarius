@@ -142,20 +142,36 @@ extension TreeData {
         case .none:
             return node.pod.name
         case .single:
-            if let next = node.pod.nextLevel(isImpactMode) {
-                return node.pod.name + "\n\t" + next.joined(separator: "\n\t")
+            if var next = node.pod.nextLevel(isImpactMode) {
+                if next.count == 1 {
+                    return node.pod.name + "└── " + next.joined()
+                } else {
+                    let last = next.removeLast()
+                    return node.pod.name + "\n├── " + next.joined(separator: "\n├── ") + "└── " + last
+                }
             }
             return node.pod.name
 
         case .recursive:
             var temp = node.pod.name
             if let nodes = namesToNodes(deep: node.deep + 1, names: node.pod.nextLevel(isImpactMode)) {
-                let next = nodes.map { self.content(for: $0, with: .recursive) }
-                    .joined(separator: "\n")
-                    .split(separator: "\n")
-                    .joined(separator: "\n\t")
+                if nodes.count == 1 {
+                    temp = temp + "\n└── " +
+                        content(for: nodes.first!, with: deepMode)
+                        .split(separator: "\n")
+                        .joined(separator: "\n    ")
+                } else {
+                    var nexts = nodes.map { self.content(for: $0, with: .recursive) }
+                    let last = nexts.removeLast()
 
-                temp = temp + "\n\t" + next
+                    let next = nexts
+                        .map { ("├── " + $0).split(separator: "\n").joined(separator: "\n│   ") }
+                        .joined(separator: "\n")
+                        + "\n"
+                        + ("└── " + last).split(separator: "\n").joined(separator: "\n    ")
+
+                    temp = temp + "\n" + next
+                }
             }
             return temp
         }

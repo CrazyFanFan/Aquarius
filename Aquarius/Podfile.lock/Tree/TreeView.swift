@@ -16,23 +16,23 @@ struct TreeView: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            HStack {
-                Text(node.pod.name)
-                    .font(.system(size: 14))
-                    .foregroundColor(.primary)
+            Text(node.pod.name + "  ")
+                .font(.system(size: 14))
+                .foregroundColor(.primary)
 
-                Text(node.pod.info?.name ?? "")
-                    .font(.system(size: 14))
-                    .foregroundColor(.secondary)
+                + Text((node.pod.info?.name ?? "") + "  ")
+                .font(.system(size: 14))
+                .foregroundColor(.secondary)
 
-                more()
-                    .foregroundColor(.primary)
-                    .opacity(0.4)
-            }
+                + more()
+                .foregroundColor(.secondary)
+
+                + Text("\n")
+                .font(.system(size: 4))
+                .foregroundColor(.secondary)
 
             Color.secondary
                 .frame(width: nil, height: 1, alignment: .leading)
-                .opacity(node.deep == 0 ? 0.7 : 0.2)
         }.padding(
             .leading,
             CGFloat(
@@ -45,7 +45,7 @@ struct TreeView: View {
 
     private func more() -> Text {
         guard let count = node.hasMore(isImpactMode) else { return Text("") }
-        return Text("\(node.isExpanded ? "▲" : "▼")(\(count))")
+        return Text("\(node.isExpanded ? "▲" : "▼")·(\(count))")
     }
 }
 
