@@ -15,8 +15,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Create the SwiftUI view that provides the window contents.
+        let treeData = TreeData()
         let contentView = LockRootView()
-            .environmentObject(DataManager())
+            .environmentObject(treeData)
             .environmentObject(Setting.shared)
 
         // Create the window and set the content view.

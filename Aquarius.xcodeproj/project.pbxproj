@@ -23,7 +23,6 @@
 		636D7940239107CB005672E7 /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D793A239107CB005672E7 /* DataReader.swift */; };
 		636D7944239107EC005672E7 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 636D7943239107EC005672E7 /* Yams */; };
 		636D855D239152C2005672E7 /* DropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D855C239152C2005672E7 /* DropView.swift */; };
-		636D8561239183C6005672E7 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D8560239183C6005672E7 /* DataManager.swift */; };
 		636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D85632391880E005672E7 /* ActivityIndicator.swift */; };
 		639F8EF02453DDBE0034BE7C /* Setting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639F8EEF2453DDBE0034BE7C /* Setting.swift */; };
 		63D5B7FE2453020C0011EF43 /* TreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D5B7FD2453020C0011EF43 /* TreeControl.swift */; };
@@ -62,7 +61,6 @@
 		636D793A239107CB005672E7 /* DataReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataReader.swift; sourceTree = "<group>"; };
 		636D793C239107CB005672E7 /* Podfile.lock */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile.lock; sourceTree = "<group>"; };
 		636D855C239152C2005672E7 /* DropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropView.swift; sourceTree = "<group>"; };
-		636D8560239183C6005672E7 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		636D85632391880E005672E7 /* ActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		639F8EEF2453DDBE0034BE7C /* Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Setting.swift; sourceTree = "<group>"; };
 		63D5B7FD2453020C0011EF43 /* TreeControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeControl.swift; sourceTree = "<group>"; };
@@ -173,7 +171,6 @@
 		636D7936239107CB005672E7 /* MetaData */ = {
 			isa = PBXGroup;
 			children = (
-				636D8560239183C6005672E7 /* DataManager.swift */,
 				636D793A239107CB005672E7 /* DataReader.swift */,
 				633999DE239212D10003A206 /* Details.swift */,
 				636D7937239107CB005672E7 /* Lock.swift */,
@@ -298,7 +295,6 @@
 			files = (
 				636D793F239107CB005672E7 /* Pod.swift in Sources */,
 				667BDB7C23C207DE001D1096 /* TreeData.swift in Sources */,
-				636D8561239183C6005672E7 /* DataManager.swift in Sources */,
 				636D855D239152C2005672E7 /* DropView.swift in Sources */,
 				63D5B7FE2453020C0011EF43 /* TreeControl.swift in Sources */,
 				6339A60823925A440003A206 /* Pasteboard.swift in Sources */,
@@ -485,7 +481,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kongkaikai.aquarius;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -509,7 +505,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.0.0;
+				MARKETING_VERSION = 2.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kongkaikai.aquarius;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

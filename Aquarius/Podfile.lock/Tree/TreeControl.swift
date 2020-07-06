@@ -10,14 +10,14 @@ import SwiftUI
 
 struct TreeControl: View {
     @EnvironmentObject private var setting: Setting
-    @EnvironmentObject var data: DataManager
+    @EnvironmentObject var treeData: TreeData
 
     var body: some View {
         VStack {
-            SearchBar(searchText: $data.treeData.searchText)
+            SearchBar(searchText: $treeData.searchText)
 
             HStack {
-                Text("Total: \(data.treeData.showNodes.filter { $0.deep == 0 }.count)")
+                Text("Total: \(treeData.showNodes.filter { $0.deep == 0 }.count)")
                     .foregroundColor(.primary)
                     .font(.headline)
 
@@ -29,7 +29,7 @@ struct TreeControl: View {
 
                 Spacer()
 
-                Picker("", selection: $data.treeData.detailMode) {
+                Picker("", selection: $treeData.detailMode) {
                     ForEach(DetailMode.allCases) {
                         Text(NSLocalizedString($0.rawValue, comment: ""))
                             .tag($0)
@@ -41,7 +41,7 @@ struct TreeControl: View {
                 Spacer()
 
                 Button("Copy all") {
-                    let content = self.data.treeData.showNodes
+                    let content = self.treeData.showNodes
                         .map { (0..<$0.deep).map { _ in "\t" }.joined() + $0.pod.name }
                         .joined(separator: "\n")
                     Pasteboard.write(content)

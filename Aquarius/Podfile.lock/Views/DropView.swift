@@ -12,8 +12,8 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct DropView: View {
-    @EnvironmentObject var data: DataManager
     @EnvironmentObject var setting: Setting
+    @EnvironmentObject var data: TreeData
     @State private var isTargeted: Bool = false
 
     var body: some View {

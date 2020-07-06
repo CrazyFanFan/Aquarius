@@ -12,7 +12,7 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct LockRootView: View {
-    @EnvironmentObject var data: DataManager
+    @EnvironmentObject var data: TreeData
 
     var body: some View {
         ZStack {

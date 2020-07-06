@@ -9,18 +9,18 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @EnvironmentObject var data: DataManager
     @EnvironmentObject var setting: Setting
+    @EnvironmentObject var treeData: TreeData
 
     var body: some View {
         List {
             Section(header: TreeControl()) {
-                ForEach(data.treeData.showNodes) { node in
-                    TreeView(node: node, isImpactMode: self.data.treeData.isImpactMode)
+                ForEach(treeData.showNodes) { node in
+                    TreeView(node: node, isImpactMode: self.treeData.isImpactMode)
                         .contentShape(Rectangle())
                         .onTapGesture {
                             withAnimation {
-                                self.data.treeData.onSeletd(node: node)
+                                self.treeData.onSeletd(node: node)
                             }
                     }.contextMenu {
                         Button(action: {
@@ -30,13 +30,17 @@ struct TreeContent: View {
                         }
 
                         Button(action: {
-                            Pasteboard.write(self.data.treeData.content(for: node, with: .single))
+                            self.treeData.content(for: node, with: .single) {
+                                 Pasteboard.write($0)
+                            }
                         }) {
                             Text("Copy child nodes")
                         }
 
                         Button(action: {
-                            Pasteboard.write(self.data.treeData.content(for: node, with: .recursive))
+                            self.treeData.content(for: node, with: .recursive) {
+                                 Pasteboard.write($0)
+                            }
                         }) {
                             Text("Copy child nodes (Recursive)")
                         }

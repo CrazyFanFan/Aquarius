@@ -8,14 +8,42 @@
 
 import Foundation
 import SwiftyUserDefaults
+import Combine
 
-struct TreeData {
+class TreeData: ObservableObject {
+    // is on processing
+    @Published var isLoading: Bool = false
+
     private var podToNodeCache: [Pod: TreeNode] = [:]
     private var dependenceToNodeCache: [String: TreeNode] = [:]
     private var nodes: [TreeNode] = []
 
     private var __showNodes: [TreeNode] = []
-    private(set) var showNodes: [TreeNode] = []
+    @Published private(set) var showNodes: [TreeNode] = []
+
+    private var __cache: [CacheKey: String] = [:]
+
+    private var setting = Setting.shared
+
+    var bookmark: Data = Defaults[\.bookmark] {
+        didSet { Defaults[\.bookmark] = bookmark }
+    }
+
+    var lockFile: LockFile? {
+        didSet {
+            if setting.isIgnoreLastModificationDate {
+                self.loadFile()
+            } else {
+                checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
+                    if isNeedReloadData {
+                        self.loadFile()
+                    }
+                }
+            }
+        }
+    }
+
+    private var lastReadDataTime: Date?
 
     var lock: Lock? {
         didSet { buildTree() }
@@ -52,9 +80,11 @@ struct TreeData {
         }
     }
 
+    private var queue = DispatchQueue(label: "aquarius_data_parse_quque")
+
     init() {}
 
-    mutating func onSeletd(node: TreeNode) {
+    func onSeletd(node: TreeNode) {
         node.isExpanded = !node.isExpanded
 
         getNextLevel(node: node, isImpactMode: isImpactMode)
@@ -62,17 +92,75 @@ struct TreeData {
     }
 }
 
+// MARK: - Load File
 private extension TreeData {
-    mutating func buildTree() {
-        nodes.removeAll()
+    func checkShouldReloadData(oldLockFile: LockFile?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
+        guard let completion = completion else { return }
 
-        // top level
-        lock?.pods.forEach { (pod) in
-            let node = TreeNode(deep: 0, pod: pod)
-            podToNodeCache[pod] = node
-            nodes.append(node)
+        // If is form bookmark or the old and new path do not match, the data must be reloaded.
+        if lockFile?.isFromBookMark == true || self.lockFile != oldLockFile {
+            completion(true)
+            return
         }
-        loadData(isImpactMode: isImpactMode)
+
+        // The data needs to be reloaded. if new path is nil or empty.
+        guard let file = lockFile, !file.url.path.isEmpty else {
+            completion(false)
+            return
+        }
+
+        // If read attributes fails, the data needs to be reloaded.
+        guard let attributes = try? FileManager.default.attributesOfItem(atPath: file.url.path),
+            let fileModificationDate = attributes[.modificationDate] as? Date,
+            let lastReadDataTime = self.lastReadDataTime else {
+                completion(true)
+                return
+        }
+
+        if fileModificationDate.distance(to: lastReadDataTime) < 0 {
+            completion(true)
+        } else {
+            completion(false)
+        }
+    }
+
+    func loadFile() {
+        DispatchQueue.main.async {
+            guard let info = self.lockFile else { return }
+            self.isLoading = true
+            self.queue.async {
+                self.lastReadDataTime = Date()
+                if let lock = DataReader(file: info).readData() {
+                    DispatchQueue.main.async {
+                        // update lock data
+                        self.lock = lock
+
+                        // update status
+                        self.isLoading = false
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.isLoading = false
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - load show data
+private extension TreeData {
+    func buildTree() {
+        nodes.removeAll()
+        queue.async {
+            // top level
+            self.lock?.pods.forEach { (pod) in
+                let node = TreeNode(deep: 0, pod: pod)
+                self.podToNodeCache[pod] = node
+                self.nodes.append(node)
+            }
+            self.loadData(isImpactMode: self.isImpactMode)
+        }
     }
 
     func namesToNodes(deep: Int, names: [String]?) -> [TreeNode]? {
@@ -103,7 +191,7 @@ private extension TreeData {
         }
     }
 
-    mutating func loadData(isImpactMode: Bool, resetIsExpanded: Bool = false) {
+    func loadData(isImpactMode: Bool, resetIsExpanded: Bool = false) {
         __showNodes.removeAll()
 
         if resetIsExpanded {
@@ -113,7 +201,7 @@ private extension TreeData {
         traverse(nodes, isImpactMode: isImpactMode)
     }
 
-    private mutating func traverse(_ nodes: [TreeNode], isImpactMode: Bool) {
+    private func traverse(_ nodes: [TreeNode], isImpactMode: Bool) {
         for node in nodes {
             if self.searchText.isEmpty ||
                 node.deep > 0 ||
@@ -126,42 +214,73 @@ private extension TreeData {
             }
         }
 
-        showNodes = __showNodes
+        DispatchQueue.main.async {
+            self.showNodes = self.__showNodes
+        }
     }
 }
 
+// MARK: - Data Copy
 extension TreeData {
-    enum NodeContentDeepMode {
+    enum NodeContentDeepMode: Hashable {
         case none
         case single
         case recursive
     }
 
-    func content(for node: TreeNode, with deepMode: NodeContentDeepMode) -> String {
+    struct CacheKey: Hashable {
+        var name: String
+        var mode: NodeContentDeepMode
+        var impact: Bool
+    }
+
+    func content(for node: TreeNode, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
+        guard let completion = completion else { return }
+
+        isLoading = true
+        queue.async {
+            self.__cache.removeAll()
+            completion(self.__content(for: node, with: deepMode))
+            self.__cache.removeAll()
+
+            DispatchQueue.main.async {
+                self.isLoading = false
+            }
+        }
+    }
+
+    func __content(for node: TreeNode, with deepMode: NodeContentDeepMode) -> String {
+        let key = CacheKey(name: node.pod.name, mode: deepMode, impact: isImpactMode)
+        if let result = __cache[key] { return result }
+
         switch deepMode {
         case .none:
             return node.pod.name
         case .single:
+            var result: String = node.pod.name
             if var next = node.pod.nextLevel(isImpactMode) {
                 if next.count == 1 {
-                    return node.pod.name + "\n└── " + next.joined()
+                    result += ("\n└── " + next.joined())
                 } else {
                     let last = next.removeLast()
-                    return node.pod.name + "\n├── " + next.joined(separator: "\n├── ") + "\n└── " + last
+                    result += ("\n├── " + next.joined(separator: "\n├── ") + "\n└── " + last)
                 }
             }
-            return node.pod.name
+
+            __cache[key] = result
+            return result
 
         case .recursive:
-            var temp = node.pod.name
+            var result = node.pod.name
+
             if let nodes = namesToNodes(deep: node.deep + 1, names: node.pod.nextLevel(isImpactMode)) {
                 if nodes.count == 1 {
-                    temp = temp + "\n└── " +
-                        content(for: nodes.first!, with: deepMode)
+                    result = result + "\n└── " +
+                        __content(for: nodes.first!, with: deepMode)
                         .split(separator: "\n")
                         .joined(separator: "\n    ")
                 } else {
-                    var nexts = nodes.map { self.content(for: $0, with: .recursive) }
+                    var nexts = nodes.map { self.__content(for: $0, with: .recursive) }
                     let last = nexts.removeLast()
 
                     let next = nexts
@@ -170,10 +289,12 @@ extension TreeData {
                         + "\n"
                         + ("└── " + last).split(separator: "\n").joined(separator: "\n    ")
 
-                    temp = temp + "\n" + next
+                    result = result + "\n" + next
                 }
             }
-            return temp
+            __cache[key] = result
+
+            return result
         }
     }
 }
