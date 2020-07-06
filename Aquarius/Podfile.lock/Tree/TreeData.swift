@@ -144,10 +144,10 @@ extension TreeData {
         case .single:
             if var next = node.pod.nextLevel(isImpactMode) {
                 if next.count == 1 {
-                    return node.pod.name + "└── " + next.joined()
+                    return node.pod.name + "\n└── " + next.joined()
                 } else {
                     let last = next.removeLast()
-                    return node.pod.name + "\n├── " + next.joined(separator: "\n├── ") + "└── " + last
+                    return node.pod.name + "\n├── " + next.joined(separator: "\n├── ") + "\n└── " + last
                 }
             }
             return node.pod.name
