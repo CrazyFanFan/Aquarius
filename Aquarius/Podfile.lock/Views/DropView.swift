@@ -12,35 +12,44 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct DropView: View {
-    @EnvironmentObject var setting: Setting
     @EnvironmentObject var data: TreeData
+
+    @AppStorage("isBookmarkEnable") private var isBookmarkEnable: Bool = false
+    @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
+
     @State private var isTargeted: Bool = false
 
     var body: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading) {
-                    Toggle(isOn: $setting.isBookmarkEnable) {
-                        Text("Bookmark")
-                    }
+        ZStack {
+            VStack {
+                HStack {
+                    VStack(alignment: .leading) {
+                        Toggle(isOn: $isBookmarkEnable) {
+                            Text("Bookmark")
+                        }
 
-                    Toggle(isOn: $setting.isIgnoreLastModificationDate) {
-                        Text("Ignore Last Modification Date")
-                    }
+                        Toggle(isOn: $isIgnoreLastModificationDate) {
+                            Text("Ignore Last Modification Date")
+                        }
 
-                }.font(.system(size: 10))
+                    }
+                    .font(.system(size: 10))
+
+                    Spacer()
+                }.padding()
+
                 Spacer()
-            }.padding()
-            Spacer()
-            Text("Drag the Podfile.lock here!")
-                .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
-                .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
-                    self.loadPath(from: $0)
+
+                Text("Drag the Podfile.lock here!")
+                    .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
+                    .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
+                        self.loadPath(from: $0)
+                    }
             }
-        }.frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
+            .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
             .onAppear {
                 // check bookmark
-                if self.setting.isBookmarkEnable, let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
+                if self.isBookmarkEnable, let (url, isStale) = BookmarkTool.url(for: self.data.bookmark) {
                     self.data.lockFile = LockFile(isFromBookMark: true, url: url)
 
                     // Bookmark is stale, need to save a new one...
@@ -48,6 +57,11 @@ struct DropView: View {
                         self.data.bookmark = bookmark
                     }
                 }
+            }
+
+            if isTargeted {
+                Color.green.opacity(0.03)
+            }
         }
     }
 
@@ -60,10 +74,10 @@ struct DropView: View {
             }
 
             guard let urlData = data as? Data,
-                let urlString = String(data: urlData, encoding: .utf8),
-                let url = URL(string: urlString) else {
-                    // TODO error
-                    return
+                  let urlString = String(data: urlData, encoding: .utf8),
+                  let url = URL(string: urlString) else {
+                // TODO error
+                return
             }
 
             guard url.lastPathComponent == "Podfile.lock" else {
