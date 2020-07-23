@@ -13,8 +13,7 @@ struct TreeContent: View {
 
     var body: some View {
         VStack {
-            TreeControl()
-
+            TreeControl().padding([.top, .trailing])
             List {
                 ForEach(treeData.showNodes) { node in
                     TreeView(node: node, isImpactMode: self.treeData.isImpactMode)
@@ -24,31 +23,23 @@ struct TreeContent: View {
                                 self.treeData.onSeletd(node: node)
                             }
                         }.contextMenu {
-                            Button(action: {
-                                Pasteboard.write(node.pod.name)
-                            }) {
-                                Text("Copy")
-                            }
+                            Button("Copy") { Pasteboard.write(node.pod.name) }
 
-                            Button(action: {
+                            Button("Copy child nodes") {
                                 self.treeData.content(for: node, with: .single) {
                                     Pasteboard.write($0)
                                 }
-                            }) {
-                                Text("Copy child nodes")
                             }
 
-                            Button(action: {
+                            Button("Copy child nodes (Recursive)") {
                                 self.treeData.content(for: node, with: .recursive) {
                                     Pasteboard.write($0)
                                 }
-                            }) {
-                                Text("Copy child nodes (Recursive)")
                             }
                         }
                 }
             }
-        }.frame(minWidth: 400, alignment: .center)
+        }.frame(minWidth: 450, alignment: .center)
     }
 }
 

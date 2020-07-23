@@ -17,11 +17,9 @@ struct TreeView: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text(node.pod.name + "  ")
-                .font(.system(size: 14))
                 .foregroundColor(.primary)
 
                 + Text((node.pod.info?.name ?? "") + "  ")
-                .font(.system(size: 14))
                 .foregroundColor(.secondary)
 
                 + more()
@@ -30,6 +28,7 @@ struct TreeView: View {
             Color.secondary
                 .frame(width: nil, height: 1, alignment: .leading)
         }
+        .font(.system(size: 14))
         .padding(
             .leading,
             CGFloat(node.deep > 0 ? (isIgnoreNodeDeep ? 30 : node.deep * 30) : 0)
