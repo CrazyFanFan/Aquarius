@@ -14,7 +14,6 @@ struct AquariusApp: App {
         WindowGroup {
             LockRootView()
                 .environmentObject(TreeData())
-                .environmentObject(Setting.shared)
         }
     }
 }

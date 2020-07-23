@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TreeControl: View {
-    @EnvironmentObject private var setting: Setting
+    @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep: Bool = false
     @EnvironmentObject var treeData: TreeData
 
     var body: some View {
@@ -23,7 +23,7 @@ struct TreeControl: View {
 
                 Spacer()
 
-                Toggle(isOn: $setting.isIgnoreNodeDeep) {
+                Toggle(isOn: $isIgnoreNodeDeep) {
                     Text("Ignore subnode deep")
                 }
 
@@ -31,8 +31,7 @@ struct TreeControl: View {
 
                 Picker("", selection: $treeData.detailMode) {
                     ForEach(DetailMode.allCases) {
-                        Text(NSLocalizedString($0.rawValue, comment: ""))
-                            .tag($0)
+                        Text(NSLocalizedString($0.rawValue, comment: "")).tag($0)
                     }
                 }
                 .labelsHidden()

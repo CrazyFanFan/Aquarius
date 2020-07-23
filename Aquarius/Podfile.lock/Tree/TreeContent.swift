@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @EnvironmentObject var setting: Setting
     @EnvironmentObject var treeData: TreeData
 
     var body: some View {

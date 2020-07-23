@@ -6,8 +6,7 @@
 //  Copyright © 2020 Crazy凡. All rights reserved.
 //
 
-import Foundation
-import SwiftyUserDefaults
+import SwiftUI
 import Combine
 
 class TreeData: ObservableObject {
@@ -23,15 +22,12 @@ class TreeData: ObservableObject {
 
     private var __cache: [CacheKey: String] = [:]
 
-    private var setting = Setting.shared
-
-    var bookmark: Data = Defaults[\.bookmark] {
-        didSet { Defaults[\.bookmark] = bookmark }
-    }
+    @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
+    @AppStorage("bookmark") var bookmark: Data?
 
     var lockFile: LockFile? {
         didSet {
-            if setting.isIgnoreLastModificationDate {
+            if isIgnoreLastModificationDate {
                 self.loadFile()
             } else {
                 checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
@@ -67,18 +63,8 @@ class TreeData: ObservableObject {
     /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
     /// 递归的找下去，会形成一棵树，我称之为”影响树“
     ///
-    var detailMode: DetailMode = Defaults[\.detailMode] {
-        didSet {
-            Defaults[\.detailMode] = detailMode
-            self.isImpactMode = detailMode == .influence
-        }
-    }
-
-    var isImpactMode: Bool = Defaults[\.detailMode] == .influence {
-        didSet {
-            loadData(isImpactMode: isImpactMode, resetIsExpanded: true)
-        }
-    }
+    @AppStorage("detailMode") var detailMode: DetailMode = .influence
+    var isImpactMode: Bool { detailMode == .influence }
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")
 

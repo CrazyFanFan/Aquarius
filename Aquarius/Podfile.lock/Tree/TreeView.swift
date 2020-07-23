@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TreeView: View {
-    @EnvironmentObject var setting: Setting
+    @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep = false
 
     var node: TreeNode
     var isImpactMode: Bool
@@ -27,19 +27,12 @@ struct TreeView: View {
                 + more()
                 .foregroundColor(.secondary)
 
-                + Text("\n")
-                .font(.system(size: 4))
-                .foregroundColor(.secondary)
-
             Color.secondary
                 .frame(width: nil, height: 1, alignment: .leading)
-        }.padding(
+        }
+        .padding(
             .leading,
-            CGFloat(
-                node.deep > 0 ?
-                    (setting.isIgnoreNodeDeep ? 30 : node.deep * 30) :
-                    0
-            )
+            CGFloat(node.deep > 0 ? (isIgnoreNodeDeep ? 30 : node.deep * 30) : 0)
         )
     }
 
