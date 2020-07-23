@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		630464EF24CA11DF00E6AE9F /* AquariusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630464EE24CA11DF00E6AE9F /* AquariusApp.swift */; };
-		6336E65E23C2465C009F72F8 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6336E65D23C2465C009F72F8 /* Keys.swift */; };
+		6336E65E23C2465C009F72F8 /* DetailMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6336E65D23C2465C009F72F8 /* DetailMode.swift */; };
 		633999DF239212D10003A206 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633999DE239212D10003A206 /* Details.swift */; };
 		6339A5FD239256CA0003A206 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6339A5FF239256CA0003A206 /* Localizable.strings */; };
 		6339A601239256D50003A206 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6339A603239256D50003A206 /* InfoPlist.strings */; };
@@ -38,7 +38,7 @@
 		630464EE24CA11DF00E6AE9F /* AquariusApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AquariusApp.swift; sourceTree = "<group>"; };
 		6331278523A29925005BD0A8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		6331278623A2997E005BD0A8 /* README_CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
-		6336E65D23C2465C009F72F8 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
+		6336E65D23C2465C009F72F8 /* DetailMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMode.swift; sourceTree = "<group>"; };
 		633999DE239212D10003A206 /* Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		633999E2239255CB0003A206 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		6339A5FE239256CA0003A206 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -82,14 +82,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6336E65C23C24638009F72F8 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				6336E65D23C2465C009F72F8 /* Keys.swift */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
 		633999E5239256490003A206 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -115,7 +107,6 @@
 			children = (
 				630464EE24CA11DF00E6AE9F /* AquariusApp.swift */,
 				636D791123910796005672E7 /* LockRootView.swift */,
-				6336E65C23C24638009F72F8 /* Settings */,
 				667BDB7823C20426001D1096 /* Tree */,
 				636D7936239107CB005672E7 /* MetaData */,
 				636D793B239107CB005672E7 /* TestData */,
@@ -197,6 +188,7 @@
 		667BDB7823C20426001D1096 /* Tree */ = {
 			isa = PBXGroup;
 			children = (
+				6336E65D23C2465C009F72F8 /* DetailMode.swift */,
 				667BDB7923C204A1001D1096 /* TreeNode.swift */,
 				667BDB7B23C207DE001D1096 /* TreeData.swift */,
 				667BDB7F23C217D5001D1096 /* TreeView.swift */,
@@ -304,7 +296,7 @@
 				667BDB7A23C204A1001D1096 /* TreeNode.swift in Sources */,
 				63F91C9423AB8A1400ABC694 /* SearchBar.swift in Sources */,
 				636D7940239107CB005672E7 /* DataReader.swift in Sources */,
-				6336E65E23C2465C009F72F8 /* Keys.swift in Sources */,
+				6336E65E23C2465C009F72F8 /* DetailMode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
