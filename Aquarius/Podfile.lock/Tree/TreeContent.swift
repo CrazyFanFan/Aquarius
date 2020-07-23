@@ -13,8 +13,10 @@ struct TreeContent: View {
     @EnvironmentObject var treeData: TreeData
 
     var body: some View {
-        List {
-            Section(header: TreeControl()) {
+        VStack {
+            TreeControl()
+
+            List {
                 ForEach(treeData.showNodes) { node in
                     TreeView(node: node, isImpactMode: self.treeData.isImpactMode)
                         .contentShape(Rectangle())
