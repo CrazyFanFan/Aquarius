@@ -24,29 +24,29 @@ struct TreeContent: View {
                             withAnimation {
                                 self.treeData.onSeletd(node: node)
                             }
-                    }.contextMenu {
-                        Button(action: {
-                            Pasteboard.write(node.pod.name)
-                        }) {
-                            Text("Copy")
-                        }
-
-                        Button(action: {
-                            self.treeData.content(for: node, with: .single) {
-                                 Pasteboard.write($0)
+                        }.contextMenu {
+                            Button(action: {
+                                Pasteboard.write(node.pod.name)
+                            }) {
+                                Text("Copy")
                             }
-                        }) {
-                            Text("Copy child nodes")
-                        }
 
-                        Button(action: {
-                            self.treeData.content(for: node, with: .recursive) {
-                                 Pasteboard.write($0)
+                            Button(action: {
+                                self.treeData.content(for: node, with: .single) {
+                                    Pasteboard.write($0)
+                                }
+                            }) {
+                                Text("Copy child nodes")
                             }
-                        }) {
-                            Text("Copy child nodes (Recursive)")
+
+                            Button(action: {
+                                self.treeData.content(for: node, with: .recursive) {
+                                    Pasteboard.write($0)
+                                }
+                            }) {
+                                Text("Copy child nodes (Recursive)")
+                            }
                         }
-                    }
                 }
             }
         }.frame(minWidth: 400, alignment: .center)

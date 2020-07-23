@@ -111,10 +111,10 @@ private extension TreeData {
 
         // If read attributes fails, the data needs to be reloaded.
         guard let attributes = try? FileManager.default.attributesOfItem(atPath: file.url.path),
-            let fileModificationDate = attributes[.modificationDate] as? Date,
-            let lastReadDataTime = self.lastReadDataTime else {
-                completion(true)
-                return
+              let fileModificationDate = attributes[.modificationDate] as? Date,
+              let lastReadDataTime = self.lastReadDataTime else {
+            completion(true)
+            return
         }
 
         if fileModificationDate.distance(to: lastReadDataTime) < 0 {
@@ -170,7 +170,7 @@ private extension TreeData {
             }
 
             if let pod = self.lock?.pods.first(where: { $0.name == dependence }),
-                let node = podToNodeCache[pod]?.copy(with: deep, isImpactMode: isImpactMode) {
+               let node = podToNodeCache[pod]?.copy(with: deep, isImpactMode: isImpactMode) {
                 return node
             }
 
