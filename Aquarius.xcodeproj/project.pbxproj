@@ -16,7 +16,6 @@
 		636D791223910796005672E7 /* LockRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D791123910796005672E7 /* LockRootView.swift */; };
 		636D791423910798005672E7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636D791323910798005672E7 /* Assets.xcassets */; };
 		636D791723910798005672E7 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 636D791623910798005672E7 /* Preview Assets.xcassets */; };
-		636D791A23910798005672E7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 636D791823910798005672E7 /* Main.storyboard */; };
 		636D793D239107CB005672E7 /* Lock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D7937239107CB005672E7 /* Lock.swift */; };
 		636D793E239107CB005672E7 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D7938239107CB005672E7 /* SpecRepo.swift */; };
 		636D793F239107CB005672E7 /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D7939239107CB005672E7 /* Pod.swift */; };
@@ -40,7 +39,6 @@
 		6331278623A2997E005BD0A8 /* README_CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README_CN.md; sourceTree = "<group>"; };
 		6336E65D23C2465C009F72F8 /* DetailMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailMode.swift; sourceTree = "<group>"; };
 		633999DE239212D10003A206 /* Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
-		633999E2239255CB0003A206 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
 		6339A5FE239256CA0003A206 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6339A600239256CE0003A206 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		6339A602239256D50003A206 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -50,7 +48,6 @@
 		636D791123910796005672E7 /* LockRootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockRootView.swift; sourceTree = "<group>"; };
 		636D791323910798005672E7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		636D791623910798005672E7 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		636D791923910798005672E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		636D791B23910798005672E7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		636D791C23910798005672E7 /* Aquarius.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aquarius.entitlements; sourceTree = "<group>"; };
 		636D7937239107CB005672E7 /* Lock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lock.swift; sourceTree = "<group>"; };
@@ -88,7 +85,6 @@
 				636D791323910798005672E7 /* Assets.xcassets */,
 				6339A603239256D50003A206 /* InfoPlist.strings */,
 				6339A5FF239256CA0003A206 /* Localizable.strings */,
-				636D791823910798005672E7 /* Main.storyboard */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -265,7 +261,6 @@
 			files = (
 				6339A5FD239256CA0003A206 /* Localizable.strings in Resources */,
 				6339A601239256D50003A206 /* InfoPlist.strings in Resources */,
-				636D791A23910798005672E7 /* Main.storyboard in Resources */,
 				636D791723910798005672E7 /* Preview Assets.xcassets in Resources */,
 				636D791423910798005672E7 /* Assets.xcassets in Resources */,
 			);
@@ -319,15 +314,6 @@
 				6339A605239258A70003A206 /* zh-Hans */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		636D791823910798005672E7 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				636D791923910798005672E7 /* Base */,
-				633999E2239255CB0003A206 /* zh-Hans */,
-			);
-			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
