@@ -27,6 +27,7 @@ struct LockRootView: View {
             if data.isLoading {
                 ActivityIndicator()
                     .frame(width: 50, height: 50, alignment: .center)
+                    .animation(.easeInOut)
             }
         }
         .frame(minHeight: 350, maxHeight: .infinity)

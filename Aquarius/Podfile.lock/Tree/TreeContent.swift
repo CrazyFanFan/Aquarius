@@ -19,9 +19,7 @@ struct TreeContent: View {
                     TreeView(node: node, isImpactMode: self.treeData.isImpactMode)
                         .contentShape(Rectangle())
                         .onTapGesture {
-                            withAnimation {
-                                self.treeData.onSeletd(node: node)
-                            }
+                            self.treeData.onSeletd(node: node)
                         }.contextMenu {
                             Button("Copy") { Pasteboard.write(node.pod.name) }
 
@@ -38,7 +36,7 @@ struct TreeContent: View {
                             }
                         }
                 }
-            }
+            }.animation(.default)
         }.frame(minWidth: 450, alignment: .center)
     }
 }

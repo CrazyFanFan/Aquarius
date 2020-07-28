@@ -23,10 +23,7 @@ struct TreeControl: View {
 
                 Spacer()
 
-                Toggle(isOn: $isIgnoreNodeDeep) {
-                    Text("Ignore subnode deep")
-                }
-
+                Toggle("Ignore subnode deep", isOn: $isIgnoreNodeDeep)
                 Spacer()
 
                 Picker("", selection: $treeData.detailMode) {
@@ -34,6 +31,7 @@ struct TreeControl: View {
                         Text(NSLocalizedString($0.rawValue, comment: "")).tag($0)
                     }
                 }
+                .pickerStyle(SegmentedPickerStyle())
                 .labelsHidden()
                 .scaledToFit()
 
