@@ -63,7 +63,13 @@ class TreeData: ObservableObject {
     /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
     /// 递归的找下去，会形成一棵树，我称之为”影响树“
     ///
-    @AppStorage("detailMode") var detailMode: DetailMode = .influence
+    @AppStorage("detailMode") var detailMode: DetailMode = .influence {
+        didSet {
+            if detailMode != oldValue {
+                buildTree()
+            }
+        }
+    }
     var isImpactMode: Bool { detailMode == .influence }
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")

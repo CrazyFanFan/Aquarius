@@ -37,7 +37,7 @@ struct TreeView: View {
         .padding(
             .leading,
             CGFloat(node.deep > 0 ? (isIgnoreNodeDeep ? 30 : node.deep * 30) : 0)
-        ).animation(.none)
+        ).animation(.easeIn)
     }
 
     private func more() -> Text? {
