@@ -17,10 +17,10 @@ class TreeData: ObservableObject {
     private var dependenceToNodeCache: [String: TreeNode] = [:]
     private var nodes: [TreeNode] = []
 
-    private var __showNodes: [TreeNode] = []
+    private var innerShowNodes: [TreeNode] = []
     @Published private(set) var showNodes: [TreeNode] = []
 
-    private var __cache: [CacheKey: String] = [:]
+    private var copyFormatedStringCache: [CacheKey: String] = [:]
     private var nameToPodCache: [String: Pod] = [:]
 
     @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
@@ -186,7 +186,7 @@ private extension TreeData {
     }
 
     func loadData(isImpactMode: Bool, resetIsExpanded: Bool = false) {
-        __showNodes.removeAll()
+        innerShowNodes.removeAll()
 
         if resetIsExpanded {
             nodes.forEach { $0.isExpanded = false }
@@ -200,7 +200,7 @@ private extension TreeData {
             if self.searchText.isEmpty ||
                 node.deep > 0 ||
                 node.pod.name.lowercased().contains(self.searchText.lowercased()) {
-                __showNodes.append(node)
+                innerShowNodes.append(node)
 
                 if node.isExpanded, let subNodes = isImpactMode ? node.infecteds : node.dependencies {
                     traverse(subNodes, isImpactMode: isImpactMode)
@@ -209,7 +209,7 @@ private extension TreeData {
         }
 
         DispatchQueue.main.async {
-            self.showNodes = self.__showNodes
+            self.showNodes = self.innerShowNodes
         }
     }
 }
@@ -232,23 +232,33 @@ extension TreeData {
     func content(for node: Pod, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
         guard let completion = completion else { return }
 
-        isLoading = true
+        let checkMode: (_ isRecursiveHandler: () -> Void) -> Void = { handler in
+            switch deepMode {
+            case .recursive: handler()
+            default: break
+            }
+        }
+
+        checkMode { self.isLoading = true }
+
         queue.async {
-            self.__cache.removeAll()
-            completion(self.__content(for: node, with: deepMode))
-            self.__cache.removeAll()
+            self.copyFormatedStringCache.removeAll()
+            completion(self.innerContent(for: node, with: deepMode))
+            self.copyFormatedStringCache.removeAll()
 
             DispatchQueue.main.async {
-                self.isLoading = false
+                checkMode { self.isLoading = false }
             }
         }
     }
 
-    func __content(for node: Pod, with deepMode: NodeContentDeepMode) -> String {
+    private func innerContent(for node: Pod, with deepMode: NodeContentDeepMode) -> String {
         let key = CacheKey(name: node.name, mode: deepMode, impact: isImpactMode)
-        if let result = __cache[key] { return result }
+        if let result = copyFormatedStringCache[key] { return result }
 
-        func __format(_ input: inout [String]) -> String {
+        func formatNames(_ input: inout [String]) -> String {
+            if input.isEmpty { return "" }
+
             if input.count == 1 {
                 return ("\n└── " + input.joined())
             } else {
@@ -263,7 +273,7 @@ extension TreeData {
         case .single:
             var result: String = node.name
             if var next = node.nextLevel(isImpactMode) {
-                result += __format(&next)
+                result += formatNames(&next)
             }
             return result
 
@@ -273,11 +283,11 @@ extension TreeData {
             if let nodes = node.nextLevel(isImpactMode)?.compactMap({ nameToPodCache[$0] }) {
                 if nodes.count == 1 {
                     result = result + "\n└── " +
-                        __content(for: nodes.first!, with: deepMode)
+                        innerContent(for: nodes.first!, with: deepMode)
                         .split(separator: "\n")
                         .joined(separator: "\n    ")
                 } else {
-                    var nexts = nodes.map { self.__content(for: $0, with: .recursive) }
+                    var nexts = nodes.map { self.innerContent(for: $0, with: .recursive) }
                     let last = nexts.removeLast()
 
                     let next = nexts
@@ -289,7 +299,7 @@ extension TreeData {
                     result = result + "\n" + next
                 }
             }
-            __cache[key] = result
+            copyFormatedStringCache[key] = result
             return result
 
         case .stripRecursive:
@@ -303,7 +313,7 @@ extension TreeData {
                 index += 1
             }
 
-            return node.name + __format(&subnames)
+            return node.name + formatNames(&subnames)
         }
     }
 }
