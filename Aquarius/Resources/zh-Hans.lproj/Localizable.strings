@@ -13,6 +13,7 @@
 "Copy" = "复制";
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
+"Copy child nodes (Recursive Strip)"="复制子节点(递归、裁剪)";
 "Recursive" = "递归";
 "dependencies" = "依赖树";
 "influence" = "影响树";

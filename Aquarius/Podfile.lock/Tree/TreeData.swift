@@ -218,6 +218,7 @@ extension TreeData {
         case none
         case single
         case recursive
+        case stripRecursive
     }
 
     struct CacheKey: Hashable {
@@ -245,21 +246,23 @@ extension TreeData {
         let key = CacheKey(name: node.pod.name, mode: deepMode, impact: isImpactMode)
         if let result = __cache[key] { return result }
 
+        func format(_ input: inout [String]) -> String {
+            if input.count == 1 {
+                return ("\n└── " + input.joined())
+            } else {
+                let last = input.removeLast()
+                return ("\n├── " + input.joined(separator: "\n├── ") + "\n└── " + last)
+            }
+        }
+
         switch deepMode {
         case .none:
             return node.pod.name
         case .single:
             var result: String = node.pod.name
             if var next = node.pod.nextLevel(isImpactMode) {
-                if next.count == 1 {
-                    result += ("\n└── " + next.joined())
-                } else {
-                    let last = next.removeLast()
-                    result += ("\n├── " + next.joined(separator: "\n├── ") + "\n└── " + last)
-                }
+                result += format(&next)
             }
-
-            __cache[key] = result
             return result
 
         case .recursive:
@@ -285,8 +288,21 @@ extension TreeData {
                 }
             }
             __cache[key] = result
-
             return result
+
+        case .stripRecursive:
+            let map = nodes.reduce(into: [String: Pod](), { $0[$1.pod.name] = $1.pod })
+            var subnames = node.pod.nextLevel(isImpactMode) ?? []
+            var index = 0
+
+            while index < subnames.count {
+                subnames += map[subnames[index]]?
+                    .nextLevel(isImpactMode)?
+                    .filter({ !subnames.contains($0) }) ?? []
+                index += 1
+            }
+
+            return node.pod.name + format(&subnames)
         }
     }
 }

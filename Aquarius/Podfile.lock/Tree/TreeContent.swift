@@ -42,6 +42,12 @@ struct TreeContent: View {
                                                 Pasteboard.write($0)
                                             }
                                         }
+
+                                        Button("Copy child nodes (Recursive Strip)") {
+                                            self.treeData.content(for: node, with: .stripRecursive) {
+                                                Pasteboard.write($0)
+                                            }
+                                        }
                                     }
                             }
                         }
