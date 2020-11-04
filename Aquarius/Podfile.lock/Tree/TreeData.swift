@@ -21,6 +21,7 @@ class TreeData: ObservableObject {
     @Published private(set) var showNodes: [TreeNode] = []
 
     private var __cache: [CacheKey: String] = [:]
+    private var nameToPodCache: [String: Pod] = [:]
 
     @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
     @AppStorage("bookmark") var bookmark: Data?
@@ -147,6 +148,7 @@ private extension TreeData {
         queue.async {
             // top level
             self.lock?.pods.forEach { (pod) in
+                self.nameToPodCache[pod.name] = pod
                 let node = TreeNode(deep: 0, pod: pod)
                 self.podToNodeCache[pod] = node
                 self.nodes.append(node)
@@ -227,7 +229,7 @@ extension TreeData {
         var impact: Bool
     }
 
-    func content(for node: TreeNode, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
+    func content(for node: Pod, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
         guard let completion = completion else { return }
 
         isLoading = true
@@ -242,11 +244,11 @@ extension TreeData {
         }
     }
 
-    func __content(for node: TreeNode, with deepMode: NodeContentDeepMode) -> String {
-        let key = CacheKey(name: node.pod.name, mode: deepMode, impact: isImpactMode)
+    func __content(for node: Pod, with deepMode: NodeContentDeepMode) -> String {
+        let key = CacheKey(name: node.name, mode: deepMode, impact: isImpactMode)
         if let result = __cache[key] { return result }
 
-        func format(_ input: inout [String]) -> String {
+        func __format(_ input: inout [String]) -> String {
             if input.count == 1 {
                 return ("\n└── " + input.joined())
             } else {
@@ -257,18 +259,18 @@ extension TreeData {
 
         switch deepMode {
         case .none:
-            return node.pod.name
+            return node.name
         case .single:
-            var result: String = node.pod.name
-            if var next = node.pod.nextLevel(isImpactMode) {
-                result += format(&next)
+            var result: String = node.name
+            if var next = node.nextLevel(isImpactMode) {
+                result += __format(&next)
             }
             return result
 
         case .recursive:
-            var result = node.pod.name
+            var result = node.name
 
-            if let nodes = namesToNodes(deep: node.deep + 1, names: node.pod.nextLevel(isImpactMode)) {
+            if let nodes = node.nextLevel(isImpactMode)?.compactMap({ nameToPodCache[$0] }) {
                 if nodes.count == 1 {
                     result = result + "\n└── " +
                         __content(for: nodes.first!, with: deepMode)
@@ -291,18 +293,17 @@ extension TreeData {
             return result
 
         case .stripRecursive:
-            let map = nodes.reduce(into: [String: Pod](), { $0[$1.pod.name] = $1.pod })
-            var subnames = node.pod.nextLevel(isImpactMode) ?? []
+            var subnames = node.nextLevel(isImpactMode) ?? []
             var index = 0
 
             while index < subnames.count {
-                subnames += map[subnames[index]]?
+                subnames += nameToPodCache[subnames[index]]?
                     .nextLevel(isImpactMode)?
                     .filter({ !subnames.contains($0) }) ?? []
                 index += 1
             }
 
-            return node.pod.name + format(&subnames)
+            return node.name + __format(&subnames)
         }
     }
 }

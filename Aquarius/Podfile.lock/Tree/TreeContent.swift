@@ -32,19 +32,19 @@ struct TreeContent: View {
                                         Button("Copy") { Pasteboard.write(node.pod.name) }
 
                                         Button("Copy child nodes") {
-                                            self.treeData.content(for: node, with: .single) {
+                                            self.treeData.content(for: node.pod, with: .single) {
                                                 Pasteboard.write($0)
                                             }
                                         }
 
                                         Button("Copy child nodes (Recursive)") {
-                                            self.treeData.content(for: node, with: .recursive) {
+                                            self.treeData.content(for: node.pod, with: .recursive) {
                                                 Pasteboard.write($0)
                                             }
                                         }
 
                                         Button("Copy child nodes (Recursive Strip)") {
-                                            self.treeData.content(for: node, with: .stripRecursive) {
+                                            self.treeData.content(for: node.pod, with: .stripRecursive) {
                                                 Pasteboard.write($0)
                                             }
                                         }

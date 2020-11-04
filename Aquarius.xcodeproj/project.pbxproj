@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		630464EF24CA11DF00E6AE9F /* AquariusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630464EE24CA11DF00E6AE9F /* AquariusApp.swift */; };
+		631362352552F41300017E55 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 631362342552F41300017E55 /* Yams */; };
 		6336E65E23C2465C009F72F8 /* DetailMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6336E65D23C2465C009F72F8 /* DetailMode.swift */; };
 		633999DF239212D10003A206 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633999DE239212D10003A206 /* Details.swift */; };
 		6339A5FD239256CA0003A206 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6339A5FF239256CA0003A206 /* Localizable.strings */; };
@@ -20,7 +21,6 @@
 		636D793E239107CB005672E7 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D7938239107CB005672E7 /* SpecRepo.swift */; };
 		636D793F239107CB005672E7 /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D7939239107CB005672E7 /* Pod.swift */; };
 		636D7940239107CB005672E7 /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D793A239107CB005672E7 /* DataReader.swift */; };
-		636D7944239107EC005672E7 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 636D7943239107EC005672E7 /* Yams */; };
 		636D855D239152C2005672E7 /* DropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D855C239152C2005672E7 /* DropView.swift */; };
 		636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636D85632391880E005672E7 /* ActivityIndicator.swift */; };
 		63D5B7FE2453020C0011EF43 /* TreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D5B7FD2453020C0011EF43 /* TreeControl.swift */; };
@@ -72,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				636D7944239107EC005672E7 /* Yams in Frameworks */,
+				631362352552F41300017E55 /* Yams in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -211,7 +211,7 @@
 			);
 			name = Aquarius;
 			packageProductDependencies = (
-				636D7943239107EC005672E7 /* Yams */,
+				631362342552F41300017E55 /* Yams */,
 			);
 			productName = Aquarius;
 			productReference = 636D790C23910796005672E7 /* Aquarius.app */;
@@ -243,7 +243,7 @@
 			);
 			mainGroup = 636D790323910796005672E7;
 			packageReferences = (
-				636D7942239107EC005672E7 /* XCRemoteSwiftPackageReference "Yams" */,
+				631362332552F41300017E55 /* XCRemoteSwiftPackageReference "Yams" */,
 			);
 			productRefGroup = 636D790D23910796005672E7 /* Products */;
 			projectDirPath = "";
@@ -508,20 +508,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		636D7942239107EC005672E7 /* XCRemoteSwiftPackageReference "Yams" */ = {
+		631362332552F41300017E55 /* XCRemoteSwiftPackageReference "Yams" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jpsim/Yams.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.1;
+				minimumVersion = 4.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		636D7943239107EC005672E7 /* Yams */ = {
+		631362342552F41300017E55 /* Yams */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 636D7942239107EC005672E7 /* XCRemoteSwiftPackageReference "Yams" */;
+			package = 631362332552F41300017E55 /* XCRemoteSwiftPackageReference "Yams" */;
 			productName = Yams;
 		};
 /* End XCSwiftPackageProductDependency section */
