@@ -8,6 +8,16 @@
 
 import SwiftUI
 
+private struct Line: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let yOffset = rect.size.height / 2
+        path.move(to: CGPoint(x: 0, y: yOffset))
+        path.addLine(to: CGPoint(x: rect.width, y: yOffset))
+        return path
+    }
+}
+
 struct TreeView: View {
     @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep = false
 
@@ -15,23 +25,21 @@ struct TreeView: View {
     var isImpactMode: Bool
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 more()?.bold()
 
                 Text(node.pod.name).foregroundColor(.primary)
-
                 Spacer()
-
                 Text((node.pod.info?.name ?? ""))
                     .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
                     .foregroundColor(.secondary)
-                    .background(Color.green.opacity(0.3))
-                    .clipShape(RoundedRectangle(cornerRadius: 3.5))
             }
 
-            Color.secondary
-                .frame(width: nil, height: 1, alignment: .leading)
+            Line()
+                .stroke(style: StrokeStyle(lineWidth: 1, dash: [3, 7]))
+                .frame(height: 1, alignment: .trailing)
+                .foregroundColor(.secondary)
         }
         .font(.system(size: 14))
         .padding(
@@ -44,9 +52,9 @@ struct TreeView: View {
         guard let count = node.hasMore(isImpactMode) else { return nil }
 
         if node.isExpanded {
-            return Text("⇇·(\(count)) ").foregroundColor(Color.red.opacity(0.7))
+            return Text("⇇·(\(count)) ").foregroundColor(Color.red.opacity(0.6))
         } else {
-            return Text("⇉·(\(count)) ").foregroundColor(Color.green.opacity(0.7))
+            return Text("⇉·(\(count)) ").foregroundColor(Color.green.opacity(0.6))
         }
     }
 }

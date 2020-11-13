@@ -54,7 +54,7 @@ struct DropView: View {
                         return
                     }
 
-                    data.lockFile = LockFile(isFromBookMark: true, url: url)
+                    data.lockFile = PodfileLockFile(isFromBookMark: true, url: url)
 
                     // Bookmark is stale, need to save a new one...
                     if isStale, let bookmark = BookmarkTool.bookmark(for: url) {
@@ -95,7 +95,7 @@ struct DropView: View {
                 }
             }
 
-            self.data.lockFile = LockFile(isFromBookMark: false, url: url)
+            self.data.lockFile = PodfileLockFile(isFromBookMark: false, url: url)
         }
         return true
     }

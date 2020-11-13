@@ -26,7 +26,7 @@ class TreeData: ObservableObject {
     @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
     @AppStorage("bookmark") var bookmark: Data?
 
-    var lockFile: LockFile? {
+    var lockFile: PodfileLockFile? {
         didSet {
             if isIgnoreLastModificationDate {
                 self.loadFile()
@@ -42,7 +42,7 @@ class TreeData: ObservableObject {
 
     private var lastReadDataTime: Date?
 
-    var lock: Lock? {
+    var podfileLock: PodfileLock? {
         didSet { buildTree() }
     }
 
@@ -87,7 +87,7 @@ class TreeData: ObservableObject {
 
 // MARK: - Load File
 private extension TreeData {
-    func checkShouldReloadData(oldLockFile: LockFile?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
+    func checkShouldReloadData(oldLockFile: PodfileLockFile?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
         guard let completion = completion else { return }
 
         // If is form bookmark or the old and new path do not match, the data must be reloaded.
@@ -126,7 +126,7 @@ private extension TreeData {
                 if let lock = DataReader(file: info).readData() {
                     DispatchQueue.main.async {
                         // update lock data
-                        self.lock = lock
+                        self.podfileLock = lock
 
                         // update status
                         self.isLoading = false
@@ -147,7 +147,7 @@ private extension TreeData {
         nodes.removeAll()
         queue.async {
             // top level
-            self.lock?.pods.forEach { (pod) in
+            self.podfileLock?.pods.forEach { (pod) in
                 self.nameToPodCache[pod.name] = pod
                 let node = TreeNode(deep: 0, pod: pod)
                 self.podToNodeCache[pod] = node
@@ -163,7 +163,7 @@ private extension TreeData {
                 return node
             }
 
-            if let pod = self.lock?.pods.first(where: { $0.name == dependence }),
+            if let pod = self.podfileLock?.pods.first(where: { $0.name == dependence }),
                let node = podToNodeCache[pod]?.copy(with: deep, isImpactMode: isImpactMode) {
                 return node
             }
