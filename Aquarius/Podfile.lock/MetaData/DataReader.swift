@@ -10,13 +10,13 @@ import Foundation
 import Yams
 
 class DataReader {
-    private var file: LockFile?
+    private var file: PodfileLockFile?
 
-    init(file: LockFile?) {
+    init(file: PodfileLockFile?) {
         self.file = file
     }
 
-    func readData() -> Lock? {
+    func readData() -> PodfileLock? {
         guard let file = file else { return nil }
 
         if file.isFromBookMark {
@@ -45,16 +45,16 @@ class DataReader {
             return nil
         }
 
-        var lock = Lock()
-        if let pods = yaml[LockRootKey.pods.rawValue] as? [Any] {
+        var lock = PodfileLock()
+        if let pods = yaml[PodfileLockRootKey.pods.rawValue] as? [Any] {
             readPods(from: pods, with: &lock)
         }
 
-        if let dependencies = yaml[LockRootKey.dependencies.rawValue] as? [String] {
+        if let dependencies = yaml[PodfileLockRootKey.dependencies.rawValue] as? [String] {
             lock.dependencies = dependencies.map { Pod(podValue: $0) }
         }
 
-        if let specRepos = yaml[LockRootKey.specRepos.rawValue] as? [String: [String]] {
+        if let specRepos = yaml[PodfileLockRootKey.specRepos.rawValue] as? [String: [String]] {
             lock.specRepos = specRepos.map { SpecRepo(repo: $0, pods: $1) }
         }
 
@@ -63,7 +63,7 @@ class DataReader {
     }
 
     @discardableResult
-    private func readPods(from pods: [Any], with lock: inout Lock) -> Bool {
+    private func readPods(from pods: [Any], with lock: inout PodfileLock) -> Bool {
         var infecteds = [String: [String]]()
         for content in pods {
             if let string = content as? String {

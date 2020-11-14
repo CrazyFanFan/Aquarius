@@ -8,44 +8,54 @@
 
 import SwiftUI
 
+private struct Line: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let yOffset = rect.size.height / 2
+        path.move(to: CGPoint(x: 0, y: yOffset))
+        path.addLine(to: CGPoint(x: rect.width, y: yOffset))
+        return path
+    }
+}
+
 struct TreeView: View {
-    @EnvironmentObject var setting: Setting
+    @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep = false
 
     var node: TreeNode
     var isImpactMode: Bool
 
     var body: some View {
-        VStack(alignment: .leading) {
-            Text(node.pod.name + "  ")
-                .font(.system(size: 14))
-                .foregroundColor(.primary)
+        VStack(alignment: .leading, spacing: 0) {
+            HStack {
+                more()?.bold()
 
-                + Text((node.pod.info?.name ?? "") + "  ")
-                .font(.system(size: 14))
+                Text(node.pod.name).foregroundColor(.primary)
+                Spacer()
+                Text((node.pod.info?.name ?? ""))
+                    .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
+                    .foregroundColor(.secondary)
+            }
+
+            Line()
+                .stroke(style: StrokeStyle(lineWidth: 1, dash: [3, 7]))
+                .frame(height: 1, alignment: .trailing)
                 .foregroundColor(.secondary)
-
-                + more()
-                .foregroundColor(.secondary)
-
-                + Text("\n")
-                .font(.system(size: 4))
-                .foregroundColor(.secondary)
-
-            Color.secondary
-                .frame(width: nil, height: 1, alignment: .leading)
-        }.padding(
+        }
+        .font(.system(size: 14))
+        .padding(
             .leading,
-            CGFloat(
-                node.deep > 0 ?
-                    (setting.isIgnoreNodeDeep ? 30 : node.deep * 30) :
-                    0
-            )
-        )
+            CGFloat(node.deep > 0 ? (isIgnoreNodeDeep ? 30 : node.deep * 30) : 0)
+        ).animation(.easeIn)
     }
 
-    private func more() -> Text {
-        guard let count = node.hasMore(isImpactMode) else { return Text("") }
-        return Text("\(node.isExpanded ? "▲" : "▼")·(\(count))")
+    private func more() -> Text? {
+        guard let count = node.hasMore(isImpactMode) else { return nil }
+
+        if node.isExpanded {
+            return Text("⇇·(\(count)) ").foregroundColor(Color.red.opacity(0.6))
+        } else {
+            return Text("⇉·(\(count)) ").foregroundColor(Color.green.opacity(0.6))
+        }
     }
 }
 

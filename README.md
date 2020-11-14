@@ -3,6 +3,11 @@
 
 A tool to obtain dependencies by analyzing "Podfile.lock"
 
+## Environment
+
+- Xcode: version ≥ Xcode12-beta1
+- OSX: version ≥ 10.16-beta1
+
 ## Preview
 ![Image](./Screenshots/s_1.jpg)
 

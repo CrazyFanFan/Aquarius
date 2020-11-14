@@ -13,6 +13,7 @@
 "Copy" = "Copy";
 "Copy child nodes"="Copy child nodes";
 "Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
+"Copy child nodes (Recursive Strip)"="Copy child nodes (Recursive Strip)";
 "Recursive" = "Recursive";
 "dependencies" = "Dependencies";
 "influence" = "Influence";

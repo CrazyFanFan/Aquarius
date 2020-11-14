@@ -6,8 +6,7 @@
 //  Copyright © 2020 Crazy凡. All rights reserved.
 //
 
-import Foundation
-import SwiftyUserDefaults
+import SwiftUI
 import Combine
 
 class TreeData: ObservableObject {
@@ -18,20 +17,18 @@ class TreeData: ObservableObject {
     private var dependenceToNodeCache: [String: TreeNode] = [:]
     private var nodes: [TreeNode] = []
 
-    private var __showNodes: [TreeNode] = []
+    private var innerShowNodes: [TreeNode] = []
     @Published private(set) var showNodes: [TreeNode] = []
 
-    private var __cache: [CacheKey: String] = [:]
+    private var copyFormatedStringCache: [CacheKey: String] = [:]
+    private var nameToPodCache: [String: Pod] = [:]
 
-    private var setting = Setting.shared
+    @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
+    @AppStorage("bookmark") var bookmark: Data?
 
-    var bookmark: Data = Defaults[\.bookmark] {
-        didSet { Defaults[\.bookmark] = bookmark }
-    }
-
-    var lockFile: LockFile? {
+    var lockFile: PodfileLockFile? {
         didSet {
-            if setting.isIgnoreLastModificationDate {
+            if isIgnoreLastModificationDate {
                 self.loadFile()
             } else {
                 checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
@@ -45,7 +42,7 @@ class TreeData: ObservableObject {
 
     private var lastReadDataTime: Date?
 
-    var lock: Lock? {
+    var podfileLock: PodfileLock? {
         didSet { buildTree() }
     }
 
@@ -67,18 +64,14 @@ class TreeData: ObservableObject {
     /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
     /// 递归的找下去，会形成一棵树，我称之为”影响树“
     ///
-    var detailMode: DetailMode = Defaults[\.detailMode] {
+    @AppStorage("detailMode") var detailMode: DetailMode = .influence {
         didSet {
-            Defaults[\.detailMode] = detailMode
-            self.isImpactMode = detailMode == .influence
+            if detailMode != oldValue {
+                buildTree()
+            }
         }
     }
-
-    var isImpactMode: Bool = Defaults[\.detailMode] == .influence {
-        didSet {
-            loadData(isImpactMode: isImpactMode, resetIsExpanded: true)
-        }
-    }
+    var isImpactMode: Bool { detailMode == .influence }
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")
 
@@ -94,7 +87,7 @@ class TreeData: ObservableObject {
 
 // MARK: - Load File
 private extension TreeData {
-    func checkShouldReloadData(oldLockFile: LockFile?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
+    func checkShouldReloadData(oldLockFile: PodfileLockFile?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
         guard let completion = completion else { return }
 
         // If is form bookmark or the old and new path do not match, the data must be reloaded.
@@ -111,10 +104,10 @@ private extension TreeData {
 
         // If read attributes fails, the data needs to be reloaded.
         guard let attributes = try? FileManager.default.attributesOfItem(atPath: file.url.path),
-            let fileModificationDate = attributes[.modificationDate] as? Date,
-            let lastReadDataTime = self.lastReadDataTime else {
-                completion(true)
-                return
+              let fileModificationDate = attributes[.modificationDate] as? Date,
+              let lastReadDataTime = self.lastReadDataTime else {
+            completion(true)
+            return
         }
 
         if fileModificationDate.distance(to: lastReadDataTime) < 0 {
@@ -133,7 +126,7 @@ private extension TreeData {
                 if let lock = DataReader(file: info).readData() {
                     DispatchQueue.main.async {
                         // update lock data
-                        self.lock = lock
+                        self.podfileLock = lock
 
                         // update status
                         self.isLoading = false
@@ -154,7 +147,8 @@ private extension TreeData {
         nodes.removeAll()
         queue.async {
             // top level
-            self.lock?.pods.forEach { (pod) in
+            self.podfileLock?.pods.forEach { (pod) in
+                self.nameToPodCache[pod.name] = pod
                 let node = TreeNode(deep: 0, pod: pod)
                 self.podToNodeCache[pod] = node
                 self.nodes.append(node)
@@ -169,8 +163,8 @@ private extension TreeData {
                 return node
             }
 
-            if let pod = self.lock?.pods.first(where: { $0.name == dependence }),
-                let node = podToNodeCache[pod]?.copy(with: deep, isImpactMode: isImpactMode) {
+            if let pod = self.podfileLock?.pods.first(where: { $0.name == dependence }),
+               let node = podToNodeCache[pod]?.copy(with: deep, isImpactMode: isImpactMode) {
                 return node
             }
 
@@ -192,7 +186,7 @@ private extension TreeData {
     }
 
     func loadData(isImpactMode: Bool, resetIsExpanded: Bool = false) {
-        __showNodes.removeAll()
+        innerShowNodes.removeAll()
 
         if resetIsExpanded {
             nodes.forEach { $0.isExpanded = false }
@@ -206,7 +200,7 @@ private extension TreeData {
             if self.searchText.isEmpty ||
                 node.deep > 0 ||
                 node.pod.name.lowercased().contains(self.searchText.lowercased()) {
-                __showNodes.append(node)
+                innerShowNodes.append(node)
 
                 if node.isExpanded, let subNodes = isImpactMode ? node.infecteds : node.dependencies {
                     traverse(subNodes, isImpactMode: isImpactMode)
@@ -215,7 +209,7 @@ private extension TreeData {
         }
 
         DispatchQueue.main.async {
-            self.showNodes = self.__showNodes
+            self.showNodes = self.innerShowNodes
         }
     }
 }
@@ -226,6 +220,7 @@ extension TreeData {
         case none
         case single
         case recursive
+        case stripRecursive
     }
 
     struct CacheKey: Hashable {
@@ -234,53 +229,65 @@ extension TreeData {
         var impact: Bool
     }
 
-    func content(for node: TreeNode, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
+    func content(for node: Pod, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
         guard let completion = completion else { return }
 
-        isLoading = true
+        let checkMode: (_ isRecursiveHandler: () -> Void) -> Void = { handler in
+            switch deepMode {
+            case .recursive: handler()
+            default: break
+            }
+        }
+
+        checkMode { self.isLoading = true }
+
         queue.async {
-            self.__cache.removeAll()
-            completion(self.__content(for: node, with: deepMode))
-            self.__cache.removeAll()
+            self.copyFormatedStringCache.removeAll()
+            completion(self.innerContent(for: node, with: deepMode))
+            self.copyFormatedStringCache.removeAll()
 
             DispatchQueue.main.async {
-                self.isLoading = false
+                checkMode { self.isLoading = false }
             }
         }
     }
 
-    func __content(for node: TreeNode, with deepMode: NodeContentDeepMode) -> String {
-        let key = CacheKey(name: node.pod.name, mode: deepMode, impact: isImpactMode)
-        if let result = __cache[key] { return result }
+    private func innerContent(for node: Pod, with deepMode: NodeContentDeepMode) -> String {
+        let key = CacheKey(name: node.name, mode: deepMode, impact: isImpactMode)
+        if let result = copyFormatedStringCache[key] { return result }
+
+        func formatNames(_ input: inout [String]) -> String {
+            if input.isEmpty { return "" }
+
+            if input.count == 1 {
+                return ("\n└── " + input.joined())
+            } else {
+                let last = input.removeLast()
+                return ("\n├── " + input.joined(separator: "\n├── ") + "\n└── " + last)
+            }
+        }
 
         switch deepMode {
         case .none:
-            return node.pod.name
+            return node.name
         case .single:
-            var result: String = node.pod.name
-            if var next = node.pod.nextLevel(isImpactMode) {
-                if next.count == 1 {
-                    result += ("\n└── " + next.joined())
-                } else {
-                    let last = next.removeLast()
-                    result += ("\n├── " + next.joined(separator: "\n├── ") + "\n└── " + last)
-                }
+            var result: String = node.name
+            if var next = node.nextLevel(isImpactMode) {
+                result += formatNames(&next)
             }
-
-            __cache[key] = result
             return result
 
         case .recursive:
-            var result = node.pod.name
+            var result = node.name
 
-            if let nodes = namesToNodes(deep: node.deep + 1, names: node.pod.nextLevel(isImpactMode)) {
+            if let nodes = node.nextLevel(isImpactMode)?.compactMap({ nameToPodCache[$0] }) {
                 if nodes.count == 1 {
                     result = result + "\n└── " +
-                        __content(for: nodes.first!, with: deepMode)
+                        innerContent(for: nodes.first!, with: deepMode)
                         .split(separator: "\n")
                         .joined(separator: "\n    ")
                 } else {
-                    var nexts = nodes.map { self.__content(for: $0, with: .recursive) }
+                    var nexts = nodes.map { self.innerContent(for: $0, with: .recursive) }
                     let last = nexts.removeLast()
 
                     let next = nexts
@@ -292,9 +299,21 @@ extension TreeData {
                     result = result + "\n" + next
                 }
             }
-            __cache[key] = result
-
+            copyFormatedStringCache[key] = result
             return result
+
+        case .stripRecursive:
+            var subnames = node.nextLevel(isImpactMode) ?? []
+            var index = 0
+
+            while index < subnames.count {
+                subnames += nameToPodCache[subnames[index]]?
+                    .nextLevel(isImpactMode)?
+                    .filter({ !subnames.contains($0) }) ?? []
+                index += 1
+            }
+
+            return node.name + formatNames(&subnames)
         }
     }
 }

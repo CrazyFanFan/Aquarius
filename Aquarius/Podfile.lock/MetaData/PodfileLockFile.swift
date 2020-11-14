@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct LockFile: Hashable {
+struct PodfileLockFile: Hashable {
     var isFromBookMark: Bool
     var url: URL
 }
