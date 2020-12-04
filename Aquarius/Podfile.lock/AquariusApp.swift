@@ -12,8 +12,7 @@ import SwiftUI
 struct AquariusApp: App {
     var body: some Scene {
         WindowGroup {
-            LockRootView()
-                .environmentObject(TreeData())
+            LockRootView(treeData: .init())
         }
     }
 }

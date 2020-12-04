@@ -36,7 +36,7 @@ struct DropViewInnerView: View {
 }
 
 struct DropView: View {
-    @EnvironmentObject var data: TreeData
+    @StateObject var data: TreeData
     @AppStorage("isBookmarkEnable") private var isBookmarkEnable: Bool = false
 
     @State private var isTargeted: Bool = false
@@ -103,6 +103,6 @@ struct DropView: View {
 
 struct DropView_Previews: PreviewProvider {
     static var previews: some View {
-        DropView()
+        DropView(data: .init())
     }
 }

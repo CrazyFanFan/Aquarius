@@ -9,13 +9,13 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @EnvironmentObject var treeData: TreeData
+    @StateObject var treeData: TreeData
 
     var body: some View {
         GeometryReader { reader in
             VStack {
                 // 顶部控制View
-                TreeControl()
+                TreeControl(treeData: treeData)
 
                 // List，用 LazyVGrid 是为了更好的性能
                 ScrollView {
@@ -27,9 +27,10 @@ struct TreeContent: View {
                         content: { makeItem() }
                     ).animation(.linear)
                 }
-            }}
-            .frame(minWidth: 550, alignment: .center)
-            .padding()
+            }
+        }
+        .frame(minWidth: 550, alignment: .center)
+        .padding()
     }
 
     /// 创建Cell
@@ -74,6 +75,6 @@ struct TreeContent: View {
 
 struct TreeContent_Previews: PreviewProvider {
     static var previews: some View {
-        TreeContent()
+        TreeContent(treeData: .init())
     }
 }

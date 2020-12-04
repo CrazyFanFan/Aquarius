@@ -8,7 +8,7 @@
 
 import Foundation
 import Yams
-
+// 可以用系统组件，先只给一层数据
 class DataReader {
     private var file: PodfileLockFile?
 
@@ -50,13 +50,13 @@ class DataReader {
             readPods(from: pods, with: &lock)
         }
 
-        if let dependencies = yaml[PodfileLockRootKey.dependencies.rawValue] as? [String] {
-            lock.dependencies = dependencies.map { Pod(podValue: $0) }
-        }
-
-        if let specRepos = yaml[PodfileLockRootKey.specRepos.rawValue] as? [String: [String]] {
-            lock.specRepos = specRepos.map { SpecRepo(repo: $0, pods: $1) }
-        }
+//        if let dependencies = yaml[PodfileLockRootKey.dependencies.rawValue] as? [String] {
+//            lock.dependencies = dependencies.map { Pod(podValue: $0) }
+//        }
+//
+//        if let specRepos = yaml[PodfileLockRootKey.specRepos.rawValue] as? [String: [String]] {
+//            lock.specRepos = specRepos.map { SpecRepo(repo: $0, pods: $1) }
+//        }
 
         // TODO: more info
         return lock
@@ -78,7 +78,7 @@ class DataReader {
                     }
                 }
             } else {
-                print(content)
+                assert(false, "Get unknown data: \(content)")
             }
         }
 

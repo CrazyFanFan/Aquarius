@@ -12,19 +12,19 @@ import SwiftUI
 private let supportType: String = kUTTypeFileURL as String
 
 struct LockRootView: View {
-    @EnvironmentObject var data: TreeData
+    @StateObject var treeData: TreeData
 
     var body: some View {
         ZStack {
             HStack {
-                DropView()
+                DropView(data: treeData)
 
-                if data.lockFile != nil {
-                    TreeContent()
+                if treeData.lockFile != nil {
+                    TreeContent(treeData: treeData)
                 }
             }
 
-            if data.isLoading {
+            if treeData.isLoading {
                 ActivityIndicator()
                     .frame(width: 50, height: 50, alignment: .center)
                     .animation(.easeInOut)
@@ -36,6 +36,6 @@ struct LockRootView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        LockRootView()
+        LockRootView(treeData: .init())
     }
 }

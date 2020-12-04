@@ -10,7 +10,6 @@
 		630464EF24CA11DF00E6AE9F /* AquariusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630464EE24CA11DF00E6AE9F /* AquariusApp.swift */; };
 		631362352552F41300017E55 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 631362342552F41300017E55 /* Yams */; };
 		6336E65E23C2465C009F72F8 /* DetailMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6336E65D23C2465C009F72F8 /* DetailMode.swift */; };
-		633999DF239212D10003A206 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633999DE239212D10003A206 /* Details.swift */; };
 		6339A5FD239256CA0003A206 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6339A5FF239256CA0003A206 /* Localizable.strings */; };
 		6339A601239256D50003A206 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6339A603239256D50003A206 /* InfoPlist.strings */; };
 		6339A60823925A440003A206 /* Pasteboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6339A60723925A440003A206 /* Pasteboard.swift */; };
@@ -285,7 +284,6 @@
 				636D85642391880E005672E7 /* ActivityIndicator.swift in Sources */,
 				63DB052223A24C48008C5FCE /* BookmarkTool.swift in Sources */,
 				630464EF24CA11DF00E6AE9F /* AquariusApp.swift in Sources */,
-				633999DF239212D10003A206 /* Details.swift in Sources */,
 				667BDB8423C2184A001D1096 /* TreeContent.swift in Sources */,
 				636D793E239107CB005672E7 /* SpecRepo.swift in Sources */,
 				667BDB7A23C204A1001D1096 /* TreeNode.swift in Sources */,

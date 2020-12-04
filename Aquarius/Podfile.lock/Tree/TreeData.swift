@@ -71,6 +71,7 @@ class TreeData: ObservableObject {
             }
         }
     }
+
     var isImpactMode: Bool { detailMode == .influence }
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")

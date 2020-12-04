@@ -10,7 +10,7 @@ import SwiftUI
 
 struct TreeControl: View {
     @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep: Bool = false
-    @EnvironmentObject var treeData: TreeData
+    @StateObject var treeData: TreeData
 
     var body: some View {
         VStack {
@@ -50,6 +50,6 @@ struct TreeControl: View {
 
 struct TreeControl_Previews: PreviewProvider {
     static var previews: some View {
-        TreeControl()
+        TreeControl(treeData: .init())
     }
 }
