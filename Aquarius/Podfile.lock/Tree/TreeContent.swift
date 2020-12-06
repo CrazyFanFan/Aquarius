@@ -30,7 +30,7 @@ struct TreeContent: View {
             }
         }
         .frame(minWidth: 550, alignment: .center)
-        .padding()
+        .padding(5)
     }
 
     /// 创建Cell

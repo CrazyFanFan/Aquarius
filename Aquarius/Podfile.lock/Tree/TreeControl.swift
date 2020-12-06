@@ -16,23 +16,26 @@ struct TreeControl: View {
         VStack {
             SearchBar(searchText: $treeData.searchText)
 
-            HStack {
+            HStack(alignment: .center) {
                 Text("Total: \(treeData.showNodes.filter { $0.deep == 0 }.count)")
                     .foregroundColor(.primary)
                     .font(.headline)
 
-                Spacer()
+                Divider()
 
-                Toggle("Ignore subnode deep", isOn: $isIgnoreNodeDeep)
-                Spacer()
+                Picker("Indentation: ", selection: $isIgnoreNodeDeep) {
+                    ForEach([true, false], id: \.self) {
+                        Text($0 ? "Ignore" : "Automatic").tag($0)
+                    }
+                }.scaledToFit()
 
-                Picker("", selection: $treeData.detailMode) {
+                Divider()
+
+                Picker("Model: ", selection: $treeData.detailMode) {
                     ForEach(DetailMode.allCases) {
                         Text(NSLocalizedString($0.rawValue, comment: "")).tag($0)
                     }
                 }
-                .pickerStyle(SegmentedPickerStyle())
-                .labelsHidden()
                 .scaledToFit()
 
                 Spacer()
@@ -43,7 +46,9 @@ struct TreeControl: View {
                         .joined(separator: "\n")
                     Pasteboard.write(content)
                 }
-            }
+            }.frame(maxHeight: 25)
+
+            Divider()
         }
     }
 }

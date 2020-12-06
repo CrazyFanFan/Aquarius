@@ -9,7 +9,7 @@
 "Drag the Podfile.lock here!" = "将“Podfile.lock”拖到这里";
 "Nothing" = "什么也没有~~";
 "Total: %lld" = "共计: %lld";
-"Copy all" = "复制";
+"Copy all" = "复制所有";
 "Copy" = "复制";
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
@@ -23,3 +23,7 @@
 "Displayed as a tree" = "以树形显示";
 "Ignore subnode deep" = "忽略子节点深度";
 "Cancel" = "取消";
+"Indentation: " = "缩进：";
+"Ignore" = "忽略";
+"Automatic" = "自动";
+"Model: " = "模式：";

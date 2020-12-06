@@ -23,7 +23,6 @@ struct DropViewInnerView: View {
                     Toggle("Ignore Last Modification Date", isOn: $isIgnoreLastModificationDate)
                 }
                 .font(.system(size: 10))
-
                 Spacer()
             }.padding()
 

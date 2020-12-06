@@ -20,6 +20,7 @@ struct LockRootView: View {
                 DropView(data: treeData)
 
                 if treeData.lockFile != nil {
+                    Divider()
                     TreeContent(treeData: treeData)
                 }
             }
