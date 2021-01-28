@@ -48,6 +48,12 @@ class TreeData: ObservableObject {
 
     var searchText = "" {
         didSet {
+            let value = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            if searchText != value {
+                searchText = value
+            }
+
             loadData(isImpactMode: isImpactMode, resetIsExpanded: true)
         }
     }
