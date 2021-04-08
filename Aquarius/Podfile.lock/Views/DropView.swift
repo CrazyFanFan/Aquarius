@@ -43,7 +43,6 @@ struct DropView: View {
     var body: some View {
         ZStack {
             DropViewInnerView()
-                .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
                 .onDrop(of: data.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
                     self.loadPath(from: $0)
                 }
@@ -66,6 +65,8 @@ struct DropView: View {
                 Color.green.opacity(0.03)
             }
         }
+        .frame(minWidth: 250, maxWidth: 250, maxHeight: .infinity)
+
     }
 
     private func loadPath(from items: [NSItemProvider]) -> Bool {
