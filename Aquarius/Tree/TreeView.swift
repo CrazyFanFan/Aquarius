@@ -8,16 +8,6 @@
 
 import SwiftUI
 
-private struct Line: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let yOffset = rect.size.height / 2
-        path.move(to: CGPoint(x: 0, y: yOffset))
-        path.addLine(to: CGPoint(x: rect.width, y: yOffset))
-        return path
-    }
-}
-
 struct TreeView: View {
     @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep = false
 
@@ -36,10 +26,7 @@ struct TreeView: View {
                     .foregroundColor(.secondary)
             }
 
-            Line()
-                .stroke(style: StrokeStyle(lineWidth: 1, dash: [3, 7]))
-                .frame(height: 1, alignment: .trailing)
-                .foregroundColor(.secondary)
+            Divider()
         }
         .font(.system(size: 14))
         .padding(

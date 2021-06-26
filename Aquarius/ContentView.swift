@@ -1,0 +1,175 @@
+//
+//  ContentView.swift
+//  Aquarius
+//
+//  Created by Crazy凡 on 2021/6/27.
+//
+
+import SwiftUI
+import CoreData
+
+private let supportType: String = kUTTypeFileURL as String
+
+struct ContentView: View {
+    @Environment(\.managedObjectContext) private var viewContext
+
+    @FetchRequest(
+        sortDescriptors: [NSSortDescriptor(keyPath: \Lock.timestamp, ascending: true)],
+        animation: .default)
+    private var items: FetchedResults<Lock>
+
+    @State private var config = GlobleState.shared
+    @State private var isTargeted: Bool = false
+
+    @State private var selection: Lock?
+
+
+    var body: some View {
+        ZStack {
+            NavigationView {
+                List(selection: $selection) {
+                    ForEach(items) { item in
+                        itemLink(for: item)
+                    }
+                    .onDelete { deleteItems(offsets: $0) }
+                    .onDeleteCommand {
+                        if let selection = selection {
+                            viewContext.delete(selection)
+                        }
+                    }
+                }
+                .listStyle(SidebarListStyle())
+                .toolbar {
+                    Spacer()
+                    Settings(config: .shared)
+                }
+                .frame(minWidth: 200, alignment: .leading)
+            }
+
+            if config.isLoading {
+                ActivityIndicator()
+                    .frame(width: 50, height: 50, alignment: .center)
+                    .animation(.easeInOut)
+            }
+
+        }
+        .onOpenURL { addItem(with: $0) }
+        .onDrop(of: config.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
+            self.loadPath(from: $0)
+        }
+        .onAppear {
+            self.selection = items.first
+        }
+    }
+}
+
+private extension ContentView {
+    func itemLink(for item: Lock) -> AnyView {
+        if let name = item.name, let url = item.url {
+            return
+                AnyView(
+                    NavigationLink(
+                        destination: TreeContent(treeData: TreeData(lockFile: .init(url: url))),
+                        tag: item,
+                        selection: $selection, label: {
+                            Text(name)
+                        })
+            )
+
+        }
+
+        return AnyView(NavigationLink("Unknown", destination: Text("Unknown")))
+    }
+
+}
+
+private extension ContentView {
+
+     func addItem(with url: URL) {
+        withAnimation {
+            if items.contains(where: { $0.url?.absoluteString == url.absoluteString }) {
+                return
+            }
+
+            guard let bookmark = BookmarkTool.bookmark(for: url) else {
+                // tod, show error.
+                return
+            }
+
+            let newItem = Lock(context: viewContext)
+            newItem.timestamp = Date()
+            newItem.id = UUID()
+            newItem.previous = items.last?.id
+            newItem.bookmark = bookmark
+            newItem.name = url
+                .absoluteString
+                .components(separatedBy: "/")
+                .suffix(2)
+                .joined(separator: "/")
+
+            items.last?.next = newItem.id
+
+            do {
+                try viewContext.save()
+                selection = newItem
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            offsets.map { items[$0] }.forEach(viewContext.delete)
+
+            do {
+                try viewContext.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+}
+
+private extension ContentView {
+    private func loadPath(from items: [NSItemProvider]) -> Bool {
+        guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
+        item.loadItem(forTypeIdentifier: supportType, options: nil) { (data, error) in
+            if let _ = error {
+                // TODO error
+                return
+            }
+
+            guard let urlData = data as? Data,
+                  let urlString = String(data: urlData, encoding: .utf8),
+                  let url = URL(string: urlString),
+                  url.lastPathComponent == "Podfile.lock" else {
+                // TODO error
+                return
+            }
+
+            addItem(with: url)
+        }
+        return true
+    }
+}
+
+private let itemFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .short
+    formatter.timeStyle = .medium
+    return formatter
+}()
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
+    }
+}

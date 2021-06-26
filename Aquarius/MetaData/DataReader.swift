@@ -19,14 +19,10 @@ class DataReader {
     func readData() -> PodfileLock? {
         guard let file = file else { return nil }
 
-        if file.isFromBookMark {
-            guard file.url.startAccessingSecurityScopedResource() else { return nil }
-        }
-
+        guard file.url.startAccessingSecurityScopedResource() else { return nil }
+        
         defer {
-            if file.isFromBookMark {
-                file.url.stopAccessingSecurityScopedResource()
-            }
+            file.url.stopAccessingSecurityScopedResource()
         }
 
         let lockContent: String

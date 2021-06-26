@@ -9,6 +9,8 @@
 import Foundation
 
 struct PodfileLockFile: Hashable {
-    var isFromBookMark: Bool
+    static let preview: PodfileLockFile = PodfileLockFile(
+        url: Bundle.main.url(forResource: "Podfile", withExtension: "lock")!)
+
     var url: URL
 }

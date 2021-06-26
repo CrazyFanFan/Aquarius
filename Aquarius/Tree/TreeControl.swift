@@ -56,6 +56,6 @@ struct TreeControl: View {
 
 struct TreeControl_Previews: PreviewProvider {
     static var previews: some View {
-        TreeControl(treeData: .init())
+        TreeControl(treeData: .init(lockFile: .preview))
     }
 }

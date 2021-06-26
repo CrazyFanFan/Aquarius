@@ -82,7 +82,10 @@ class TreeData: ObservableObject {
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")
 
-    init() {}
+    init(lockFile: PodfileLockFile) {
+        self.lockFile = lockFile
+        self.loadFile()
+    }
 
     func onSeletd(node: TreeNode) {
         node.isExpanded = !node.isExpanded
@@ -98,7 +101,7 @@ private extension TreeData {
         guard let completion = completion else { return }
 
         // If is form bookmark or the old and new path do not match, the data must be reloaded.
-        if lockFile?.isFromBookMark == true || self.lockFile != oldLockFile {
+        if self.lockFile != oldLockFile {
             completion(true)
             return
         }
