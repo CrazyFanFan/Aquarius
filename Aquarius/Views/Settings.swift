@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct Settings: View {
-    @StateObject var config: GlobleState
+    @StateObject var config: GlobalState
 
     var body: some View {
         Menu {

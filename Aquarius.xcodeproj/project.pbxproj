@@ -25,7 +25,7 @@
 		63CAEE9B26879AD200B591FC /* Lock+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAEE9A26879AD200B591FC /* Lock+.swift */; };
 		7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */; };
 		9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */; };
-		A07C42832854033533B8C1F03355AE41 /* GlobleState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE045068413BF0D9C946CB8332B4A37 /* GlobleState.swift */; };
+		A07C42832854033533B8C1F03355AE41 /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE045068413BF0D9C946CB8332B4A37 /* GlobalState.swift */; };
 		A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */; };
 		AC23EF05D5D5AF0384D9C8B8A90AFC82 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAD41DF167E77D9689639F8B6A4F2CE9 /* Preview Assets.xcassets */; };
 		B269E18FC95069954A5531B323BA5AA1 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062216981A86012A027DAC2B7BD9A230 /* Persistence.swift */; };
@@ -75,7 +75,7 @@
 		FBF73CFFC898849D2AEF6C72EAE48EC7 /* Pod.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pod.swift; sourceTree = "<group>"; };
 		FD99C6956BBEB6BBD0C350A3B2BC5C5E /* TreeNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeNode.swift; sourceTree = "<group>"; };
 		FE53FFAF4BA15A1F0516F1A4C05841EE /* BookmarkTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BookmarkTool.swift; sourceTree = "<group>"; };
-		FFE045068413BF0D9C946CB8332B4A37 /* GlobleState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobleState.swift; sourceTree = "<group>"; };
+		FFE045068413BF0D9C946CB8332B4A37 /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -212,7 +212,7 @@
 			isa = PBXGroup;
 			children = (
 				BD6360C600918A90779721494C9DB67E /* CoreData */,
-				FFE045068413BF0D9C946CB8332B4A37 /* GlobleState.swift */,
+				FFE045068413BF0D9C946CB8332B4A37 /* GlobalState.swift */,
 			);
 			path = DataAndConfig;
 			sourceTree = "<group>";
@@ -308,7 +308,7 @@
 				F23B1952203382974FD321CEB8223D5D /* Details.swift in Sources */,
 				63CAEE99268792D000B591FC /* Settings.swift in Sources */,
 				63CAEE9B26879AD200B591FC /* Lock+.swift in Sources */,
-				A07C42832854033533B8C1F03355AE41 /* GlobleState.swift in Sources */,
+				A07C42832854033533B8C1F03355AE41 /* GlobalState.swift in Sources */,
 				DB252DFFDE947E64DD6A17C0908D761E /* Pasteboard.swift in Sources */,
 				B269E18FC95069954A5531B323BA5AA1 /* Persistence.swift in Sources */,
 				504F3B0CAEE38CE5FCE068E780833F3A /* Pod.swift in Sources */,

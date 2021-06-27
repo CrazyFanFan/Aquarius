@@ -18,7 +18,7 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Lock>
 
-    @State private var config = GlobleState.shared
+    @State private var globalState = GlobalState.shared
     @State private var isTargeted: Bool = false
 
     @State private var selection: Lock?
@@ -46,7 +46,7 @@ struct ContentView: View {
                 .frame(minWidth: 200, alignment: .leading)
             }
 
-            if config.isLoading {
+            if globalState.isLoading {
                 ActivityIndicator()
                     .frame(width: 50, height: 50, alignment: .center)
                     .animation(.easeInOut)
@@ -54,7 +54,7 @@ struct ContentView: View {
 
         }
         .onOpenURL { addItem(with: $0) }
-        .onDrop(of: config.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
+        .onDrop(of: globalState.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
             self.loadPath(from: $0)
         }
         .onAppear {
@@ -64,28 +64,34 @@ struct ContentView: View {
 }
 
 private extension ContentView {
-    func itemLink(for item: Lock) -> AnyView {
-        if let name = item.name, let url = item.url {
-            return
-                AnyView(
-                    NavigationLink(
-                        destination: TreeContent(treeData: TreeData(lockFile: .init(url: url))),
-                        tag: item,
-                        selection: $selection, label: {
-                            Text(name)
-                        })
-            )
+    func itemLink(for item: Lock) -> NavigationLink<Text, TreeContent>? {
+        if let name = item.name, let data = data(for: item) {
+            return NavigationLink(
+                destination: TreeContent(treeData: data),
+                tag: item,
+                selection: $selection, label: {
+                Text(name)
+            })
 
         }
+        return nil
 
-        return AnyView(NavigationLink("Unknown", destination: Text("Unknown")))
     }
 
+    func data(for item: Lock) -> TreeData? {
+        if let data = globalState.cache.object(forKey: item) { return data }
+
+        if let url = item.url {
+            return TreeData(lockFile: .init(url: url))
+        }
+
+        return nil
+    }
 }
 
 private extension ContentView {
 
-     func addItem(with url: URL) {
+    func addItem(with url: URL) {
         withAnimation {
             if items.contains(where: { $0.url?.absoluteString == url.absoluteString }) {
                 return
@@ -150,9 +156,9 @@ private extension ContentView {
                   let urlString = String(data: urlData, encoding: .utf8),
                   let url = URL(string: urlString),
                   url.lastPathComponent == "Podfile.lock" else {
-                // TODO error
-                return
-            }
+                      // TODO error
+                      return
+                  }
 
             addItem(with: url)
         }

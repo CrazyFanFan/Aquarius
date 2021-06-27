@@ -9,8 +9,8 @@
 import Combine
 import SwiftUI
 
-class GlobleState: ObservableObject {
-    static let shared = GlobleState()
+class GlobalState: ObservableObject {
+    static let shared = GlobalState()
 
     @Published var isLoading: Bool = false
 
@@ -18,5 +18,6 @@ class GlobleState: ObservableObject {
     @AppStorage("isIgnoreLastModificationDate") var isIgnoreLastModificationDate: Bool = false
     @AppStorage("isIgnoreNodeDeep") var isIgnoreNodeDeep = false
 
+    public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}
 }
