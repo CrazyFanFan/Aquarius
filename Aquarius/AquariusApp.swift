@@ -12,9 +12,13 @@ struct AquariusApp: App {
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "main") {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+        }
+        .commands {
+            // 禁用创建新的Window
+            CommandGroup(replacing: CommandGroupPlacement.newItem) { }
         }
     }
 }

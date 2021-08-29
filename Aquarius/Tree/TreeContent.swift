@@ -12,20 +12,19 @@ struct TreeContent: View {
     @StateObject var treeData: TreeData
 
     var body: some View {
-        GeometryReader { reader in
-            VStack {
-                TreeControl(treeData: treeData)
+        VStack {
+            // 顶部控制View
+            TreeControl(treeData: treeData)
 
-                // List，用 LazyVGrid 是为了更好的性能
-                ScrollView {
-                    LazyVGrid(
-                        columns: [GridItem(.flexible())],
-                        alignment: .leading,
-                        content: {
-                            makeItem()
-                        }
-                    )
-                }
+            // List，用 LazyVGrid 是为了更好的性能
+            ScrollView {
+                LazyVGrid(
+                    columns: [GridItem(.flexible())],
+                    alignment: .center,
+                    spacing: nil,
+                    pinnedViews: [],
+                    content: { makeItem() }
+                ).animation(.linear)
             }
         }
         .frame(minWidth: 550, alignment: .center)
@@ -44,6 +43,7 @@ struct TreeContent: View {
                 .contextMenu {
                     self.menus(node.pod)
                 }
+                .frame(maxWidth: .infinity)
         }
     }
 

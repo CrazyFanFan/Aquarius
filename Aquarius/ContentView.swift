@@ -23,6 +23,7 @@ struct ContentView: View {
 
     @State private var selection: Lock?
 
+    @State private var isPresented: Bool = false
 
     var body: some View {
         ZStack {
@@ -30,26 +31,29 @@ struct ContentView: View {
                 List(selection: $selection) {
                     ForEach(items) { item in
                         itemLink(for: item)
-                    }
-                    .onDelete { deleteItems(offsets: $0) }
-                    .onDeleteCommand {
-                        if let selection = selection {
-                            viewContext.delete(selection)
-                        }
+                            .contextMenu {
+                                Button("Delete") {
+                                    self.delete(items: [item])
+                                }
+                                Button("Copy path") {
+                                    Pasteboard.write(item.url?.path ?? "")
+                                }
+                            }
                     }
                 }
                 .listStyle(SidebarListStyle())
                 .toolbar {
                     Spacer()
+                    Button(action: toggleSidebar, label: { Image("c_sidebar.left") })
                     Settings(config: .shared)
                 }
-                .frame(minWidth: 200, alignment: .leading)
+                .frame(minWidth: 250, alignment: .leading)
             }
 
             if globalState.isLoading {
                 ActivityIndicator()
                     .frame(width: 50, height: 50, alignment: .center)
-                    .animation(.easeInOut)
+                    .animation(.linear)
             }
 
         }
@@ -58,7 +62,11 @@ struct ContentView: View {
             self.loadPath(from: $0)
         }
         .onAppear {
-            self.selection = items.first
+            if globalState.isBookmarkEnable {
+                self.selection = items.first
+            } else {
+                delete(items: Array(items))
+            }
         }
     }
 }
@@ -86,6 +94,10 @@ private extension ContentView {
         }
 
         return nil
+    }
+
+    func toggleSidebar() {
+        NSApp.keyWindow?.firstResponder?.tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
     }
 }
 
@@ -130,6 +142,21 @@ private extension ContentView {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             offsets.map { items[$0] }.forEach(viewContext.delete)
+
+            do {
+                try viewContext.save()
+            } catch {
+                // Replace this implementation with code to handle the error appropriately.
+                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
+                let nsError = error as NSError
+                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+            }
+        }
+    }
+
+    private func delete(items: [Lock]) {
+        withAnimation {
+            items.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()

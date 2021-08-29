@@ -23,7 +23,7 @@ struct Settings: View {
             .pickerStyle(MenuPickerStyle())
             .scaledToFit()
         } label: {
-            Label("Settings", systemImage: "gearshape")
+            Label("Settings", image: "c_gearshape")
         }
     }
 }
