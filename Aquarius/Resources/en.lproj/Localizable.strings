@@ -15,8 +15,8 @@
 "Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
 "Copy child nodes (Recursive Strip)"="Copy child nodes (Recursive Strip)";
 "Recursive" = "Recursive";
-"dependencies" = "Dependencies";
-"influence" = "Influence";
+"Successors" = "Successors";
+"Predecessors" = "Predecessors";
 "Type your search" = "Type your search";
 "Bookmark" = "Bookmark";
 "Ignore Last Modification Date" = "Ignore Last Modification Date";

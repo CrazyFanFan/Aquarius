@@ -24,7 +24,7 @@ struct TreeControl: View {
 
             Picker("Model: ", selection: $treeData.detailMode) {
                 ForEach(DetailMode.allCases) {
-                    Text(NSLocalizedString($0.rawValue, comment: "")).tag($0)
+                    Text(NSLocalizedString($0.rawValue.capitalized, comment: "")).tag($0)
                 }
             }
             .scaledToFit()

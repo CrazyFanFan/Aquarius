@@ -11,6 +11,6 @@ import Foundation
 enum DetailMode: String, CaseIterable, Identifiable {
     var id: String { self.rawValue }
 
-    case dependencies
-    case influence
+    case successors
+    case predecessors
 }

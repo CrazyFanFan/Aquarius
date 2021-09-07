@@ -10,30 +10,30 @@ import Foundation
 
 class TreeNode: NSObject {
     var pod: Pod
-    var dependencies: [TreeNode]?
-    var infecteds: [TreeNode]?
+    var successors: [TreeNode]?
+    var predecessors: [TreeNode]?
 
     var deep: Int
     var isExpanded: Bool = false
 
-    init(deep: Int, pod: Pod, dependencies: [TreeNode]? = nil, infecteds: [TreeNode]? = nil) {
+    init(deep: Int, pod: Pod, successors: [TreeNode]? = nil, predecessors: [TreeNode]? = nil) {
         self.deep = deep
         self.pod = pod
-        self.dependencies = dependencies
-        self.infecteds = infecteds
+        self.successors = successors
+        self.predecessors = predecessors
     }
 
     func copy(with deep: Int, isImpactMode: Bool) -> TreeNode {
         TreeNode(
             deep: deep,
             pod: pod,
-            dependencies: isImpactMode ? nil : dependencies?.map { $0.copy(with: deep + 1, isImpactMode: isImpactMode) },
-            infecteds: isImpactMode ? infecteds?.map { $0.copy(with: deep + 1, isImpactMode: isImpactMode) } : nil
+            successors: isImpactMode ? nil : successors?.map { $0.copy(with: deep + 1, isImpactMode: isImpactMode) },
+            predecessors: isImpactMode ? predecessors?.map { $0.copy(with: deep + 1, isImpactMode: isImpactMode) } : nil
         )
     }
 
     func hasMore(_ isImpact: Bool = false) -> Int? {
-        isImpact ? pod.infecteds?.count : pod.dependencies?.count
+        isImpact ? pod.predecessors?.count : pod.successors?.count
     }
 }
 

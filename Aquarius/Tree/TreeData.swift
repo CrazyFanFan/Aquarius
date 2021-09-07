@@ -70,7 +70,7 @@ class TreeData: ObservableObject {
     /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
     /// 递归的找下去，会形成一棵树，我称之为”影响树“
     ///
-    @AppStorage("detailMode") var detailMode: DetailMode = .influence {
+    @AppStorage("detailMode") var detailMode: DetailMode = .predecessors {
         didSet {
             if detailMode != oldValue {
                 buildTree()
@@ -78,7 +78,7 @@ class TreeData: ObservableObject {
         }
     }
 
-    var isImpactMode: Bool { detailMode == .influence }
+    var isImpactMode: Bool { detailMode == .predecessors }
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")
 
@@ -189,9 +189,9 @@ private extension TreeData {
 
     func getNextLevel(node: TreeNode, isImpactMode: Bool) {
         if !isImpactMode {
-            node.dependencies = namesToNodes(deep: node.deep + 1, names: node.pod.dependencies)
+            node.successors = namesToNodes(deep: node.deep + 1, names: node.pod.successors)
         } else {
-            node.infecteds = namesToNodes(deep: node.deep + 1, names: node.pod.infecteds)
+            node.predecessors = namesToNodes(deep: node.deep + 1, names: node.pod.predecessors)
         }
     }
 
@@ -212,7 +212,7 @@ private extension TreeData {
                 node.pod.name.lowercased().contains(self.searchText.lowercased()) {
                 innerShowNodes.append(node)
 
-                if node.isExpanded, let subNodes = isImpactMode ? node.infecteds : node.dependencies {
+                if node.isExpanded, let subNodes = isImpactMode ? node.predecessors : node.successors {
                     traverse(subNodes, isImpactMode: isImpactMode)
                 }
             }

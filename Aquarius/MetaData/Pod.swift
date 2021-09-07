@@ -31,8 +31,8 @@ class Pod {
 
     var name: String
     var info: Info?
-    var dependencies: [String]?
-    var infecteds: [String]?
+    var successors: [String]?
+    var predecessors: [String]?
 
     init(podValue: String) {
         (name, info) = Self.format(podValue: podValue)
@@ -41,7 +41,7 @@ class Pod {
     init?(map: [String: [String]]) {
         if let podValue = map.keys.first {
             (name, info) = Self.format(podValue: podValue)
-            self.dependencies = map[podValue]?.map { Self.format(podValue: $0).name }
+            self.successors = map[podValue]?.map { Self.format(podValue: $0).name }
         } else {
             return nil
         }
@@ -52,15 +52,15 @@ extension Pod: Hashable {
     func hash(into hasher: inout Hasher) {
         hasher.combine(info)
         hasher.combine(name)
-        hasher.combine(dependencies)
-        hasher.combine(infecteds)
+        hasher.combine(successors)
+        hasher.combine(predecessors)
     }
 
     static func == (lhs: Pod, rhs: Pod) -> Bool {
         if lhs.info == rhs.info,
         lhs.name == rhs.name,
-        lhs.dependencies == rhs.dependencies,
-        lhs.infecteds == rhs.infecteds {
+        lhs.successors == rhs.successors,
+        lhs.predecessors == rhs.predecessors {
             return true
         }
         return false
@@ -81,7 +81,7 @@ private extension Pod {
 
 extension Pod {
     func nextLevel(_ isImpactMode: Bool) -> [String]? {
-        isImpactMode ? infecteds : dependencies
+        isImpactMode ? predecessors : successors
     }
 }
 
