@@ -28,7 +28,6 @@ struct TreeContent: View {
                 }
             }
         }
-        .animation(.linear)
         .frame(minWidth: 550, alignment: .center)
         .padding(5)
     }
