@@ -46,7 +46,8 @@ struct TreeControl: View {
                         .joined(separator: "\n")
                     Pasteboard.write(content)
                 }
-            }.frame(maxHeight: 25)
+            }
+            .frame(maxHeight: 25)
 
             Divider()
         }

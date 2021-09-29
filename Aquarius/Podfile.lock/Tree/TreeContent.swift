@@ -12,24 +12,40 @@ struct TreeContent: View {
     @StateObject var treeData: TreeData
 
     var body: some View {
-        List {
-            // 顶部控制View
-            Section(header: TreeControl(treeData: treeData)) {
-                ForEach(treeData.showNodes) { node in
-                    TreeView(node: node, isImpactMode: self.treeData.isImpactMode)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            self.treeData.onSeletd(node: node)
+        GeometryReader { reader in
+            VStack {
+                TreeControl(treeData: treeData)
+
+                // List，用 LazyVGrid 是为了更好的性能
+                ScrollView {
+                    LazyVGrid(
+                        columns: [GridItem(.flexible())],
+                        alignment: .leading,
+                        content: {
+                            makeItem()
                         }
-                        .contextMenu {
-                            self.menus(node.pod)
-                        }
+                    )
                 }
             }
         }
-        .animation(.easeIn)
-        .padding(.top)
+        .animation(.linear)
         .frame(minWidth: 550, alignment: .center)
+        .padding(5)
+    }
+
+    /// 创建Cell
+    /// - Returns: Cell
+    @inline(__always)
+    private func makeItem() -> some View {
+        ForEach(treeData.showNodes) { node in
+            TreeView(node: node, isImpactMode: self.treeData.isImpactMode)
+                .onTapGesture {
+                    self.treeData.onSeletd(node: node)
+                }
+                .contextMenu {
+                    self.menus(node.pod)
+                }
+        }
     }
 
     /// Cell 右键菜单
