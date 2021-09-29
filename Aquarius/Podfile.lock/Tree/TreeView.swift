@@ -45,11 +45,13 @@ struct TreeView: View {
         .padding(
             .leading,
             CGFloat(node.deep > 0 ? (isIgnoreNodeDeep ? 30 : node.deep * 30) : 0)
-        ).animation(.easeIn)
+        )
     }
 
     private func more() -> Text? {
-        guard let count = node.hasMore(isImpactMode) else { return nil }
+        guard let count = node.hasMore(isImpactMode) else {
+            return Text("=·(0) ").foregroundColor(Color.gray.opacity(0.6))
+        }
 
         if node.isExpanded {
             return Text("⇇·(\(count)) ").foregroundColor(Color.red.opacity(0.6))
