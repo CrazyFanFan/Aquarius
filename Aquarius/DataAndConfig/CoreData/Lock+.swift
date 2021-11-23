@@ -9,7 +9,7 @@ import Foundation
 
 extension Lock {
     var url: URL? {
-        guard let (url, isStale) = BookmarkTool.url(for: bookmark), !isStale else {
+        guard let (url, _) = BookmarkTool.url(for: bookmark) else {
             return nil
         }
 

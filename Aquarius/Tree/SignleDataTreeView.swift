@@ -1,5 +1,5 @@
 //
-//  TreeView.swift
+//  SignleDataTreeView.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2020/1/5.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct TreeView: View {
+struct SignleDataTreeView: View {
     @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep = false
 
     var node: TreeNode
@@ -17,10 +17,14 @@ struct TreeView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
-                more()?.bold()
+                more()
+                    .bold()
 
-                Text(node.pod.name).foregroundColor(.primary)
+                Text(node.pod.name)
+                    .foregroundColor(.primary)
+
                 Spacer()
+
                 Text((node.pod.info?.name ?? ""))
                     .padding(EdgeInsets(top: 3, leading: 5, bottom: 3, trailing: 5))
                     .foregroundColor(.secondary)
@@ -35,21 +39,24 @@ struct TreeView: View {
         )
     }
 
-    private func more() -> Text? {
+    private func more() -> Text {
         guard let count = node.hasMore(isImpactMode) else {
-            return Text("=·(0) ").foregroundColor(Color.gray.opacity(0.6))
+            return Text("=·(0) ")
+                .foregroundColor(Color.gray.opacity(0.6))
         }
 
         if node.isExpanded {
-            return Text("⇇·(\(count)) ").foregroundColor(Color.red.opacity(0.6))
+            return Text("⇇·(\(count)) ")
+                .foregroundColor(Color.red.opacity(0.6))
         } else {
-            return Text("⇉·(\(count)) ").foregroundColor(Color.green.opacity(0.6))
+            return Text("⇉·(\(count)) ")
+                .foregroundColor(Color.green.opacity(0.6))
         }
     }
 }
 
-struct TreeView_Previews: PreviewProvider {
+struct SignleDataTreeView_Previews: PreviewProvider {
     static var previews: some View {
-        TreeView(node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
+        SignleDataTreeView(node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
     }
 }

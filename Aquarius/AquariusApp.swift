@@ -17,6 +17,8 @@ struct AquariusApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
         .commands {
+            SidebarCommands()
+
             // 禁用创建新的Window
             CommandGroup(replacing: CommandGroupPlacement.newItem) { }
         }

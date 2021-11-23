@@ -20,7 +20,7 @@ class DataReader {
         guard let file = file else { return nil }
 
         guard file.url.startAccessingSecurityScopedResource() else { return nil }
-        
+
         defer {
             file.url.stopAccessingSecurityScopedResource()
         }

@@ -15,7 +15,7 @@
 		46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD7D930854906F524A62EA108D0511C /* PodfileLock.swift */; };
 		487B7FFEEA1FFE8ED27DBEFB3DD0770E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BB9BB4E09AE79EADFB516F72675D3D /* ContentView.swift */; };
 		504F3B0CAEE38CE5FCE068E780833F3A /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF73CFFC898849D2AEF6C72EAE48EC7 /* Pod.swift */; };
-		56AB7DDB9A897AF0BF5AA17C216A63A0 /* TreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BED1A50DF5A9A7D195536250644406 /* TreeView.swift */; };
+		56AB7DDB9A897AF0BF5AA17C216A63A0 /* SignleDataTreeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BED1A50DF5A9A7D195536250644406 /* SignleDataTreeView.swift */; };
 		56FEAE54F56086581F732068BEB0EFB0 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF416BC8022BE2CE5878457F08520C29 /* SearchBar.swift */; };
 		57FF59E520D2F91CC1A1EA4B8A9FD7C9 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700385A8E0970D47AE9D37D27571919B /* ActivityIndicator.swift */; };
 		5BC68D3D806C8809408939B8E14E5282 /* TreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */; };
@@ -49,7 +49,7 @@
 		4BDBAF2890DC910919BAE7FE1A78D99E /* TreeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeData.swift; sourceTree = "<group>"; };
 		4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aquarius.entitlements; sourceTree = "<group>"; };
 		56BB9BB4E09AE79EADFB516F72675D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		57BED1A50DF5A9A7D195536250644406 /* TreeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeView.swift; sourceTree = "<group>"; };
+		57BED1A50DF5A9A7D195536250644406 /* SignleDataTreeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignleDataTreeView.swift; sourceTree = "<group>"; };
 		5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodfileLockFile.swift; sourceTree = "<group>"; };
 		63CAEE98268792D000B591FC /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		63CAEE9A26879AD200B591FC /* Lock+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lock+.swift"; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 				8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */,
 				4BDBAF2890DC910919BAE7FE1A78D99E /* TreeData.swift */,
 				FD99C6956BBEB6BBD0C350A3B2BC5C5E /* TreeNode.swift */,
-				57BED1A50DF5A9A7D195536250644406 /* TreeView.swift */,
+				57BED1A50DF5A9A7D195536250644406 /* SignleDataTreeView.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -320,7 +320,7 @@
 				5BC68D3D806C8809408939B8E14E5282 /* TreeControl.swift in Sources */,
 				D26B6DBD95EDDC523104E744D6D99971 /* TreeData.swift in Sources */,
 				C9451A1E3596AFCFCDA0367772B6D809 /* TreeNode.swift in Sources */,
-				56AB7DDB9A897AF0BF5AA17C216A63A0 /* TreeView.swift in Sources */,
+				56AB7DDB9A897AF0BF5AA17C216A63A0 /* SignleDataTreeView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,8 +481,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kongkaikai.aquarius;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -507,8 +507,8 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 2.1.2;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kongkaikai.aquarius;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -29,17 +29,7 @@ struct ContentView: View {
         ZStack {
             NavigationView {
                 List(selection: $selection) {
-                    ForEach(items) { item in
-                        itemLink(for: item)
-                            .contextMenu {
-                                Button("Delete") {
-                                    self.delete(items: [item])
-                                }
-                                Button("Copy path") {
-                                    Pasteboard.write(item.url?.path ?? "")
-                                }
-                            }
-                    }
+                    showItems()
                 }
                 .listStyle(SidebarListStyle())
                 .toolbar {
@@ -48,14 +38,14 @@ struct ContentView: View {
                     Settings(config: .shared)
                 }
                 .frame(minWidth: 250, alignment: .leading)
+
+                Text("Select a Podfile.lock")
             }
 
             if globalState.isLoading {
                 ActivityIndicator()
                     .frame(width: 50, height: 50, alignment: .center)
-                    .animation(.linear)
             }
-
         }
         .onOpenURL { addItem(with: $0) }
         .onDrop(of: globalState.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
@@ -73,25 +63,35 @@ struct ContentView: View {
 }
 
 private extension ContentView {
-    func itemLink(for item: Lock) -> NavigationLink<Text, TreeContent>? {
-        if let name = item.name, let data = data(for: item) {
-            return NavigationLink(
-                destination: TreeContent(treeData: data),
-                tag: item,
-                selection: $selection, label: {
-                Text(name)
-            })
-
+    func showItems() -> some View {
+        ForEach(items) { item in
+            if let name = item.name, let data = data(for: item) {
+                NavigationLink {
+                    TreeContent(treeData: data)
+                } label: {
+                    Text(name)
+                }
+                .tag(item)
+                .contextMenu {
+                    Button("Delete") {
+                        self.delete(items: [item])
+                        if item == self.selection {
+                            self.selection = nil
+                        }
+                    }
+                    Button("Copy path") {
+                        Pasteboard.write(item.url?.path ?? "")
+                    }
+                }
+            }
         }
-        return nil
-
     }
 
     func data(for item: Lock) -> TreeData? {
         if let data = globalState.cache.object(forKey: item) { return data }
 
         if let url = item.url {
-            return TreeData(lockFile: .init(url: url))
+            return TreeData(lockFile: PodfileLockFile(url: url))
         }
 
         return nil

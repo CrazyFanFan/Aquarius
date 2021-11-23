@@ -12,23 +12,28 @@ struct TreeContent: View {
     @StateObject var treeData: TreeData
 
     var body: some View {
-        VStack {
-            // 顶部控制View
-            TreeControl(treeData: treeData)
-
-            // List，用 LazyVGrid 是为了更好的性能
-            ScrollView {
-                LazyVGrid(
-                    columns: [GridItem(.flexible())],
-                    alignment: .center,
-                    spacing: nil,
-                    pinnedViews: [],
-                    content: { makeItem() }
-                ).animation(.linear)
+        // List，用 LazyVGrid 是为了更好的性能
+        ScrollView {
+            LazyVGrid(
+                columns: [GridItem(.flexible())],
+                alignment: .center,
+                spacing: nil,
+                pinnedViews: [.sectionHeaders]
+            ) {
+                Section {
+                    makeItem()
+                } header: {
+                    // 顶部控制View
+                    TreeControl(treeData: treeData)
+                        .background(Color(NSColor.windowBackgroundColor))
+                        .animation(.none)
+                }
             }
+            .padding(5)
+            .animation(.linear)
+
         }
         .frame(minWidth: 550, alignment: .center)
-        .padding(5)
     }
 
     /// 创建Cell
@@ -36,7 +41,7 @@ struct TreeContent: View {
     @inline(__always)
     private func makeItem() -> some View {
         ForEach(treeData.showNodes) { node in
-            TreeView(node: node, isImpactMode: self.treeData.isImpactMode)
+            SignleDataTreeView(node: node, isImpactMode: self.treeData.isImpactMode)
                 .onTapGesture {
                     self.treeData.onSeletd(node: node)
                 }
