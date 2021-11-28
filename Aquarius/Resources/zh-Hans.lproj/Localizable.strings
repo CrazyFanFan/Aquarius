@@ -29,3 +29,4 @@
 "Model: " = "模式：";
 "Delete" = "删除";
 "Copy path" = "拷贝路径";
+"Select a Podfile.lock" = "请选择一个 Podfile.lock";
