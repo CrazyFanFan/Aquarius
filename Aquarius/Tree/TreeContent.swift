@@ -18,22 +18,16 @@ struct TreeContent: View {
                 columns: [GridItem(.flexible())],
                 alignment: .center,
                 spacing: nil,
-                pinnedViews: [.sectionHeaders]
+                pinnedViews: []
             ) {
-                Section {
-                    makeItem()
-                } header: {
-                    // 顶部控制View
-                    TreeControl(treeData: treeData)
-                        .background(Color(NSColor.windowBackgroundColor))
-                        .animation(.none)
-                }
+                makeItem()
             }
             .padding(5)
             .animation(.linear)
 
         }
         .frame(minWidth: 550, alignment: .center)
+        .modifier(TreeControlModifier(treeData: treeData))
     }
 
     /// 创建Cell
