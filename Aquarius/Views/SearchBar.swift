@@ -9,23 +9,44 @@
 import SwiftUI
 import Combine
 
+fileprivate extension Image {
+    func icon() -> some View {
+        self
+            .resizable()
+            .frame(width: 12, height: 12, alignment: .center)
+            .foregroundColor(.secondary)
+    }
+}
+
 struct SearchBar: View {
     @Binding var searchText: String
 
     var body: some View {
-        HStack {
-            TextField("Type your search", text: $searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
+        HStack(alignment: .center) {
+            Image("magnifyingglass").icon()
 
-            Button(action: {
-                self.searchText = ""
-            }) {
-                Text("Cancel")
-                    .font(.system(size: 15))
-                    .foregroundColor(.secondary)
+            ZStack(alignment: .trailing) {
+                TextField(LocalizedStringKey("Search"), text: $searchText)
+                    .textFieldStyle(PlainTextFieldStyle())
+                    .padding(.trailing)
+
+                if !searchText.isEmpty {
+                    Button(action: {
+                        self.searchText = ""
+                    }) {
+                        Image("xmark.circle.fill").icon()
+                    }
+                    .disabled(searchText == "")
+                }
             }
-            .disabled(searchText == "")
+            .frame(minWidth: 250)
         }
+        .frame(minHeight: 28)
+        .padding([.leading])
+        .overlay(
+            RoundedRectangle(cornerRadius: 5)
+                .stroke(.gray.opacity(0.3), lineWidth: 1)
+        )
     }
 }
 

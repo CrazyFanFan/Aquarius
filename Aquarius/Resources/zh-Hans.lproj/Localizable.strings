@@ -17,7 +17,7 @@
 "Recursive" = "递归";
 "Successors" = "依赖树";
 "Predecessors" = "影响树";
-"Type your search" = "请输入搜索内容";
+"Search" = "搜索";
 "Bookmark" = "书签";
 "Ignore Last Modification Date" = "忽略最后修改时间";
 "Displayed as a tree" = "以树形显示";
