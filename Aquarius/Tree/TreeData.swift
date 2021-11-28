@@ -46,12 +46,12 @@ class TreeData: ObservableObject {
         didSet { buildTree() }
     }
 
-    var searchText = "" {
+    var searchKey = "" {
         didSet {
-            let value = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+            let value = searchKey.trimmingCharacters(in: .whitespacesAndNewlines)
 
-            if searchText != value {
-                searchText = value
+            if searchKey != value {
+                searchKey = value
             }
 
             loadData(isImpactMode: isImpactMode, resetIsExpanded: true)
@@ -202,19 +202,22 @@ private extension TreeData {
             nodes.forEach { $0.isExpanded = false }
         }
 
-        traverse(nodes, isImpactMode: isImpactMode)
+        var tmpNodes = nodes
+
+        if !self.searchKey.isEmpty {
+            let lowerKey = self.searchKey.lowercased()
+            tmpNodes = nodes.filter { $0.pod.name.lowercased().contains(lowerKey) }
+        }
+
+        traverse(tmpNodes, isImpactMode: isImpactMode)
     }
 
     private func traverse(_ nodes: [TreeNode], isImpactMode: Bool) {
         for node in nodes {
-            if self.searchText.isEmpty ||
-                node.deep > 0 ||
-                node.pod.name.lowercased().contains(self.searchText.lowercased()) {
-                innerShowNodes.append(node)
+            innerShowNodes.append(node)
 
-                if node.isExpanded, let subNodes = isImpactMode ? node.predecessors : node.successors {
-                    traverse(subNodes, isImpactMode: isImpactMode)
-                }
+            if node.isExpanded, let subNodes = isImpactMode ? node.predecessors : node.successors {
+                traverse(subNodes, isImpactMode: isImpactMode)
             }
         }
 

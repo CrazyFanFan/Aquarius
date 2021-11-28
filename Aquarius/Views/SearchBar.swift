@@ -19,24 +19,24 @@ fileprivate extension Image {
 }
 
 struct SearchBar: View {
-    @Binding var searchText: String
+    @Binding var text: String
 
     var body: some View {
         HStack(alignment: .center) {
             Image("magnifyingglass").icon()
 
             ZStack(alignment: .trailing) {
-                TextField(LocalizedStringKey("Search"), text: $searchText)
+                TextField(LocalizedStringKey("Search"), text: $text)
                     .textFieldStyle(PlainTextFieldStyle())
                     .padding(.trailing)
 
-                if !searchText.isEmpty {
+                if !text.isEmpty {
                     Button(action: {
-                        self.searchText = ""
+                        self.text = ""
                     }) {
                         Image("xmark.circle.fill").icon()
                     }
-                    .disabled(searchText == "")
+                    .disabled(text == "")
                 }
             }
             .frame(minWidth: 250)
@@ -52,6 +52,6 @@ struct SearchBar: View {
 
 struct SearchBar_Previews: PreviewProvider {
     static var previews: some View {
-        SearchBar(searchText: .constant(""))
+        SearchBar(text: .constant(""))
     }
 }
