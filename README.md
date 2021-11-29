@@ -3,10 +3,12 @@
 
 A tool to obtain dependencies by analyzing "Podfile.lock"
 
+**[ChangeLog](./ChangeLog/change_log.md)**
+
 ## Environment
 
-- Xcode: version ≥ Xcode12-beta1
-- OSX: version ≥ 10.16-beta1
+- Xcode: version ≥ Xcode13.0
+- OSX: version ≥ 11.0
 
 ## Preview
 ![Image](./Screenshots/s_1.jpg)
