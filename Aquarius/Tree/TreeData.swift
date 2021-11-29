@@ -78,6 +78,14 @@ class TreeData: ObservableObject {
         }
     }
 
+    @AppStorage("orderRule") var orderRule: OrderBy = .alphabeticalAscending {
+        didSet {
+            if orderRule != oldValue {
+                buildTree()
+            }
+        }
+    }
+
     var isImpactMode: Bool { detailMode == .predecessors }
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")
@@ -116,9 +124,9 @@ private extension TreeData {
         guard let attributes = try? FileManager.default.attributesOfItem(atPath: file.url.path),
               let fileModificationDate = attributes[.modificationDate] as? Date,
               let lastReadDataTime = self.lastReadDataTime else {
-            completion(true)
-            return
-        }
+                  completion(true)
+                  return
+              }
 
         if fileModificationDate.distance(to: lastReadDataTime) < 0 {
             completion(true)
@@ -209,15 +217,27 @@ private extension TreeData {
             tmpNodes = nodes.filter { $0.pod.name.lowercased().contains(lowerKey) }
         }
 
-        traverse(tmpNodes, isImpactMode: isImpactMode)
+        let sortClosure = orderRule.sortClosure(isImpactMode: isImpactMode)
+
+        tmpNodes.sort(by: sortClosure)
+
+        traverse(tmpNodes, isImpactMode: isImpactMode, sortClosure: sortClosure)
     }
 
-    private func traverse(_ nodes: [TreeNode], isImpactMode: Bool) {
+    private func traverse(
+        _ nodes: [TreeNode],
+        isImpactMode: Bool,
+        sortClosure: OrderBy.SortClosure
+    ) {
         for node in nodes {
             innerShowNodes.append(node)
 
             if node.isExpanded, let subNodes = isImpactMode ? node.predecessors : node.successors {
-                traverse(subNodes, isImpactMode: isImpactMode)
+                traverse(
+                    subNodes.sorted(by: sortClosure),
+                    isImpactMode: isImpactMode,
+                    sortClosure: sortClosure
+                )
             }
         }
 
@@ -296,7 +316,7 @@ extension TreeData {
             if let nodes = node.nextLevel(isImpactMode)?.compactMap({ nameToPodCache[$0] }) {
                 if nodes.count == 1 {
                     result = result + "\n└── " +
-                        innerContent(for: nodes.first!, with: deepMode)
+                    innerContent(for: nodes.first!, with: deepMode)
                         .split(separator: "\n")
                         .joined(separator: "\n    ")
                 } else {
@@ -306,8 +326,8 @@ extension TreeData {
                     let next = nexts
                         .map { ("├── " + $0).split(separator: "\n").joined(separator: "\n│   ") }
                         .joined(separator: "\n")
-                        + "\n"
-                        + ("└── " + last).split(separator: "\n").joined(separator: "\n    ")
+                    + "\n"
+                    + ("└── " + last).split(separator: "\n").joined(separator: "\n    ")
 
                     result = result + "\n" + next
                 }
@@ -327,6 +347,31 @@ extension TreeData {
             }
 
             return node.name + formatNames(&subnames)
+        }
+    }
+}
+
+fileprivate func < (lhs: Optional<Int>, rhs: Optional<Int>) -> Bool {
+    switch (lhs, rhs) {
+    case (.some, .none), (.none, .none): return false
+    case (.none, .some): return true
+    case (.some(let a), .some(let b)): return a < b
+    }
+}
+
+fileprivate extension OrderBy {
+    typealias SortClosure = (_ lhs: TreeNode, _ rhs: TreeNode) -> Bool
+
+    func sortClosure(isImpactMode: Bool) -> SortClosure {
+        switch self {
+        case .alphabeticalAscending:
+            return { $0.pod.name < $1.pod.name }
+        case .alphabeticalDescending:
+            return { $0.pod.name > $1.pod.name }
+        case .numberAscending:
+            return { $0.pod.nextLevel(isImpactMode)?.count < $1.pod.nextLevel(isImpactMode)?.count }
+        case .numberDescending:
+            return { !($0.pod.nextLevel(isImpactMode)?.count < $1.pod.nextLevel(isImpactMode)?.count) }
         }
     }
 }

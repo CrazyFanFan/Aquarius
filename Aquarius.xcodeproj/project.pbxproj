@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A0F7690AC51BC77E9793F1B23A6B228 /* DetailMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6201A71E0894C0B1AB53CA8D43539F /* DetailMode.swift */; };
+		0A0F7690AC51BC77E9793F1B23A6B228 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A6201A71E0894C0B1AB53CA8D43539F /* Constants.swift */; };
 		2E5171C21EFAA76463F7149B2BB75DEC /* README_CN.md in Resources */ = {isa = PBXBuildFile; fileRef = 7AA331021A9A32BDF804E477A2DE02DA /* README_CN.md */; };
 		33CDFC27ACD4BC44840A03E3BCCC65F0 /* Aquarius.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02FA363A9E65F76535E065C4CCB348E6 /* Aquarius.xcdatamodeld */; };
 		39962FCF98FA7BC30152C2675FEFB72F /* Podfile.lock in Resources */ = {isa = PBXBuildFile; fileRef = D3420D56B2C3E7069F443FACECDA5CFC /* Podfile.lock */; };
@@ -45,7 +45,7 @@
 		062216981A86012A027DAC2B7BD9A230 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		1DC0806032C8DA738AB6244B36925B6B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		215DC8C15AD85BA1AA52C0266C2EC2CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		4A6201A71E0894C0B1AB53CA8D43539F /* DetailMode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailMode.swift; sourceTree = "<group>"; };
+		4A6201A71E0894C0B1AB53CA8D43539F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4BDBAF2890DC910919BAE7FE1A78D99E /* TreeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeData.swift; sourceTree = "<group>"; };
 		4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aquarius.entitlements; sourceTree = "<group>"; };
 		56BB9BB4E09AE79EADFB516F72675D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 		D2EF5C8144ECF2B319AF3C5A01705FFD /* Tree */ = {
 			isa = PBXGroup;
 			children = (
-				4A6201A71E0894C0B1AB53CA8D43539F /* DetailMode.swift */,
+				4A6201A71E0894C0B1AB53CA8D43539F /* Constants.swift */,
 				AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */,
 				8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */,
 				4BDBAF2890DC910919BAE7FE1A78D99E /* TreeData.swift */,
@@ -304,7 +304,7 @@
 				FB789A5733C629F01F04500ABCCAF139 /* BookmarkTool.swift in Sources */,
 				487B7FFEEA1FFE8ED27DBEFB3DD0770E /* ContentView.swift in Sources */,
 				5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */,
-				0A0F7690AC51BC77E9793F1B23A6B228 /* DetailMode.swift in Sources */,
+				0A0F7690AC51BC77E9793F1B23A6B228 /* Constants.swift in Sources */,
 				F23B1952203382974FD321CEB8223D5D /* Details.swift in Sources */,
 				63CAEE99268792D000B591FC /* Settings.swift in Sources */,
 				63CAEE9B26879AD200B591FC /* Lock+.swift in Sources */,

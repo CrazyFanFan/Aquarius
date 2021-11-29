@@ -17,6 +17,15 @@ struct TreeControlModifier: ViewModifier {
                 .foregroundColor(.primary)
                 .font(.headline)
 
+            Picker("Sort by:", selection: $treeData.orderRule) {
+                ForEach(OrderBy.allCases, id: \.self) { rule in
+                    HStack{
+                        Image("arrow.up.arrow.down.square.fill")
+                        Text(rule.rawValue)
+                    }.tag(rule)
+                }
+            }
+
             Picker("Model: ", selection: $treeData.detailMode) {
                 ForEach(DetailMode.allCases) {
                     Text(NSLocalizedString($0.rawValue.capitalized, comment: "")).tag($0)
