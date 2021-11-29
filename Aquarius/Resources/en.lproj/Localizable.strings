@@ -15,9 +15,9 @@
 "Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
 "Copy child nodes (Recursive Strip)"="Copy child nodes (Recursive Strip)";
 "Recursive" = "Recursive";
-"dependencies" = "Dependencies";
-"influence" = "Influence";
-"Type your search" = "Type your search";
+"Successors" = "Successors";
+"Predecessors" = "Predecessors";
+"Search" = "Search";
 "Bookmark" = "Bookmark";
 "Ignore Last Modification Date" = "Ignore Last Modification Date";
 "Displayed as a tree" = "Displayed as a tree";
@@ -27,3 +27,6 @@
 "Ignore" = "Ignore";
 "Automatic" = "Automatic";
 "Model: " = "Model: ";
+"Delete" = "Delete";
+"Copy path" = "Copy path";
+"Select a Podfile.lock" = "Select a Podfile.lock";
