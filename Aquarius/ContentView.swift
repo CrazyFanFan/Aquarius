@@ -66,9 +66,7 @@ private extension ContentView {
     func showItems() -> some View {
         ForEach(items) { item in
             if let name = item.name, let data = data(for: item) {
-                NavigationLink {
-                    TreeContent(treeData: data)
-                } label: {
+                NavigationLink(destination: TreeContent(treeData: data)) {
                     Text(name)
                 }
                 .tag(item)

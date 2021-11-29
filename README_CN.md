@@ -1,4 +1,7 @@
 # Aquarius
+
+![Build status](https://github.com/CrazyFanFan/Aquarius/actions/workflows/xcodebuild.yml/badge.svg)
+
 [English](https://github.com/CrazyFanFan/Aquarius/blob/master/README.md)
 
 一个通过分析"Podfile.lock"获取各个库之间的依赖关系的工具。

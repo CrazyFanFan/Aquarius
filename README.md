@@ -1,4 +1,7 @@
 # Aquarius
+
+![Build status](https://github.com/CrazyFanFan/Aquarius/actions/workflows/xcodebuild.yml/badge.svg)
+
 [中文版](https://github.com/CrazyFanFan/Aquarius/blob/master/README_CN.md)
 
 A tool to obtain dependencies by analyzing "Podfile.lock"

@@ -45,7 +45,7 @@ struct SearchBar: View {
         .padding([.leading])
         .overlay(
             RoundedRectangle(cornerRadius: 5)
-                .stroke(.gray.opacity(0.3), lineWidth: 1)
+                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
         )
     }
 }
