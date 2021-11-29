@@ -1,6 +1,6 @@
 # Aquarius
 
-![Build status](https://github.com/CrazyFanFan/Aquarius/actions/workflows/xcodebuild.yml/badge.svg)
+[![Swift](https://github.com/CrazyFanFan/Aquarius/actions/workflows/xcodebuild.yml/badge.svg?branch=main)](https://github.com/CrazyFanFan/Aquarius/actions/workflows/xcodebuild.yml)
 
 [中文版](https://github.com/CrazyFanFan/Aquarius/blob/master/README_CN.md)
 
