@@ -354,7 +354,7 @@ extension TreeData {
     }
 }
 
-fileprivate func < (lhs: Optional<Int>, rhs: Optional<Int>) -> Bool {
+private func < (lhs: Int?, rhs: Int?) -> Bool {
     switch (lhs, rhs) {
     case (.some, .none), (.none, .none): return false
     case (.none, .some): return true

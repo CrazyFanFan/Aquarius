@@ -19,7 +19,7 @@ struct TreeControlModifier: ViewModifier {
 
             Picker("Sort by:", selection: $treeData.orderRule) {
                 ForEach(OrderBy.allCases, id: \.self) { rule in
-                    HStack{
+                    HStack {
                         Image("arrow.up.arrow.down.square.fill")
                         Text(rule.rawValue)
                     }.tag(rule)
