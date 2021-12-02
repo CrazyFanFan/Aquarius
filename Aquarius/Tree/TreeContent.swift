@@ -35,7 +35,7 @@ struct TreeContent: View {
     @inline(__always)
     private func makeItem() -> some View {
         ForEach(treeData.showNodes) { node in
-            SignleDataTreeView(node: node, isImpactMode: self.treeData.isImpactMode)
+            SignleDataTreeView(node: node, isImpactMode: self.treeData.isImpact)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     self.treeData.onSeletd(node: node)

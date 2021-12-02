@@ -23,16 +23,16 @@ class TreeNode: NSObject {
         self.predecessors = predecessors
     }
 
-    func copy(with deep: Int, isImpactMode: Bool) -> TreeNode {
+    func copy(with deep: Int, isImpact: Bool) -> TreeNode {
         TreeNode(
             deep: deep,
             pod: pod,
-            successors: isImpactMode ? nil : successors?.map { $0.copy(with: deep + 1, isImpactMode: isImpactMode) },
-            predecessors: isImpactMode ? predecessors?.map { $0.copy(with: deep + 1, isImpactMode: isImpactMode) } : nil
+            successors: isImpact ? nil : successors?.map { $0.copy(with: deep + 1, isImpact: isImpact) },
+            predecessors: isImpact ? predecessors?.map { $0.copy(with: deep + 1, isImpact: isImpact) } : nil
         )
     }
 
-    func hasMore(_ isImpact: Bool = false) -> Int? {
+    func nextCount(_ isImpact: Bool = false) -> Int? {
         isImpact ? pod.predecessors?.count : pod.successors?.count
     }
 }

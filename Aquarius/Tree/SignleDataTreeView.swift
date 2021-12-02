@@ -40,7 +40,7 @@ struct SignleDataTreeView: View {
     }
 
     private func more() -> Text {
-        guard let count = node.hasMore(isImpactMode) else {
+        guard let count = node.nextCount(isImpactMode) else {
             return Text("=·(0) ")
                 .foregroundColor(Color.gray.opacity(0.6))
         }

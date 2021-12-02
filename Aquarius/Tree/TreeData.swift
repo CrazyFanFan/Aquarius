@@ -14,10 +14,10 @@ class TreeData: ObservableObject {
     @Published var isLoading: Bool = false
 
     private var podToNodeCache: [Pod: TreeNode] = [:]
-    private var dependenceToNodeCache: [String: TreeNode] = [:]
+    private var nameToNodeCache: [String: TreeNode] = [:]
     private var nodes: [TreeNode] = []
 
-    private var innerShowNodes: [TreeNode] = []
+    private var loadShowNodesTmp: [TreeNode] = []
     @Published private(set) var showNodes: [TreeNode] = []
 
     private var copyFormatedStringCache: [CacheKey: String] = [:]
@@ -54,7 +54,7 @@ class TreeData: ObservableObject {
                 searchKey = value
             }
 
-            loadData(isImpactMode: isImpactMode, resetIsExpanded: true)
+            loadData(isImpact: isImpact, resetIsExpanded: true)
         }
     }
 
@@ -86,7 +86,7 @@ class TreeData: ObservableObject {
         }
     }
 
-    var isImpactMode: Bool { detailMode == .predecessors }
+    var isImpact: Bool { detailMode == .predecessors }
 
     private var queue = DispatchQueue(label: "aquarius_data_parse_quque")
 
@@ -98,8 +98,8 @@ class TreeData: ObservableObject {
     func onSeletd(node: TreeNode) {
         node.isExpanded = !node.isExpanded
 
-        getNextLevel(node: node, isImpactMode: isImpactMode)
-        loadData(isImpactMode: isImpactMode)
+        updateNext(for: node, isImpact: isImpact)
+        loadData(isImpact: isImpact)
     }
 }
 
@@ -171,18 +171,18 @@ private extension TreeData {
                 self.podToNodeCache[pod] = node
                 self.nodes.append(node)
             }
-            self.loadData(isImpactMode: self.isImpactMode)
+            self.loadData(isImpact: self.isImpact)
         }
     }
 
     func namesToNodes(deep: Int, names: [String]?) -> [TreeNode]? {
         names?.compactMap { (dependence) -> TreeNode? in
-            if let node = dependenceToNodeCache[dependence]?.copy(with: deep, isImpactMode: isImpactMode) {
+            if let node = nameToNodeCache[dependence]?.copy(with: deep, isImpact: isImpact) {
                 return node
             }
 
             if let pod = self.podfileLock?.pods.first(where: { $0.name == dependence }),
-               let node = podToNodeCache[pod]?.copy(with: deep, isImpactMode: isImpactMode) {
+               let node = podToNodeCache[pod]?.copy(with: deep, isImpact: isImpact) {
                 return node
             }
 
@@ -191,20 +191,21 @@ private extension TreeData {
         }
     }
 
-    func getNextLevel(nodes: [TreeNode], isImpactMode: Bool) {
-        nodes.forEach { getNextLevel(node: $0, isImpactMode: isImpactMode) }
+    @inline(__always)
+    func updateNext(for nodes: [TreeNode], isImpact: Bool) {
+        nodes.forEach { updateNext(for: $0, isImpact: isImpact) }
     }
 
-    func getNextLevel(node: TreeNode, isImpactMode: Bool) {
-        if !isImpactMode {
-            node.successors = namesToNodes(deep: node.deep + 1, names: node.pod.successors)
-        } else {
+    func updateNext(for node: TreeNode, isImpact: Bool) {
+        if isImpact {
             node.predecessors = namesToNodes(deep: node.deep + 1, names: node.pod.predecessors)
+        } else {
+            node.successors = namesToNodes(deep: node.deep + 1, names: node.pod.successors)
         }
     }
 
-    func loadData(isImpactMode: Bool, resetIsExpanded: Bool = false) {
-        innerShowNodes.removeAll()
+    func loadData(isImpact: Bool, resetIsExpanded: Bool = false) {
+        loadShowNodesTmp.removeAll()
 
         if resetIsExpanded {
             nodes.forEach { $0.isExpanded = false }
@@ -217,32 +218,32 @@ private extension TreeData {
             tmpNodes = nodes.filter { $0.pod.name.lowercased().contains(lowerKey) }
         }
 
-        let sortClosure = orderRule.sortClosure(isImpactMode: isImpactMode)
+        let sortClosure = orderRule.sortClosure(isImpactMode: isImpact)
 
         tmpNodes.sort(by: sortClosure)
 
-        traverse(tmpNodes, isImpactMode: isImpactMode, sortClosure: sortClosure)
+        traverse(tmpNodes, isImpact: isImpact, sortClosure: sortClosure)
     }
 
     private func traverse(
         _ nodes: [TreeNode],
-        isImpactMode: Bool,
+        isImpact: Bool,
         sortClosure: OrderBy.SortClosure
     ) {
         for node in nodes {
-            innerShowNodes.append(node)
+            loadShowNodesTmp.append(node)
 
-            if node.isExpanded, let subNodes = isImpactMode ? node.predecessors : node.successors {
+            if node.isExpanded, let subNodes = isImpact ? node.predecessors : node.successors {
                 traverse(
                     subNodes.sorted(by: sortClosure),
-                    isImpactMode: isImpactMode,
+                    isImpact: isImpact,
                     sortClosure: sortClosure
                 )
             }
         }
 
         DispatchQueue.main.async {
-            self.showNodes = self.innerShowNodes
+            self.showNodes = self.loadShowNodesTmp
         }
     }
 }
@@ -286,7 +287,7 @@ extension TreeData {
     }
 
     private func innerContent(for node: Pod, with deepMode: NodeContentDeepMode) -> String {
-        let key = CacheKey(name: node.name, mode: deepMode, impact: isImpactMode)
+        let key = CacheKey(name: node.name, mode: deepMode, impact: isImpact)
         if let result = copyFormatedStringCache[key] { return result }
 
         func formatNames(_ input: inout [String]) -> String {
@@ -305,7 +306,7 @@ extension TreeData {
             return node.name
         case .single:
             var result: String = node.name
-            if var next = node.nextLevel(isImpactMode) {
+            if var next = node.nextLevel(isImpact) {
                 result += formatNames(&next)
             }
             return result
@@ -313,7 +314,7 @@ extension TreeData {
         case .recursive:
             var result = node.name
 
-            if let nodes = node.nextLevel(isImpactMode)?.compactMap({ nameToPodCache[$0] }) {
+            if let nodes = node.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }) {
                 if nodes.count == 1 {
                     result = result + "\n└── " +
                     innerContent(for: nodes.first!, with: deepMode)
@@ -336,12 +337,12 @@ extension TreeData {
             return result
 
         case .stripRecursive:
-            var subnames = node.nextLevel(isImpactMode) ?? []
+            var subnames = node.nextLevel(isImpact) ?? []
             var index = 0
 
             while index < subnames.count {
                 subnames += nameToPodCache[subnames[index]]?
-                    .nextLevel(isImpactMode)?
+                    .nextLevel(isImpact)?
                     .filter({ !subnames.contains($0) }) ?? []
                 index += 1
             }
