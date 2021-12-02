@@ -73,7 +73,7 @@ class TreeData: ObservableObject {
     @AppStorage("detailMode") var detailMode: DetailMode = .predecessors {
         didSet {
             if detailMode != oldValue {
-                buildTree()
+                loadData(isImpact: isImpact, resetIsExpanded: true)
             }
         }
     }
@@ -81,7 +81,7 @@ class TreeData: ObservableObject {
     @AppStorage("orderRule") var orderRule: OrderBy = .alphabeticalAscending {
         didSet {
             if orderRule != oldValue {
-                buildTree()
+                loadData(isImpact: isImpact, resetIsExpanded: false)
             }
         }
     }
@@ -96,6 +96,8 @@ class TreeData: ObservableObject {
     }
 
     func onSeletd(node: TreeNode) {
+        guard node.hasMore(isImpact: isImpact) else { return }
+
         node.isExpanded = !node.isExpanded
 
         updateNext(for: node, isImpact: isImpact)

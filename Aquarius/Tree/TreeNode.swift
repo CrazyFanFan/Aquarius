@@ -32,8 +32,17 @@ class TreeNode: NSObject {
         )
     }
 
-    func nextCount(_ isImpact: Bool = false) -> Int? {
+    @inline(__always)
+    func nextCount(_ isImpact: Bool) -> Int? {
         isImpact ? pod.predecessors?.count : pod.successors?.count
+    }
+
+    func hasMore(isImpact: Bool) -> Bool {
+        if let count = nextCount(isImpact), count != 0 {
+            return true
+        }
+
+        return false
     }
 }
 
