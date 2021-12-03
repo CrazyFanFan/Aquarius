@@ -50,9 +50,17 @@ class DataReader {
 //            lock.dependencies = dependencies.map { Pod(podValue: $0) }
 //        }
 //
-//        if let specRepos = yaml[PodfileLockRootKey.specRepos.rawValue] as? [String: [String]] {
-//            lock.specRepos = specRepos.map { SpecRepo(repo: $0, pods: $1) }
-//        }
+        if let specRepos = yaml[PodfileLockRootKey.specRepos.rawValue] as? [String: [String]] {
+            lock.specRepos = specRepos.map { SpecRepo(repo: $0, pods: $1) }
+        }
+
+        if let externalSources = yaml[PodfileLockRootKey.externalSources.rawValue] as? [String: [String: String]] {
+            lock.externalSources = externalSources
+        }
+
+        if let checkoutOptions = yaml[PodfileLockRootKey.checkoutOptions.rawValue] as? [String: [String: String]] {
+            lock.checkoutOptions = checkoutOptions
+        }
 
         // TODO: more info
         return lock
