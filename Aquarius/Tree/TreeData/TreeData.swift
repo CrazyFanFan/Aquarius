@@ -41,7 +41,7 @@ class TreeData: ObservableObject {
 
     private var lastReadDataTime: Date?
 
-    var podfileLock: PodfileLock? {
+    private(set) var podfileLock: PodfileLock? {
         didSet { buildTree() }
     }
 
