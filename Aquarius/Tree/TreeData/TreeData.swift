@@ -219,7 +219,7 @@ private extension TreeData {
             tmpNodes = nodes.filter { $0.pod.name.lowercased().contains(lowerKey) }
         }
 
-        let sortClosure = orderRule.sortClosure(isImpactMode: isImpact)
+        let sortClosure = orderRule.sortClosure(isImpact: isImpact)
 
         tmpNodes.sort(by: sortClosure)
 
@@ -260,16 +260,16 @@ private func < (lhs: Int?, rhs: Int?) -> Bool {
 fileprivate extension OrderBy {
     typealias SortClosure = (_ lhs: TreeNode, _ rhs: TreeNode) -> Bool
 
-    func sortClosure(isImpactMode: Bool) -> SortClosure {
+    func sortClosure(isImpact: Bool) -> SortClosure {
         switch self {
         case .alphabeticalAscending:
             return { $0.pod.name < $1.pod.name }
         case .alphabeticalDescending:
             return { $0.pod.name > $1.pod.name }
         case .numberAscending:
-            return { $0.pod.nextLevel(isImpactMode)?.count < $1.pod.nextLevel(isImpactMode)?.count }
+            return { $0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count }
         case .numberDescending:
-            return { !($0.pod.nextLevel(isImpactMode)?.count < $1.pod.nextLevel(isImpactMode)?.count) }
+            return { !($0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count) }
         }
     }
 }
