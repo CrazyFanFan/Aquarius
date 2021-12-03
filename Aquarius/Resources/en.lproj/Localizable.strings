@@ -14,6 +14,7 @@
 "Copy child nodes"="Copy child nodes";
 "Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
 "Copy child nodes (Recursive Strip)"="Copy child nodes (Recursive Strip)";
+"Show podspec" = "Show podspec";
 "Recursive" = "Recursive";
 "Successors" = "Successors";
 "Predecessors" = "Predecessors";

@@ -61,11 +61,17 @@ struct TreeContent: View {
             ("Copy child nodes (Recursive Strip)", .stripRecursive)
         ]
 
-        return ForEach(menus, id: \.0) { item in
-            Button(NSLocalizedString(item.name, comment: item.name)) {
-                self.treeData.content(for: pod, with: item.type) {
-                    Pasteboard.write($0)
+        return Group {
+            ForEach(menus, id: \.name) { item in
+                Button(LocalizedStringKey(item.name)) {
+                    self.treeData.content(for: pod, with: item.type) {
+                        Pasteboard.write($0)
+                    }
                 }
+            }
+
+            Button("Show podspec") {
+                self.treeData.showPodspec(of: pod)
             }
         }
     }

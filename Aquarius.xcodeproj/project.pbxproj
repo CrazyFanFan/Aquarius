@@ -20,6 +20,7 @@
 		57FF59E520D2F91CC1A1EA4B8A9FD7C9 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700385A8E0970D47AE9D37D27571919B /* ActivityIndicator.swift */; };
 		5BC68D3D806C8809408939B8E14E5282 /* TreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */; };
 		5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AED5E016CBD591C71066F0CB8E099F /* DataReader.swift */; };
+		636C8E4B275A76DC000061B1 /* TreeData+Podspec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C8E4A275A76DC000061B1 /* TreeData+Podspec.swift */; };
 		63CAEE972687912D00B591FC /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63CAEE962687912D00B591FC /* Yams */; };
 		63CAEE99268792D000B591FC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAEE98268792D000B591FC /* Settings.swift */; };
 		63CAEE9B26879AD200B591FC /* Lock+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAEE9A26879AD200B591FC /* Lock+.swift */; };
@@ -51,6 +52,7 @@
 		56BB9BB4E09AE79EADFB516F72675D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		57BED1A50DF5A9A7D195536250644406 /* SignleDataTreeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignleDataTreeView.swift; sourceTree = "<group>"; };
 		5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodfileLockFile.swift; sourceTree = "<group>"; };
+		636C8E4A275A76DC000061B1 /* TreeData+Podspec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeData+Podspec.swift"; sourceTree = "<group>"; };
 		63CAEE98268792D000B591FC /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		63CAEE9A26879AD200B591FC /* Lock+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lock+.swift"; sourceTree = "<group>"; };
 		6B8F5A52192C95321FB019A5F85A046A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -119,6 +121,15 @@
 			path = MetaData;
 			sourceTree = "<group>";
 		};
+		636C8E4C275A76F8000061B1 /* TreeData */ = {
+			isa = PBXGroup;
+			children = (
+				4BDBAF2890DC910919BAE7FE1A78D99E /* TreeData.swift */,
+				636C8E4A275A76DC000061B1 /* TreeData+Podspec.swift */,
+			);
+			path = TreeData;
+			sourceTree = "<group>";
+		};
 		64FA1B486146871F0E1B12C6BDAF0396 = {
 			isa = PBXGroup;
 			children = (
@@ -170,10 +181,10 @@
 		D2EF5C8144ECF2B319AF3C5A01705FFD /* Tree */ = {
 			isa = PBXGroup;
 			children = (
+				636C8E4C275A76F8000061B1 /* TreeData */,
 				4A6201A71E0894C0B1AB53CA8D43539F /* Constants.swift */,
 				AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */,
 				8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */,
-				4BDBAF2890DC910919BAE7FE1A78D99E /* TreeData.swift */,
 				FD99C6956BBEB6BBD0C350A3B2BC5C5E /* TreeNode.swift */,
 				57BED1A50DF5A9A7D195536250644406 /* SignleDataTreeView.swift */,
 			);
@@ -318,6 +329,7 @@
 				9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */,
 				7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */,
 				5BC68D3D806C8809408939B8E14E5282 /* TreeControl.swift in Sources */,
+				636C8E4B275A76DC000061B1 /* TreeData+Podspec.swift in Sources */,
 				D26B6DBD95EDDC523104E744D6D99971 /* TreeData.swift in Sources */,
 				C9451A1E3596AFCFCDA0367772B6D809 /* TreeNode.swift in Sources */,
 				56AB7DDB9A897AF0BF5AA17C216A63A0 /* SignleDataTreeView.swift in Sources */,

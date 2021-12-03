@@ -14,6 +14,7 @@
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
 "Copy child nodes (Recursive Strip)"="复制子节点(递归、裁剪)";
+"Show podspec" = "展示 podspec";
 "Recursive" = "递归";
 "Successors" = "依赖树";
 "Predecessors" = "影响树";
