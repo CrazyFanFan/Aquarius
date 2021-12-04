@@ -37,4 +37,10 @@
 "Load podspec content faile." = "读取Podspec内容失败";
 "Copy content" = "拷贝内容";
 "Close" = "关闭";
+
+"Commit: %@" = "提交: %@";
+"Tag: %@" = "标签: %@";
+"Branch: %@" = "分支: %@";
+"No branch tag or commit specified, automatic checkout commit: %@" = "未指定分支、标签或提交，自动检出提交: %@";
+"Viewing PodSpecs in Git sources is not supported currently." = "暂不支持查看Git源中的Podspec。";
 // --- Podspec view end ---

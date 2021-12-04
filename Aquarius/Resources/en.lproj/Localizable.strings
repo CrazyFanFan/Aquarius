@@ -38,4 +38,11 @@
 "Load podspec content faile." = "Load podspec content faile.";
 "Copy content" = "Copy content";
 "Close" = "Close";
+
+"Commit: %@" = "Commit: %@";
+"Tag: %@" = "Tag: %@";
+"Branch: %@" = "Branch: %@";
+"No branch tag or commit specified, automatic checkout commit: %@" = "No branch tag or commit specified, automatic checkout commit: %@";
+"Viewing PodSpecs in Git sources is not supported currently." = "Viewing PodSpecs in Git sources is not supported currently.";
+
 // --- Podspec view end ---

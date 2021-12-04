@@ -24,8 +24,8 @@ struct PodspecView: View {
             case .repo:
                 Text("Todo")
 
-            case .git:
-                Text("Todo")
+            case .git(let podspec):
+                gitView(for: podspec)
             }
         }
         .padding()
@@ -73,6 +73,43 @@ struct PodspecView: View {
                 }
                 Button("Show in finder") {
                     NSWorkspace.shared.selectFile(spec.podspecFileURL.path, inFileViewerRootedAtPath: "")
+                }
+            }
+
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Close") {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        }
+    }
+
+    private func gitView(for spec: TreeData.GitSpec) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("Git: \(spec.gitURLString)")
+                Spacer()
+            }
+
+            switch spec.revision {
+            case .commit(let commit):
+                Text("Commit: \(commit)")
+            case .brance(let branch, let commit):
+                Text("Branch: \(branch), Commit: \(commit)")
+            case .tag(let tag):
+                Text("Tag: \(tag)")
+            case .autoCommit(let commit):
+                Text("No branch tag or commit specified, automatic checkout commit: \(commit)")
+            }
+
+            Spacer()
+
+            Text("Viewing PodSpecs in Git sources is not supported currently.")
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .automatic) {
+                Button("Copy path") {
+                    Pasteboard.write(spec.gitURLString)
                 }
             }
 

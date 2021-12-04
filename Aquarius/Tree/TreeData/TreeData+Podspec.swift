@@ -54,13 +54,15 @@ extension TreeData {
         var podspecContent: String
     }
 
-    struct GitSpec {
-        enum GitRevision: Hashable {
-            case brance(String)
-            case tag(String)
-            case commit(String)
-        }
+    enum GitRevision: Hashable {
+        /// bransh and commit
+        case brance(String, String)
+        case tag(String)
+        case commit(String)
+        case autoCommit(String)
+    }
 
+    struct GitSpec {
         var gitURLString: String
         var revision: GitRevision
     }
@@ -76,6 +78,14 @@ extension TreeData {
 extension TreeData {
     private func normalized(name: String) -> String {
         name.components(separatedBy: "/").first ?? name
+    }
+
+    @inline(__always)
+    private func show(with podspec: PodspecInfo) {
+        self.podspec = podspec
+        DispatchQueue.main.async {
+            self.isPodspecShow = true
+        }
     }
 
     private func loadLoacalPodspec(_ path: String, name: String) {
@@ -102,14 +112,32 @@ extension TreeData {
 
         let string = (try? String(contentsOfFile: newURL.path)) ?? "Load podspec content faile."
 
-        podspec = .local(.init(podspecFileURL: newURL, podspecContent: string))
-        DispatchQueue.main.async {
-            self.isPodspecShow = true
-        }
+        show(with: .local(.init(podspecFileURL: newURL, podspecContent: string)))
     }
 
-    private func loadGitPodspec(_ config: [String: String]) {
+    private func loadGitPodspec(_ config: [String: String], checkoutOption: [String: String]?) {
+        guard let gitURLString = config[":git"] else {
+            // todo error
+            assert(false, "Should never here.")
+            return
+        }
 
+        let revision: GitRevision
+
+        if let commit = config[":commit"] {
+            revision = .commit(commit)
+        } else if let tag = config[":tag"] {
+            revision = .tag(tag)
+        } else if let branch = config[":branch"], let commit = checkoutOption?[":commit"] {
+            revision = .brance(branch, commit)
+        } else if let commit = checkoutOption?[":commit"] {
+            revision = .autoCommit(commit)
+        } else {
+            assert(false, "Should never here.")
+            return
+        }
+
+        show(with: .git(.init(gitURLString: gitURLString, revision: revision)))
     }
 
     private func loadRepoPodspec(_ repoGitURLString: String) {
@@ -129,7 +157,7 @@ extension TreeData {
             if let path = config[":path"] {
                 loadLoacalPodspec(path, name: name)
             } else if config.keys.contains(":git") {
-                loadGitPodspec(config)
+                loadGitPodspec(config, checkoutOption: lock.checkoutOptions[name] )
             }
         } else if let repo = lock.specRepos.first(where: { repo in repo.pods.contains(name) }) {
             loadRepoPodspec(repo.repo)
