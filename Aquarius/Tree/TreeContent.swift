@@ -24,9 +24,11 @@ struct TreeContent: View {
             }
             .padding(5)
             .animation(.linear)
-
         }
-        .frame(minWidth: 550, alignment: .center)
+        .sheet(isPresented: $treeData.isPodspecShow, content: {
+            PodspecView(podspec: treeData.podspec)
+        })
+        .frame(minWidth: 1000, minHeight: 400, alignment: .center)
         .modifier(TreeControlModifier(treeData: treeData))
     }
 

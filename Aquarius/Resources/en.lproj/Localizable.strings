@@ -15,6 +15,7 @@
 "Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
 "Copy child nodes (Recursive Strip)"="Copy child nodes (Recursive Strip)";
 "Show podspec" = "Show podspec";
+"Show in finder" = "Show in finder";
 "Recursive" = "Recursive";
 "Successors" = "Successors";
 "Predecessors" = "Predecessors";
@@ -29,5 +30,12 @@
 "Automatic" = "Automatic";
 "Model: " = "Model: ";
 "Delete" = "Delete";
-"Copy path" = "Copy path";
+"Copy path" = "Copy path"; // Podspec view use again
+"Copy content" = "Copy content";
 "Select a Podfile.lock" = "Select a Podfile.lock";
+
+// --- Podspec view start ---
+"Load podspec content faile." = "Load podspec content faile.";
+"Copy content" = "Copy content";
+"Close" = "Close";
+// --- Podspec view end ---

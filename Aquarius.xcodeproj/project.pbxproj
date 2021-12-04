@@ -22,6 +22,7 @@
 		5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AED5E016CBD591C71066F0CB8E099F /* DataReader.swift */; };
 		636C8E4B275A76DC000061B1 /* TreeData+Podspec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C8E4A275A76DC000061B1 /* TreeData+Podspec.swift */; };
 		636C8E4E275A7775000061B1 /* TreeData+Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C8E4D275A7775000061B1 /* TreeData+Copy.swift */; };
+		636C8E50275A8949000061B1 /* PodspecView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636C8E4F275A8949000061B1 /* PodspecView.swift */; };
 		63CAEE972687912D00B591FC /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63CAEE962687912D00B591FC /* Yams */; };
 		63CAEE99268792D000B591FC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAEE98268792D000B591FC /* Settings.swift */; };
 		63CAEE9B26879AD200B591FC /* Lock+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CAEE9A26879AD200B591FC /* Lock+.swift */; };
@@ -55,6 +56,7 @@
 		5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodfileLockFile.swift; sourceTree = "<group>"; };
 		636C8E4A275A76DC000061B1 /* TreeData+Podspec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeData+Podspec.swift"; sourceTree = "<group>"; };
 		636C8E4D275A7775000061B1 /* TreeData+Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeData+Copy.swift"; sourceTree = "<group>"; };
+		636C8E4F275A8949000061B1 /* PodspecView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodspecView.swift; sourceTree = "<group>"; };
 		63CAEE98268792D000B591FC /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		63CAEE9A26879AD200B591FC /* Lock+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lock+.swift"; sourceTree = "<group>"; };
 		6B8F5A52192C95321FB019A5F85A046A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */,
 				FD99C6956BBEB6BBD0C350A3B2BC5C5E /* TreeNode.swift */,
 				57BED1A50DF5A9A7D195536250644406 /* SignleDataTreeView.swift */,
+				636C8E4F275A8949000061B1 /* PodspecView.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -327,6 +330,7 @@
 				B269E18FC95069954A5531B323BA5AA1 /* Persistence.swift in Sources */,
 				504F3B0CAEE38CE5FCE068E780833F3A /* Pod.swift in Sources */,
 				46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */,
+				636C8E50275A8949000061B1 /* PodspecView.swift in Sources */,
 				A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */,
 				56FEAE54F56086581F732068BEB0EFB0 /* SearchBar.swift in Sources */,
 				9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */,

@@ -89,6 +89,10 @@ class TreeData: ObservableObject {
 
     private(set) var queue = DispatchQueue(label: "aquarius_data_parse_quque")
 
+    // for show podspec
+    var podspec: PodspecInfo?
+    @Published var isPodspecShow: Bool = false
+
     init(lockFile: PodfileLockFile) {
         self.lockFile = lockFile
         self.loadFile()
