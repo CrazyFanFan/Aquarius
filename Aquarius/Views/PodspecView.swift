@@ -16,7 +16,14 @@ struct PodspecView: View {
         Group {
             switch podspec {
             case .none:
-                Text("Todo")
+                Text("Empty")
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Close") {
+                                presentationMode.wrappedValue.dismiss()
+                            }
+                        }
+                    }
 
             case .local(let spec):
                 localView(for: spec)
@@ -58,10 +65,9 @@ private extension PodspecView {
 
             Divider()
 
-            ScrollView {
-                HStack {
-                    Text(spec.podspecContent)
-                    Spacer()
+            List {
+                ForEach(spec.podspecContent.indices, id: \.self) {
+                    Text(spec.podspecContent[$0])
                 }
             }
         }
@@ -71,7 +77,7 @@ private extension PodspecView {
                     Pasteboard.write(spec.podspecFileURL.path)
                 }
                 Button("Copy content") {
-                    Pasteboard.write(spec.podspecFileURL.path)
+                    Pasteboard.write(spec.podspecContent.joined(separator: "\n"))
                 }
                 Button("Show in finder") {
                     NSWorkspace.shared.selectFile(spec.podspecFileURL.path, inFileViewerRootedAtPath: "")

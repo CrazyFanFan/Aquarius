@@ -64,7 +64,7 @@ extension TreeData {
 
     struct LocalSpec {
         var podspecFileURL: URL
-        var podspecContent: String
+        var podspecContent: [String]
 
         init(podspecFileURL: URL, podspecContent: String? = nil) {
             let string = podspecContent ??
@@ -72,7 +72,7 @@ extension TreeData {
             "Load podspec content faile."
 
             self.podspecFileURL = podspecFileURL
-            self.podspecContent = string
+            self.podspecContent = string.components(separatedBy: "\n")
         }
     }
 
@@ -299,6 +299,7 @@ private extension TreeData {
         } else if let repoFileURL = findRepoFileURL(at: url, with: repoGitURLString) {
             podspecFileURL = findPod(pod, in: repoFileURL)
         } else {
+            assert(false, "Should never here.")
             podspecFileURL = nil
         }
 
