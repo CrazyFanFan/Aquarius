@@ -26,6 +26,7 @@
 		5BC68D3D806C8809408939B8E14E5282 /* TreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */; };
 		5C0BE06929DE5B8141979A03C965B5B3 /* Lock+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */; };
 		5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AED5E016CBD591C71066F0CB8E099F /* DataReader.swift */; };
+		636C8E54275D2052000061B1 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63CAEE962687912D00B591FC /* Yams */; };
 		7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */; };
 		9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */; };
 		A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */; };
@@ -88,7 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63CAEE972687912D00B591FC /* Yams in Frameworks */,
+				636C8E54275D2052000061B1 /* Yams in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -122,16 +123,6 @@
 				CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */,
 			);
 			path = MetaData;
-			sourceTree = "<group>";
-		};
-		B14640AE888A3DEBD808D9726E7A9F33 /* TreeData */ = {
-			isa = PBXGroup;
-			children = (
-				928C5AF52977689BD85F0C9DCC365371 /* TreeData+Copy.swift */,
-				ED2E0DD3FA7F3E2988EDBE3D418160FE /* TreeData+Podspec.swift */,
-				A4E02AF0F4DC35FD35B9AC8664F3C14E /* TreeData.swift */,
-			);
-			path = TreeData;
 			sourceTree = "<group>";
 		};
 		64FA1B486146871F0E1B12C6BDAF0396 = {
@@ -169,6 +160,16 @@
 				046D41BE365CC74359430B03A6C36E4A /* Pasteboard.swift */,
 			);
 			path = Tool;
+			sourceTree = "<group>";
+		};
+		B14640AE888A3DEBD808D9726E7A9F33 /* TreeData */ = {
+			isa = PBXGroup;
+			children = (
+				928C5AF52977689BD85F0C9DCC365371 /* TreeData+Copy.swift */,
+				ED2E0DD3FA7F3E2988EDBE3D418160FE /* TreeData+Podspec.swift */,
+				A4E02AF0F4DC35FD35B9AC8664F3C14E /* TreeData.swift */,
+			);
+			path = TreeData;
 			sourceTree = "<group>";
 		};
 		BD6360C600918A90779721494C9DB67E /* CoreData */ = {
