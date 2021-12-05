@@ -43,6 +43,19 @@ import Foundation
      :tag: 5.4.4
  */
 
+extension String {
+    func prettyed() -> String {
+        if let data = self.data(using: .utf8),
+        let json = try? JSONSerialization.jsonObject(with: data, options: []),
+        let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+           let newString = String(data: data, encoding: .utf8) {
+            return newString
+        }
+
+        return self
+    }
+}
+
 extension TreeData {
     struct RepoSpec {
         var repoURLString: String
@@ -55,7 +68,7 @@ extension TreeData {
 
         init(podspecFileURL: URL, podspecContent: String? = nil) {
             let string = podspecContent ??
-            (try? String(contentsOfFile: podspecFileURL.path)) ??
+            (try? String(contentsOfFile: podspecFileURL.path))?.prettyed() ??
             "Load podspec content faile."
 
             self.podspecFileURL = podspecFileURL

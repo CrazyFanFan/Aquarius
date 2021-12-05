@@ -21,11 +21,11 @@ struct PodspecView: View {
             case .local(let spec):
                 localView(for: spec)
 
-            case .repo:
-                Text("Todo")
+            case .repo(let spec):
+                repoView(for: spec)
 
-            case .git(let podspec):
-                gitView(for: podspec)
+            case .git(let spec):
+                gitView(for: spec)
             }
         }
         .padding()
@@ -39,8 +39,10 @@ struct PodspecView: View {
             alignment: .center
         )
     }
+}
 
-    private func contentView(_ content: String?) -> some View {
+private extension PodspecView {
+    func contentView(_ content: String?) -> some View {
         if let content = content {
             return Text(content)
         } else {
@@ -48,7 +50,7 @@ struct PodspecView: View {
         }
     }
 
-    private func localView(for spec: TreeData.LocalSpec) -> some View {
+    func localView(for spec: TreeData.LocalSpec) -> some View {
         VStack(alignment: .leading) {
             HStack {
                 Text(spec.podspecFileURL.path)
@@ -84,7 +86,7 @@ struct PodspecView: View {
         }
     }
 
-    private func gitView(for spec: TreeData.GitSpec) -> some View {
+    func gitView(for spec: TreeData.GitSpec) -> some View {
         VStack(alignment: .leading) {
             HStack {
                 Text("Git: \(spec.gitURLString)")
@@ -118,6 +120,24 @@ struct PodspecView: View {
                     presentationMode.wrappedValue.dismiss()
                 }
             }
+        }
+    }
+
+    func repoView(for spec: TreeData.RepoSpec) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text(spec.repoURLString)
+
+                Spacer()
+
+                Button("Copy repo URL") {
+                    Pasteboard.write(spec.repoURLString)
+                }
+            }
+
+            Divider()
+
+            localView(for: spec.local)
         }
     }
 }

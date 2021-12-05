@@ -44,5 +44,5 @@
 "Branch: %@" = "Branch: %@";
 "No branch tag or commit specified, automatic checkout commit: %@" = "No branch tag or commit specified, automatic checkout commit: %@";
 "Viewing PodSpecs in Git sources is not supported currently." = "Viewing PodSpecs in Git sources is not supported currently.";
-
+"Copy repo URL" = "Copy repo URL";
 // --- Podspec view end ---
