@@ -93,6 +93,8 @@ class TreeData: ObservableObject {
     var podspec: PodspecInfo?
     @Published var isPodspecShow: Bool = false
 
+    var podspecCache: [Pod: PodspecInfo] = [:]
+
     init(lockFile: PodfileLockFile) {
         self.lockFile = lockFile
         self.loadFile()
@@ -143,20 +145,12 @@ private extension TreeData {
     func loadFile() {
         DispatchQueue.main.async {
             guard let info = self.lockFile else { return }
-            self.isLoading = true
             self.queue.async {
                 self.lastReadDataTime = Date()
                 if let lock = DataReader(file: info).readData() {
                     DispatchQueue.main.async {
                         // update lock data
                         self.podfileLock = lock
-
-                        // update status
-                        self.isLoading = false
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.isLoading = false
                     }
                 }
             }
@@ -168,6 +162,7 @@ private extension TreeData {
 private extension TreeData {
     func buildTree() {
         nodes.removeAll()
+        podspecCache.removeAll()
         queue.async {
             // top level
             self.podfileLock?.pods.forEach { (pod) in

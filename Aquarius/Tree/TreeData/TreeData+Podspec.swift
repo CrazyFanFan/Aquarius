@@ -98,6 +98,18 @@ extension TreeData {
 
 extension TreeData {
     func showPodspec(of pod: Pod) {
+        GlobalState.shared.isLoading = true
+
+        if let cache = podspecCache[pod] {
+            show(with: cache, and: nil)
+        }
+
+        DispatchQueue.global().async { [weak self] in
+            self?.asyncShowPodspec(of: pod)
+        }
+    }
+
+    func asyncShowPodspec(of pod: Pod) {
         guard let lock = podfileLock else {
             assert(false, "Should never here.")
             return
@@ -107,9 +119,9 @@ extension TreeData {
 
         if let config = lock.externalSources[name] {
             if let path = config[":path"] {
-                loadLoacalPodspec(path, name: name)
+                loadLoacalPodspec(path, name: name, pod: pod)
             } else if config.keys.contains(":git") {
-                loadGitPodspec(config, checkoutOption: lock.checkoutOptions[name] )
+                loadGitPodspec(config, checkoutOption: lock.checkoutOptions[name], pod: pod)
             }
         } else if let repo = lock.specRepos.first(where: { repo in repo.pods.contains(name) }) {
             loadRepoPodspec(repo.repo, for: pod)
@@ -139,15 +151,22 @@ private extension TreeData {
         return version
     }
 
-    @inline(__always)
-    func show(with podspec: PodspecInfo) {
+    /// UI show podspec
+    /// - Parameters:
+    ///   - podspec: podspec
+    ///   - pod: pod use as cache key, pass nil to skip update cache.
+    func show(with podspec: PodspecInfo, and pod: Pod?) {
+        if let pod = pod {
+            self.podspecCache[pod] = podspec
+        }
         self.podspec = podspec
         DispatchQueue.main.async {
             self.isPodspecShow = true
+            GlobalState.shared.isLoading = false
         }
     }
 
-    func loadLoacalPodspec(_ path: String, name: String) {
+    func loadLoacalPodspec(_ path: String, name: String, pod: Pod) {
         guard let url = lockFile?.url else {
             assert(false, "Should never here.")
             return
@@ -169,10 +188,10 @@ private extension TreeData {
         newURL.appendPathComponent(path)
         newURL.appendPathComponent("\(name).podspec")
 
-        show(with: .local(.init(podspecFileURL: newURL)))
+        show(with: .local(.init(podspecFileURL: newURL)), and: pod)
     }
 
-    func loadGitPodspec(_ config: [String: String], checkoutOption: [String: String]?) {
+    func loadGitPodspec(_ config: [String: String], checkoutOption: [String: String]?, pod: Pod) {
         guard let gitURLString = config[":git"] else {
             // todo error
             assert(false, "Should never here.")
@@ -194,7 +213,7 @@ private extension TreeData {
             return
         }
 
-        show(with: .git(.init(gitURLString: gitURLString, revision: revision)))
+        show(with: .git(.init(gitURLString: gitURLString, revision: revision)), and: pod)
     }
 
     /// run shell
@@ -307,6 +326,8 @@ private extension TreeData {
             return
         }
 
-        self.show(with: .repo(.init(repoURLString: repoGitURLString, local: .init(podspecFileURL: podspecFileURL))))
+        self.show(
+            with: .repo(.init(repoURLString: repoGitURLString, local: .init(podspecFileURL: podspecFileURL))),
+            and: pod)
     }
 }

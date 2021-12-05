@@ -18,7 +18,7 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Lock>
 
-    @State private var globalState = GlobalState.shared
+    @StateObject private var globalState = GlobalState.shared
     @State private var isTargeted: Bool = false
 
     @State private var selection: Lock?
@@ -57,7 +57,6 @@ struct ContentView: View {
             } else {
                 delete(items: Array(items))
             }
-
         }
     }
 }

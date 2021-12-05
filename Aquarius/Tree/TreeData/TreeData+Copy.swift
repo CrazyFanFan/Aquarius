@@ -32,7 +32,7 @@ extension TreeData {
             }
         }
 
-        checkMode { self.isLoading = true }
+        checkMode { GlobalState.shared.isLoading = true }
 
         queue.async {
             var cache: [CacheKey: String] = [:]
@@ -41,7 +41,7 @@ extension TreeData {
             cache.removeAll()
 
             DispatchQueue.main.async {
-                checkMode { self.isLoading = false }
+                checkMode { GlobalState.shared.isLoading = false }
             }
         }
     }
