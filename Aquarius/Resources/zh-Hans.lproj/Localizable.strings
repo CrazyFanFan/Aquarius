@@ -14,6 +14,8 @@
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
 "Copy child nodes (Recursive Strip)"="复制子节点(递归、裁剪)";
+"Show podspec" = "展示 podspec";
+"Show in finder" = "在文件夹中显示";
 "Recursive" = "递归";
 "Successors" = "依赖树";
 "Predecessors" = "影响树";
@@ -28,5 +30,18 @@
 "Automatic" = "自动";
 "Model: " = "模式：";
 "Delete" = "删除";
-"Copy path" = "拷贝路径";
+"Copy path" = "拷贝路径"; // Podspec view use again
 "Select a Podfile.lock" = "请选择一个 Podfile.lock";
+
+// --- Podspec view start ---
+"Load podspec content faile." = "读取Podspec内容失败";
+"Copy content" = "拷贝内容";
+"Close" = "关闭";
+
+"Commit: %@" = "提交: %@";
+"Tag: %@" = "标签: %@";
+"Branch: %@" = "分支: %@";
+"No branch tag or commit specified, automatic checkout commit: %@" = "未指定分支、标签或提交，自动检出提交: %@";
+"Viewing PodSpecs in Git sources is not supported currently." = "暂不支持查看Git源中的Podspec。";
+"Copy repo URL" = "拷贝Repo地址";
+// --- Podspec view end ---
