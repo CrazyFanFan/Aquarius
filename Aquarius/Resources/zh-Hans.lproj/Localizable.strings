@@ -34,7 +34,7 @@
 "Select a Podfile.lock" = "请选择一个 Podfile.lock";
 
 // --- Podspec view start ---
-"Load podspec content faile." = "读取Podspec内容失败";
+"Load podspec content failed." = "读取Podspec内容失败";
 "Copy content" = "拷贝内容";
 "Close" = "关闭";
 

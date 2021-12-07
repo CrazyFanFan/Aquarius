@@ -101,17 +101,17 @@ extension TreeData {
             return result
 
         case .stripRecursive:
-            var subnames = node.nextLevel(isImpact) ?? []
+            var subNames = node.nextLevel(isImpact) ?? []
             var index = 0
 
-            while index < subnames.count {
-                subnames += nameToPodCache[subnames[index]]?
+            while index < subNames.count {
+                subNames += nameToPodCache[subNames[index]]?
                     .nextLevel(isImpact)?
-                    .filter({ !subnames.contains($0) }) ?? []
+                    .filter({ !subNames.contains($0) }) ?? []
                 index += 1
             }
 
-            return node.name + formatNames(&subnames)
+            return node.name + formatNames(&subNames)
         }
     }
 }

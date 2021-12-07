@@ -26,7 +26,7 @@
 ## 使用
 - 克隆这个仓库
 - 打开 **Aquarius.xcodeproj** （要求Xcode版本 ≥ 11.0）
-- 等待“Swift Packges”处理完， 按下`Command` + `R`即可。
+- 等待“Swift Packages”处理完， 按下`Command` + `R`即可。
 
 ```shell
 git clone https://github.com/CrazyFanFan/Aquarius.git

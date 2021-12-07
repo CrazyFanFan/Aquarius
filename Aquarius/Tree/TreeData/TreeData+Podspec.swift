@@ -44,9 +44,9 @@ import Foundation
  */
 
 extension String {
-    func prettyed() -> String {
-        if let data = self.data(using: .utf8),
-        let json = try? JSONSerialization.jsonObject(with: data, options: []),
+    func prettied() -> String {
+        if let stringData = data(using: .utf8),
+        let json = try? JSONSerialization.jsonObject(with: stringData, options: []),
         let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
            let newString = String(data: data, encoding: .utf8) {
             return newString
@@ -68,8 +68,8 @@ extension TreeData {
 
         init(podspecFileURL: URL, podspecContent: String? = nil) {
             let string = podspecContent ??
-            (try? String(contentsOfFile: podspecFileURL.path))?.prettyed() ??
-            "Load podspec content faile."
+            (try? String(contentsOfFile: podspecFileURL.path))?.prettied() ??
+            "Load podspec content failed."
 
             self.podspecFileURL = podspecFileURL
             self.podspecContent = string.components(separatedBy: "\n")
@@ -77,8 +77,8 @@ extension TreeData {
     }
 
     enum GitRevision: Hashable {
-        /// bransh and commit
-        case brance(String, String)
+        /// branch and commit
+        case branch(String, String)
         case tag(String)
         case commit(String)
         case autoCommit(String)
@@ -119,7 +119,7 @@ extension TreeData {
 
         if let config = lock.externalSources[name] {
             if let path = config[":path"] {
-                loadLoacalPodspec(path, name: name, pod: pod)
+                loadLocalPodspec(path, name: name, pod: pod)
             } else if config.keys.contains(":git") {
                 loadGitPodspec(config, checkoutOption: lock.checkoutOptions[name], pod: pod)
             }
@@ -157,7 +157,7 @@ private extension TreeData {
     ///   - pod: pod use as cache key, pass nil to skip update cache.
     func show(with podspec: PodspecInfo, and pod: Pod?) {
         if let pod = pod {
-            self.podspecCache[pod] = podspec
+            podspecCache[pod] = podspec
         }
         self.podspec = podspec
         DispatchQueue.main.async {
@@ -166,7 +166,7 @@ private extension TreeData {
         }
     }
 
-    func loadLoacalPodspec(_ path: String, name: String, pod: Pod) {
+    func loadLocalPodspec(_ path: String, name: String, pod: Pod) {
         guard let url = lockFile?.url else {
             assert(false, "Should never here.")
             return
@@ -205,7 +205,7 @@ private extension TreeData {
         } else if let tag = config[":tag"] {
             revision = .tag(tag)
         } else if let branch = config[":branch"], let commit = checkoutOption?[":commit"] {
-            revision = .brance(branch, commit)
+            revision = .branch(branch, commit)
         } else if let commit = checkoutOption?[":commit"] {
             revision = .autoCommit(commit)
         } else {
@@ -326,7 +326,7 @@ private extension TreeData {
             return
         }
 
-        self.show(
+        show(
             with: .repo(.init(repoURLString: repoGitURLString, local: .init(podspecFileURL: podspecFileURL))),
             and: pod)
     }

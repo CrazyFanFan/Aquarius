@@ -31,11 +31,10 @@
 "Model: " = "Model: ";
 "Delete" = "Delete";
 "Copy path" = "Copy path"; // Podspec view use again
-"Copy content" = "Copy content";
 "Select a Podfile.lock" = "Select a Podfile.lock";
 
 // --- Podspec view start ---
-"Load podspec content faile." = "Load podspec content faile.";
+"Load podspec content failed." = "Load podspec content failed.";
 "Copy content" = "Copy content";
 "Close" = "Close";
 

@@ -19,7 +19,7 @@ A tool to obtain dependencies by analyzing "Podfile.lock"
 ## Usage
 - clone this repo
 - open **Aquarius.xcodeproj** by Xcode(Version >= 11.0)
-- `Command` + `R`, after resolve  Swift Packges
+- `Command` + `R`, after resolve  Swift Packages
 
 ```shell
 git clone https://github.com/CrazyFanFan/Aquarius.git

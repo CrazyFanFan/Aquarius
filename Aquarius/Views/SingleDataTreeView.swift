@@ -1,5 +1,5 @@
 //
-//  SignleDataTreeView.swift
+//  SingleDataTreeView.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2020/1/5.
@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-struct SignleDataTreeView: View {
+struct SingleDataTreeView: View {
     @AppStorage("isIgnoreNodeDeep") private var isIgnoreNodeDeep = false
 
     var node: TreeNode
@@ -55,8 +55,8 @@ struct SignleDataTreeView: View {
     }
 }
 
-struct SignleDataTreeView_Previews: PreviewProvider {
+struct SingleDataTreeView_Previews: PreviewProvider {
     static var previews: some View {
-        SignleDataTreeView(node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
+        SingleDataTreeView(node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
     }
 }

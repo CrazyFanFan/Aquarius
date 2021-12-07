@@ -53,7 +53,7 @@ private extension PodspecView {
         if let content = content {
             return Text(content)
         } else {
-            return Text("Load podspec content faile.")
+            return Text("Load podspec content failed.")
         }
     }
 
@@ -102,7 +102,7 @@ private extension PodspecView {
             switch spec.revision {
             case .commit(let commit):
                 Text("Commit: \(commit)")
-            case .brance(let branch, let commit):
+            case .branch(let branch, let commit):
                 Text("Branch: \(branch), Commit: \(commit)")
             case .tag(let tag):
                 Text("Tag: \(tag)")

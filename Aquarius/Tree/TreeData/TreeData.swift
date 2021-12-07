@@ -87,7 +87,7 @@ class TreeData: ObservableObject {
 
     var isImpact: Bool { detailMode == .predecessors }
 
-    private(set) var queue = DispatchQueue(label: "aquarius_data_parse_quque")
+    private(set) var queue = DispatchQueue(label: "aquarius_data_parse_queue")
 
     // for show podspec
     var podspec: PodspecInfo?
@@ -100,7 +100,7 @@ class TreeData: ObservableObject {
         self.loadFile()
     }
 
-    func onSeletd(node: TreeNode) {
+    func onSelected(node: TreeNode) {
         guard node.hasMore(isImpact: isImpact) else { return }
 
         node.isExpanded = !node.isExpanded
