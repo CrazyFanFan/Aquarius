@@ -21,12 +21,10 @@
 		4E9656A539584CADE684815B8EC5CF9B /* TreeData+Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 928C5AF52977689BD85F0C9DCC365371 /* TreeData+Copy.swift */; };
 		4F8B62C2BFFB63D06E3D803FCF5B5CF5 /* TreeData+Podspec.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2E0DD3FA7F3E2988EDBE3D418160FE /* TreeData+Podspec.swift */; };
 		504F3B0CAEE38CE5FCE068E780833F3A /* Pod.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBF73CFFC898849D2AEF6C72EAE48EC7 /* Pod.swift */; };
-		56FEAE54F56086581F732068BEB0EFB0 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF416BC8022BE2CE5878457F08520C29 /* SearchBar.swift */; };
-		57FF59E520D2F91CC1A1EA4B8A9FD7C9 /* ActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 700385A8E0970D47AE9D37D27571919B /* ActivityIndicator.swift */; };
 		5BC68D3D806C8809408939B8E14E5282 /* TreeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */; };
 		5C0BE06929DE5B8141979A03C965B5B3 /* Lock+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */; };
 		5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AED5E016CBD591C71066F0CB8E099F /* DataReader.swift */; };
-		636C8E54275D2052000061B1 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63CAEE962687912D00B591FC /* Yams */; };
+		63120CC927BE8C7B000A9458 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63120CC827BE8C7B000A9458 /* Yams */; };
 		7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */; };
 		9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */; };
 		A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */; };
@@ -49,12 +47,11 @@
 		1DC0806032C8DA738AB6244B36925B6B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		215DC8C15AD85BA1AA52C0266C2EC2CD /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		31C0D31171741D4D80905B5C97528737 /* GlobalState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalState.swift; sourceTree = "<group>"; };
-		4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Aquarius.entitlements; sourceTree = "<group>"; };
+		4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Aquarius.entitlements; path = DataAndConfig/CoreData/Aquarius.entitlements; sourceTree = "<group>"; };
 		56BB9BB4E09AE79EADFB516F72675D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lock+.swift"; sourceTree = "<group>"; };
 		5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodfileLockFile.swift; sourceTree = "<group>"; };
 		6B8F5A52192C95321FB019A5F85A046A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		700385A8E0970D47AE9D37D27571919B /* ActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityIndicator.swift; sourceTree = "<group>"; };
 		76B5BFD9BFDE193F60E5F0F787A55CB5 /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		76EB096455D84CCC0B81786C92F611C8 /* SingleDataTreeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleDataTreeView.swift; sourceTree = "<group>"; };
 		76FDD4A88025B24028ED287D3FEEB6C6 /* Aquarius.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Aquarius.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,7 +70,6 @@
 		BAD7D930854906F524A62EA108D0511C /* PodfileLock.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodfileLock.swift; sourceTree = "<group>"; };
 		CAD41DF167E77D9689639F8B6A4F2CE9 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpecRepo.swift; sourceTree = "<group>"; };
-		CF416BC8022BE2CE5878457F08520C29 /* SearchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		D3420D56B2C3E7069F443FACECDA5CFC /* Podfile.lock */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile.lock; sourceTree = "<group>"; };
 		DE2F0CE822A9E69431ADCBA4923E4BCE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EB86065323AB7154B436356B19CECFB0 /* AquariusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AquariusApp.swift; sourceTree = "<group>"; };
@@ -89,7 +85,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				636C8E54275D2052000061B1 /* Yams in Frameworks */,
+				63120CC927BE8C7B000A9458 /* Yams in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,7 +171,6 @@
 		BD6360C600918A90779721494C9DB67E /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
-				4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */,
 				02FA363A9E65F76535E065C4CCB348E6 /* Aquarius.xcdatamodeld */,
 				59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */,
 				1951EF075364A96ECB20A7F6BB2D5994 /* Persistence.swift */,
@@ -198,9 +193,7 @@
 		D8639A94B002133DDADBA31722EDDC34 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				700385A8E0970D47AE9D37D27571919B /* ActivityIndicator.swift */,
 				9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */,
-				CF416BC8022BE2CE5878457F08520C29 /* SearchBar.swift */,
 				A47B9A4EB6F7F088D8190DA9BDAD1CAA /* Settings.swift */,
 				76EB096455D84CCC0B81786C92F611C8 /* SingleDataTreeView.swift */,
 			);
@@ -210,6 +203,7 @@
 		E18DA77457EA32EE7730B2B8DB63632D /* Aquarius */ = {
 			isa = PBXGroup;
 			children = (
+				4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */,
 				FBFF8C04850F007D8DA9597F02B0B33A /* DataAndConfig */,
 				1B2B512663567F7EF67B3E9316DD76DF /* MetaData */,
 				0833A089F5391066BCDB9B9DCA323E0D /* Preview Content */,
@@ -251,7 +245,7 @@
 			);
 			name = Aquarius;
 			packageProductDependencies = (
-				63CAEE962687912D00B591FC /* Yams */,
+				63120CC827BE8C7B000A9458 /* Yams */,
 			);
 			productName = Aquarius;
 			productReference = 76FDD4A88025B24028ED287D3FEEB6C6 /* Aquarius.app */;
@@ -264,7 +258,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1250;
+				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					164AB9769D8B58F1CABB8AEF460795A4 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -282,7 +276,7 @@
 			);
 			mainGroup = 64FA1B486146871F0E1B12C6BDAF0396;
 			packageReferences = (
-				63CAEE952687912D00B591FC /* XCRemoteSwiftPackageReference "Yams" */,
+				63120CC727BE8C7B000A9458 /* XCRemoteSwiftPackageReference "Yams" */,
 			);
 			productRefGroup = 16744D63F7E16E203AAF3279BAD7522E /* Products */;
 			projectDirPath = "";
@@ -315,7 +309,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				57FF59E520D2F91CC1A1EA4B8A9FD7C9 /* ActivityIndicator.swift in Sources */,
 				33CDFC27ACD4BC44840A03E3BCCC65F0 /* Aquarius.xcdatamodeld in Sources */,
 				DAA5B90916B09DE920A0A86F4D7A2038 /* AquariusApp.swift in Sources */,
 				FB789A5733C629F01F04500ABCCAF139 /* BookmarkTool.swift in Sources */,
@@ -331,7 +324,6 @@
 				46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */,
 				A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */,
 				1E3E1494E17845CECFB79617A326409F /* PodspecView.swift in Sources */,
-				56FEAE54F56086581F732068BEB0EFB0 /* SearchBar.swift in Sources */,
 				F73DC28C70C53FF3C85849148C191EFB /* Settings.swift in Sources */,
 				18B2CD5C6ED2823429A420200D412D3E /* SingleDataTreeView.swift in Sources */,
 				9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */,
@@ -372,6 +364,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -433,6 +426,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -559,20 +553,20 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		63CAEE952687912D00B591FC /* XCRemoteSwiftPackageReference "Yams" */ = {
+		63120CC727BE8C7B000A9458 /* XCRemoteSwiftPackageReference "Yams" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/jpsim/Yams.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 4.0.6;
+				minimumVersion = 5.0.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		63CAEE962687912D00B591FC /* Yams */ = {
+		63120CC827BE8C7B000A9458 /* Yams */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 63CAEE952687912D00B591FC /* XCRemoteSwiftPackageReference "Yams" */;
+			package = 63120CC727BE8C7B000A9458 /* XCRemoteSwiftPackageReference "Yams" */;
 			productName = Yams;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -7,8 +7,7 @@
 
 import SwiftUI
 import CoreData
-
-private let supportType: String = kUTTypeFileURL as String
+import UniformTypeIdentifiers
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -24,6 +23,8 @@ struct ContentView: View {
     @State private var selection: Lock?
 
     @State private var isPresented: Bool = false
+
+    private static let supportType = UTType.fileURL
 
     var body: some View {
         ZStack {
@@ -43,12 +44,16 @@ struct ContentView: View {
             }
 
             if globalState.isLoading {
-                ActivityIndicator()
-                    .frame(width: 50, height: 50, alignment: .center)
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .scaleEffect(x: 1.5, y: 1.5, anchor: .center)
             }
         }
         .onOpenURL { addItem(with: $0) }
-        .onDrop(of: globalState.isLoading ? [] : [supportType], isTargeted: $isTargeted) {
+        .onDrop(
+            of: globalState.isLoading ? [] : [ContentView.supportType],
+            isTargeted: $isTargeted
+        ) {
             self.loadPath(from: $0)
         }
         .onAppear {
@@ -172,7 +177,7 @@ private extension ContentView {
 private extension ContentView {
     private func loadPath(from items: [NSItemProvider]) -> Bool {
         guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
-        item.loadItem(forTypeIdentifier: supportType, options: nil) { (data, error) in
+        item.loadItem(forTypeIdentifier: ContentView.supportType.identifier, options: nil) { (data, error) in
             if let _ = error {
                 // TODO error
                 return

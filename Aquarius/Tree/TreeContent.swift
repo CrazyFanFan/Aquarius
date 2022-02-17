@@ -23,11 +23,12 @@ struct TreeContent: View {
                 makeItem()
             }
             .padding(5)
-            .animation(.linear)
+            .animation(.default, value: treeData.showNodes)
         }
         .sheet(isPresented: $treeData.isPodspecShow, content: {
             PodspecView(podspec: treeData.podspec)
         })
+        .searchable(text: $treeData.searchKey)
         .frame(minWidth: 1000, minHeight: 400, alignment: .center)
         .modifier(TreeControlModifier(treeData: treeData))
     }

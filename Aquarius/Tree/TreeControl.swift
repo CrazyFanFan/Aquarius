@@ -39,8 +39,6 @@ struct TreeControlModifier: ViewModifier {
                     .joined(separator: "\n")
                 Pasteboard.write(content)
             }
-
-            SearchBar(text: $treeData.searchKey)
         }
     }
 }
