@@ -11,9 +11,10 @@
 "Total: %lld" = "Total: %lld";
 "Copy all" = "Copy all";
 "Copy" = "Copy";
+"Copying..." = "Copying...";
 "Copy child nodes"="Copy child nodes";
 "Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
-"Copy child nodes (Recursive Strip)"="Copy child nodes (Recursive Strip)";
+"Copy child nodes (Recursive, Strip)"="Copy child nodes (Recursive, Strip)";
 "Show podspec" = "Show podspec";
 "Show in finder" = "Show in finder";
 "Recursive" = "Recursive";
@@ -45,3 +46,5 @@
 "Viewing PodSpecs in Git sources is not supported currently." = "Viewing PodSpecs in Git sources is not supported currently.";
 "Copy repo URL" = "Copy repo URL";
 // --- Podspec view end ---
+
+"Tree content is too large, writed to cache file: %@" = "Tree content is too large, writed to cache file: %@";

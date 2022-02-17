@@ -16,43 +16,75 @@ extension TreeData {
         case stripRecursive
     }
 
-    struct CacheKey: Hashable {
-        var name: String
-        var mode: NodeContentDeepMode
-        var impact: Bool
+    typealias CacheKey = String
+
+    enum CopyError: Error {
+        case cancelled
     }
 
-    func content(for node: Pod, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
-        guard let completion = completion else { return }
+    @MainActor func resetCopyStatus() {
+        copyProgress = 0
+    }
 
-        let checkMode: (_ isRecursiveHandler: () -> Void) -> Void = { handler in
-            switch deepMode {
-            case .recursive: handler()
-            default: break
+    @MainActor func cancelCopyTask() {
+        copyTask?.cancel()
+        copyTask = nil
+        resetCopyStatus()
+    }
+
+    func copy(for node: Pod, with deepMode: NodeContentDeepMode) async -> String? {
+        await self.resetCopyStatus()
+
+        var content = ""
+        do {
+            content = try await self.runcopy(for: node, with: deepMode)
+        } catch {
+            if error is CopyError {
+                return nil
+            }
+        }
+        var isWriteToFile = false
+        if content.count > 4096, let url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first {
+            do {
+                if !FileManager.default.fileExists(atPath: url.path) {
+                    try FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
+                }
+                let treeURL = url.appendingPathComponent(UUID().uuidString + ".tree.txt")
+                try content.data(using: .utf8)?.write(to: URL(fileURLWithPath: treeURL.path))
+                content = String(
+                    format: String(localized: "Tree content is too large, writed to cache file: %@"),
+                    treeURL.path
+                )
+                isWriteToFile = true
+            } catch {
+                // TODO fix write error
+                print(error)
             }
         }
 
-        checkMode { GlobalState.shared.isLoading = true }
+        return content
+    }
 
-        queue.async {
-            var cache: [CacheKey: String] = [:]
+    private func runcopy(for node: Pod, with deepMode: NodeContentDeepMode) async throws -> String {
+        var cache: [CacheKey: String] = [:]
+        return try await self.innerContent(for: node, with: deepMode, weight: 1, cache: &cache)
+    }
 
-            completion(self.innerContent(for: node, with: deepMode, cache: &cache))
-            cache.removeAll()
-
-            DispatchQueue.main.async {
-                checkMode { GlobalState.shared.isLoading = false }
-            }
+    @inline(__always)
+    private func updateProgress(append: Double) {
+        DispatchQueue.main.async {
+            self.copyProgress += append
         }
     }
 
     private func innerContent(
         for node: Pod,
         with deepMode: NodeContentDeepMode,
-        cache: inout [CacheKey: String]
-    ) -> String {
-        let key = CacheKey(name: node.name, mode: deepMode, impact: isImpact)
-        if let result = cache[key] { return result }
+        weight: Double,
+        cache: inout [CacheKey: String],
+        prefix: String = ""
+    ) async throws -> String {
+        guard !Task.isCancelled else { throw CopyError.cancelled }
 
         func formatNames(_ input: inout [String]) -> String {
             if input.isEmpty { return "" }
@@ -67,37 +99,56 @@ extension TreeData {
 
         switch deepMode {
         case .none:
+            updateProgress(append: weight)
             return node.name
         case .single:
             var result: String = node.name
             if var next = node.nextLevel(isImpact) {
                 result += formatNames(&next)
             }
+            updateProgress(append: weight)
             return result
 
         case .recursive:
-            var result = node.name
-
-            if let nodes = node.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }) {
-                if nodes.count == 1 {
-                    result = result + "\n└── " +
-                    innerContent(for: nodes.first!, with: deepMode, cache: &cache)
-                        .split(separator: "\n")
-                        .joined(separator: "\n    ")
-                } else {
-                    var nexts = nodes.map { self.innerContent(for: $0, with: .recursive, cache: &cache) }
-                    let last = nexts.removeLast()
-
-                    let next = nexts
-                        .map { ("├── " + $0).split(separator: "\n").joined(separator: "\n│   ") }
-                        .joined(separator: "\n")
-                    + "\n"
-                    + ("└── " + last).split(separator: "\n").joined(separator: "\n    ")
-
-                    result = result + "\n" + next
-                }
+            let key = node.name
+            if let result = cache[key] {
+                updateProgress(append: weight)
+                return result
             }
+
+            var result = node.name
+            updateProgress(append: weight * 0.01)
+
+            @inline(__always)
+            func newPart(for node: Pod, separator: String, connector: String, weight: Double) async throws {
+                let next = try await innerContent(for: node, with: deepMode, weight: weight, cache: &cache)
+                    .split(separator: "\n")
+                    .joined(separator: separator)
+                result = result + connector + next
+            }
+
+            let nodesWeight = weight * 0.98
+
+            if var nodes = node.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }), !nodes.isEmpty {
+                if nodes.count == 1, let node = nodes.first {
+                    try await newPart(for: node, separator: "\n    ", connector: "\n└── ", weight: nodesWeight)
+                } else {
+                    let partWeight = nodesWeight / Double(nodes.count)
+                    let last = nodes.removeLast()
+
+                    for node in nodes {
+                        try await newPart(for: node, separator: "\n│   ", connector: "\n├── ", weight: partWeight)
+                    }
+
+                    try await newPart(for: last, separator: "\n    ", connector: "\n└── ", weight: partWeight)
+                }
+            } else {
+                updateProgress(append: nodesWeight)
+            }
+
             cache[key] = result
+
+            updateProgress(append: weight * 0.01)
             return result
 
         case .stripRecursive:
@@ -106,10 +157,11 @@ extension TreeData {
 
             while index < subNames.count {
                 subNames += nameToPodCache[subNames[index]]?
-                    .nextLevel(isImpact)?
-                    .filter({ !subNames.contains($0) }) ?? []
+                        .nextLevel(isImpact)?
+                        .filter({ !subNames.contains($0) }) ?? []
                 index += 1
             }
+            updateProgress(append: weight)
 
             return node.name + formatNames(&subNames)
         }

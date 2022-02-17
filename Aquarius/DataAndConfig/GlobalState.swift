@@ -13,6 +13,7 @@ class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
     @Published var isLoading: Bool = false
+    @Published var isCopying: Bool = false
 
     @AppStorage("isBookmarkEnable") var isBookmarkEnable: Bool = false
     @AppStorage("isIgnoreLastModificationDate") var isIgnoreLastModificationDate: Bool = false

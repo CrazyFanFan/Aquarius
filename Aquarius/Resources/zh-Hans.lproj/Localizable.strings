@@ -11,9 +11,12 @@
 "Total: %lld" = "共计: %lld";
 "Copy all" = "复制所有";
 "Copy" = "复制";
+"Copying..." = "复制中...";
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
-"Copy child nodes (Recursive Strip)"="复制子节点(递归、裁剪)";
+"Copy child nodes (Recursive, Ignore Subspec)" = "复制子节点(递归、忽略Subspec)";
+"Copy child nodes (Recursive, Strip)"="复制子节点(递归、裁剪)";
+"Copy child nodes (Recursive, Strip, Ignore Subspec)" = "复制子节点(递归、裁剪、忽略Subspec)";
 "Show podspec" = "展示 podspec";
 "Show in finder" = "在文件夹中显示";
 "Recursive" = "递归";
@@ -45,3 +48,5 @@
 "Viewing PodSpecs in Git sources is not supported currently." = "暂不支持查看Git源中的Podspec。";
 "Copy repo URL" = "拷贝Repo地址";
 // --- Podspec view end ---
+
+"Tree content is too large, writed to cache file: %@" = "子树过大，写到了缓存文件: %@";

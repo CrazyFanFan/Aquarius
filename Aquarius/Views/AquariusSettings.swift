@@ -12,7 +12,7 @@ struct AquariusSettings: View {
 
     var body: some View {
         Form {
-            Group{
+            Group {
                 Toggle("Bookmark", isOn: $config.isBookmarkEnable)
                 Toggle("Ignore Last Modified time", isOn: $config.isIgnoreLastModificationDate)
             }

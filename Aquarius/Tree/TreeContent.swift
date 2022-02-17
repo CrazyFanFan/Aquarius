@@ -10,6 +10,7 @@ import SwiftUI
 
 struct TreeContent: View {
     @StateObject var treeData: TreeData
+    @StateObject var globalState: GlobalState
 
     var body: some View {
         // List，用 LazyVGrid 是为了更好的性能
@@ -61,15 +62,13 @@ struct TreeContent: View {
             ("Copy", .none),
             ("Copy child nodes", .single),
             ("Copy child nodes (Recursive)", .recursive),
-            ("Copy child nodes (Recursive Strip)", .stripRecursive)
+            ("Copy child nodes (Recursive, Strip)", .stripRecursive)
         ]
 
         return Group {
             ForEach(menus, id: \.name) { item in
                 Button(LocalizedStringKey(item.name)) {
-                    self.treeData.content(for: pod, with: item.type) {
-                        Pasteboard.write($0)
-                    }
+                    copy(with: pod, and: item.type)
                 }
             }
 
@@ -78,10 +77,31 @@ struct TreeContent: View {
             }
         }
     }
+
+    private func copy(with pod: Pod, and type: TreeData.NodeContentDeepMode) {
+        treeData.copyTask?.cancel()
+
+        treeData.copyTask = Task.detached(priority: .medium) {
+            DispatchQueue.main.async {
+                globalState.isCopying = true
+            }
+            defer {
+                DispatchQueue.main.async {
+                    globalState.isCopying = false
+                }
+            }
+
+            guard let content = await treeData.copy(for: pod, with: type), !Task.isCancelled else {
+                return
+            }
+
+            Pasteboard.write(content)
+        }
+    }
 }
 
 struct TreeContent_Previews: PreviewProvider {
     static var previews: some View {
-        TreeContent(treeData: .init(lockFile: .preview))
+        TreeContent(treeData: .init(lockFile: .preview), globalState: .shared)
     }
 }

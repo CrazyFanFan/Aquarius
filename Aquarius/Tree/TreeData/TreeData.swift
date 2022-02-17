@@ -11,8 +11,6 @@ import Combine
 
 class TreeData: ObservableObject {
     // is on processing
-    @Published var isLoading: Bool = false
-
     private var podToNodeCache: [Pod: TreeNode] = [:]
     private var nameToNodeCache: [String: TreeNode] = [:]
     private var nodes: [TreeNode] = []
@@ -24,6 +22,12 @@ class TreeData: ObservableObject {
 
     @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
     @AppStorage("bookmark") var bookmark: Data?
+
+    /// for copy
+    @Published var copyProgress: Double = 0
+    var copyTask: Task<Void, Error>?
+
+    @Published var copyResult: (content: String, isWriteToFile: Bool)?
 
     var lockFile: PodfileLockFile? {
         didSet {
