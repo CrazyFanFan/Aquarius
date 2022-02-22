@@ -2,7 +2,7 @@ name: Swift
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main feature/* release/* ]
   pull_request:
     branches: [ main ]
 
@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         os: ['macos-11']
-        xcode: ['13.2.0']
+        xcode: ['13.1.0', '13.2.0']
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2

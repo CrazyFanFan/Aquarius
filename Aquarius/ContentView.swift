@@ -45,7 +45,7 @@ struct ContentView: View {
 
             if globalState.isLoading {
                 ProgressView()
-                    .progressViewStyle(.circular)
+                    .progressViewStyle(CircularProgressViewStyle())
                     .scaleEffect(x: 1.5, y: 1.5, anchor: .center)
             }
         }
