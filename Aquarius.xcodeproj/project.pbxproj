@@ -37,7 +37,7 @@
 		DB252DFFDE947E64DD6A17C0908D761E /* Pasteboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 046D41BE365CC74359430B03A6C36E4A /* Pasteboard.swift */; };
 		ED58AADC737AEC8D050204ED3C92F574 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DE2F0CE822A9E69431ADCBA4923E4BCE /* Assets.xcassets */; };
 		F23B1952203382974FD321CEB8223D5D /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76B5BFD9BFDE193F60E5F0F787A55CB5 /* Details.swift */; };
-		F73DC28C70C53FF3C85849148C191EFB /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B9A4EB6F7F088D8190DA9BDAD1CAA /* Settings.swift */; };
+		F73DC28C70C53FF3C85849148C191EFB /* AquariusSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A47B9A4EB6F7F088D8190DA9BDAD1CAA /* AquariusSettings.swift */; };
 		FB789A5733C629F01F04500ABCCAF139 /* BookmarkTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE53FFAF4BA15A1F0516F1A4C05841EE /* BookmarkTool.swift */; };
 /* End PBXBuildFile section */
 
@@ -61,7 +61,7 @@
 		8C443286EBA67C64BE7F9DB05CFEB5E7 /* TreeControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeControl.swift; sourceTree = "<group>"; };
 		928C5AF52977689BD85F0C9DCC365371 /* TreeData+Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TreeData+Copy.swift"; sourceTree = "<group>"; };
 		9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodspecView.swift; sourceTree = "<group>"; };
-		A47B9A4EB6F7F088D8190DA9BDAD1CAA /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		A47B9A4EB6F7F088D8190DA9BDAD1CAA /* AquariusSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AquariusSettings.swift; sourceTree = "<group>"; };
 		A4E02AF0F4DC35FD35B9AC8664F3C14E /* TreeData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TreeData.swift; sourceTree = "<group>"; };
 		ADC4E0C6A08C31952BCCB4B16DAD0643 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		AE38D383545BEC5B26368AC0DECC9018 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -194,7 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */,
-				A47B9A4EB6F7F088D8190DA9BDAD1CAA /* Settings.swift */,
+				A47B9A4EB6F7F088D8190DA9BDAD1CAA /* AquariusSettings.swift */,
 				76EB096455D84CCC0B81786C92F611C8 /* SingleDataTreeView.swift */,
 			);
 			path = Views;
@@ -324,7 +324,7 @@
 				46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */,
 				A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */,
 				1E3E1494E17845CECFB79617A326409F /* PodspecView.swift in Sources */,
-				F73DC28C70C53FF3C85849148C191EFB /* Settings.swift in Sources */,
+				F73DC28C70C53FF3C85849148C191EFB /* AquariusSettings.swift in Sources */,
 				18B2CD5C6ED2823429A420200D412D3E /* SingleDataTreeView.swift in Sources */,
 				9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */,
 				7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */,

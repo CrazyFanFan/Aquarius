@@ -22,5 +22,9 @@ struct AquariusApp: App {
             // 禁用创建新的Window
             CommandGroup(replacing: CommandGroupPlacement.newItem) { }
         }
+
+        Settings {
+            AquariusSettings(config: .shared)
+        }
     }
 }

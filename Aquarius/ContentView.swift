@@ -36,7 +36,14 @@ struct ContentView: View {
                 .toolbar {
                     Spacer()
                     Button(action: toggleSidebar, label: { Image("c_sidebar.left") })
-                    Settings(config: .shared)
+                    Button {
+                        isPresented.toggle()
+                    } label: {
+                        Image("c_gearshape")
+                    }
+                    .popover(isPresented: $isPresented) {
+                        AquariusSettings(config: .shared)
+                    }
                 }
                 .frame(minWidth: 250, alignment: .leading)
 

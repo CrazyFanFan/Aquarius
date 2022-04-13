@@ -21,11 +21,11 @@
 "Predecessors" = "影响树";
 "Search" = "搜索";
 "Bookmark" = "书签";
-"Ignore Last Modification Date" = "忽略最后修改时间";
+"Ignore Last Modified time" = "忽略最后修改时间";
 "Displayed as a tree" = "以树形显示";
 "Ignore subnode deep" = "忽略子节点深度";
 "Cancel" = "取消";
-"Indentation: " = "缩进：";
+"Indentation" = "缩进";
 "Ignore" = "忽略";
 "Automatic" = "自动";
 "Model: " = "模式：";
