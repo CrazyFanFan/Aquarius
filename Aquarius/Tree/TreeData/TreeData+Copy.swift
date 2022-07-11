@@ -37,7 +37,7 @@ extension TreeData {
         var cache: [CacheKey: String]
     }
 
-    func copy(for node: Pod, with deepMode: NodeContentDeepMode) async -> String? {
+    func copy(for pod: Pod, with deepMode: NodeContentDeepMode) async -> String? {
         await self.resetCopyStatus()
 
         var content = ""
@@ -46,7 +46,7 @@ extension TreeData {
                 deepMode: deepMode,
                 cache: .init()
             )
-            content = try await self.innerContent(for: node, weight: 1, context: &context)
+            content = try await self.recursiveContent(for: pod, weight: 1, context: &context)
         } catch {
             if error is CopyError {
                 return nil
@@ -81,8 +81,8 @@ extension TreeData {
         }
     }
 
-    private func innerContent(
-        for node: Pod,
+    private func recursiveContent(
+        for pod: Pod,
         weight: Double,
         context: inout CopyStaticContext
     ) async throws -> String {
@@ -102,28 +102,28 @@ extension TreeData {
         switch context.deepMode {
         case .none:
             updateProgress(append: weight)
-            return node.name
+            return pod.name
         case .single:
-            var result: String = node.name
-            if var next = node.nextLevel(isImpact) {
+            var result: String = pod.name
+            if var next = pod.nextLevel(isImpact) {
                 result += formatNames(&next)
             }
             updateProgress(append: weight)
             return result
 
         case .recursive:
-            let key = node.name
+            let key = pod.name
             if let result = context.cache[key] {
                 updateProgress(append: weight)
                 return result
             }
 
-            var result = node.name
+            var result = pod.name
             updateProgress(append: weight * 0.01)
 
             @inline(__always)
-            func newPart(for node: Pod, separator: String, connector: String, weight: Double) async throws {
-                let next = try await innerContent(for: node, weight: weight, context: &context)
+            func content(for pod: Pod, separator: String, connector: String, weight: Double) async throws {
+                let next = try await recursiveContent(for: pod, weight: weight, context: &context)
                     .split(separator: "\n")
                     .joined(separator: separator)
                 result = result + connector + next
@@ -131,18 +131,18 @@ extension TreeData {
 
             let nodesWeight = weight * 0.98
 
-            if var nodes = node.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }), !nodes.isEmpty {
+            if var nodes = pod.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }), !nodes.isEmpty {
                 if nodes.count == 1, let node = nodes.first {
-                    try await newPart(for: node, separator: "\n    ", connector: "\n└── ", weight: nodesWeight)
+                    try await content(for: node, separator: "\n    ", connector: "\n└── ", weight: nodesWeight)
                 } else {
                     let partWeight = nodesWeight / Double(nodes.count)
                     let last = nodes.removeLast()
 
-                    for node in nodes {
-                        try await newPart(for: node, separator: "\n│   ", connector: "\n├── ", weight: partWeight)
+                    for pod in nodes {
+                        try await content(for: pod, separator: "\n│   ", connector: "\n├── ", weight: partWeight)
                     }
 
-                    try await newPart(for: last, separator: "\n    ", connector: "\n└── ", weight: partWeight)
+                    try await content(for: last, separator: "\n    ", connector: "\n└── ", weight: partWeight)
                 }
             } else {
                 updateProgress(append: nodesWeight)
@@ -154,7 +154,7 @@ extension TreeData {
             return result
 
         case .stripRecursive:
-            var subNames = node.nextLevel(isImpact) ?? []
+            var subNames = pod.nextLevel(isImpact) ?? []
             var index = 0
 
             while index < subNames.count {
@@ -165,7 +165,7 @@ extension TreeData {
             }
             updateProgress(append: weight)
 
-            return node.name + formatNames(&subNames)
+            return pod.name + formatNames(&subNames)
         }
     }
 }
