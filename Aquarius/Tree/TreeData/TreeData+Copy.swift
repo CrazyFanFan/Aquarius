@@ -157,8 +157,8 @@ extension TreeData {
 
             while index < subNames.count {
                 subNames += nameToPodCache[subNames[index]]?
-                        .nextLevel(isImpact)?
-                        .filter({ !subNames.contains($0) }) ?? []
+                    .nextLevel(isImpact)?
+                    .filter({ !subNames.contains($0) }) ?? []
                 index += 1
             }
             updateProgress(append: weight)

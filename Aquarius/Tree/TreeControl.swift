@@ -13,21 +13,8 @@ struct TreeControlModifier: ViewModifier {
 
     func body(content: Self.Content) -> some View {
         content.toolbar {
-            if GlobalState.shared.isCopying {
-                HStack {
-                    ProgressView(value: treeData.copyProgress) {
-                        Text("Copying...")
-                            .font(.system(size: 10))
-                    } currentValueLabel: {
-                        Text(String(format: "%0.2f%%", treeData.copyProgress * 100))
-                    }.progressViewStyle(.linear)
-
-                    Button {
-                        treeData.cancelCopyTask()
-                    } label: {
-                        Image("xmark.circle.fill")
-                    }
-                }
+            if treeData.isCopying {
+                copyProgress()
             }
 
             Text("Total: \(treeData.showNodes.filter { $0.deep == 0 }.count)")
@@ -55,6 +42,25 @@ struct TreeControlModifier: ViewModifier {
                     .map { (0..<$0.deep).map { _ in "\t" }.joined() + $0.pod.name }
                     .joined(separator: "\n")
                 Pasteboard.write(content)
+            }
+        }
+    }
+}
+
+private extension TreeControlModifier {
+    func copyProgress() -> some View {
+        HStack {
+            ProgressView(value: treeData.copyProgress) {
+                Text("Copying...")
+                    .font(.system(size: 10))
+            } currentValueLabel: {
+                Text(String(format: "%0.2f%%", treeData.copyProgress * 100))
+            }.progressViewStyle(.linear)
+
+            Button {
+                treeData.cancelCopyTask()
+            } label: {
+                Image("xmark.circle.fill")
             }
         }
     }

@@ -83,11 +83,11 @@ struct TreeContent: View {
 
         treeData.copyTask = Task.detached(priority: .medium) {
             DispatchQueue.main.async {
-                globalState.isCopying = true
+                treeData.isCopying = true
             }
             defer {
                 DispatchQueue.main.async {
-                    globalState.isCopying = false
+                    treeData.isCopying = false
                 }
             }
 

@@ -13,12 +13,11 @@ class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
     @Published var isLoading: Bool = false
-    @Published var isCopying: Bool = false
 
     @AppStorage("isBookmarkEnable") var isBookmarkEnable: Bool = false
     @AppStorage("isIgnoreLastModificationDate") var isIgnoreLastModificationDate: Bool = false
     @AppStorage("isIgnoreNodeDeep") var isIgnoreNodeDeep = false
 
-    public var cache: NSCache<Lock, TreeData> = .init()
+     public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}
 }
