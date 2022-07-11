@@ -32,12 +32,21 @@ extension TreeData {
         resetCopyStatus()
     }
 
+    struct CopyStaticContext {
+        let deepMode: NodeContentDeepMode
+        var cache: [CacheKey: String]
+    }
+
     func copy(for node: Pod, with deepMode: NodeContentDeepMode) async -> String? {
         await self.resetCopyStatus()
 
         var content = ""
         do {
-            content = try await self.runcopy(for: node, with: deepMode)
+            var context = CopyStaticContext(
+                deepMode: deepMode,
+                cache: .init()
+            )
+            content = try await self.innerContent(for: node, weight: 1, context: &context)
         } catch {
             if error is CopyError {
                 return nil
@@ -65,11 +74,6 @@ extension TreeData {
         return content
     }
 
-    private func runcopy(for node: Pod, with deepMode: NodeContentDeepMode) async throws -> String {
-        var cache: [CacheKey: String] = [:]
-        return try await self.innerContent(for: node, with: deepMode, weight: 1, cache: &cache)
-    }
-
     @inline(__always)
     private func updateProgress(append: Double) {
         DispatchQueue.main.async {
@@ -79,10 +83,8 @@ extension TreeData {
 
     private func innerContent(
         for node: Pod,
-        with deepMode: NodeContentDeepMode,
         weight: Double,
-        cache: inout [CacheKey: String],
-        prefix: String = ""
+        context: inout CopyStaticContext
     ) async throws -> String {
         guard !Task.isCancelled else { throw CopyError.cancelled }
 
@@ -97,7 +99,7 @@ extension TreeData {
             }
         }
 
-        switch deepMode {
+        switch context.deepMode {
         case .none:
             updateProgress(append: weight)
             return node.name
@@ -111,7 +113,7 @@ extension TreeData {
 
         case .recursive:
             let key = node.name
-            if let result = cache[key] {
+            if let result = context.cache[key] {
                 updateProgress(append: weight)
                 return result
             }
@@ -121,7 +123,7 @@ extension TreeData {
 
             @inline(__always)
             func newPart(for node: Pod, separator: String, connector: String, weight: Double) async throws {
-                let next = try await innerContent(for: node, with: deepMode, weight: weight, cache: &cache)
+                let next = try await innerContent(for: node, weight: weight, context: &context)
                     .split(separator: "\n")
                     .joined(separator: separator)
                 result = result + connector + next
@@ -146,7 +148,7 @@ extension TreeData {
                 updateProgress(append: nodesWeight)
             }
 
-            cache[key] = result
+            context.cache[key] = result
 
             updateProgress(append: weight * 0.01)
             return result
