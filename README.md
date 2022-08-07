@@ -10,7 +10,7 @@ A tool to obtain dependencies by analyzing "Podfile.lock"
 
 ## Environment
 
-- Xcode: version ≥ Xcode13.0
+- Xcode: version ≥ Xcode14 (Task.detached)
 - OSX: version ≥ 11.0
 
 ## Preview

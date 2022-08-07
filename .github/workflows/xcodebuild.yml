@@ -11,8 +11,8 @@ jobs:
     name: Xcode ${{ matrix.xcode }} on ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['macos-11']
-        xcode: ['13.2.0']
+        os: ['macos-12']
+        xcode: ['13.1', '13.3', '13.4.1']
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2

@@ -7,6 +7,14 @@
 
 import Foundation
 
+private enum Constant {
+    static let connector1 = "└── ".data(using: .utf8)!
+    static let connector2 = "├── ".data(using: .utf8)!
+    static let prefix1 = "    ".data(using: .utf8)!
+    static let prefix2 = "│   ".data(using: .utf8)!
+    static let newline: Data = .init(repeating: 10, count: 1)
+}
+
 // MARK: - Data Copy
 extension TreeData {
     enum NodeContentDeepMode: Hashable {
@@ -16,43 +24,100 @@ extension TreeData {
         case stripRecursive
     }
 
-    struct CacheKey: Hashable {
-        var name: String
-        var mode: NodeContentDeepMode
-        var impact: Bool
-    }
+    @MainActor func startCopyStatus(with pod: Pod, and deepMode: NodeContentDeepMode) {
+        let start = Date()
+        resetCopyStatus()
+        isCopying = true
 
-    func content(for node: Pod, with deepMode: NodeContentDeepMode, completion: ((String) -> Void)?) {
-        guard let completion = completion else { return }
-
-        let checkMode: (_ isRecursiveHandler: () -> Void) -> Void = { handler in
-            switch deepMode {
-            case .recursive: handler()
-            default: break
+        self.copyTask = Task.detached(priority: .userInitiated) {
+            defer {
+                print(start.distance(to: Date()))
             }
-        }
 
-        checkMode { GlobalState.shared.isLoading = true }
-
-        queue.async {
-            var cache: [CacheKey: String] = [:]
-
-            completion(self.innerContent(for: node, with: deepMode, cache: &cache))
-            cache.removeAll()
-
-            DispatchQueue.main.async {
-                checkMode { GlobalState.shared.isLoading = false }
+            guard let content = await self.copy(for: pod, with: deepMode), !Task.isCancelled else {
+                return
             }
+
+            Pasteboard.write(content)
+
+            await self.resetCopyStatus()
         }
     }
 
-    private func innerContent(
-        for node: Pod,
-        with deepMode: NodeContentDeepMode,
-        cache: inout [CacheKey: String]
-    ) -> String {
-        let key = CacheKey(name: node.name, mode: deepMode, impact: isImpact)
-        if let result = cache[key] { return result }
+    @MainActor func resetCopyStatus() {
+        isCopying = false
+        copyProgress = 0
+    }
+
+    @MainActor func cancelCurrentCopyTask() {
+        copyTask?.cancel()
+        copyTask = nil
+        resetCopyStatus()
+    }
+}
+
+private extension TreeData {
+    struct CopyStaticContext {
+        let deepMode: NodeContentDeepMode
+        var fileHandle: FileHandle
+        var fileURL: URL?
+    }
+
+    enum CopyError: Error {
+        case cancelled
+    }
+
+    func copy(for pod: Pod, with deepMode: NodeContentDeepMode) async -> String? {
+        var context = CopyStaticContext(deepMode: deepMode, fileHandle: .nullDevice)
+
+        do {
+            if deepMode == .recursive {
+                let treeURL = try Utils.cacheFile()
+
+                context.fileHandle = try FileHandle(forWritingTo: treeURL)
+                context.fileURL = treeURL
+
+                try self.recursiveContent(for: pod, weight: 1, context: context)
+
+                if let size = Utils.size(of: treeURL), size <= 4096 {
+                    if let data = try? Data(contentsOf: treeURL), let string = String(data: data, encoding: .utf8) {
+                        try? FileManager.default.removeItem(at: treeURL) // delete cache file
+                        return string
+                    }
+                }
+
+                return String(
+                    format: String(localized: "Tree content is too large, writed to cache file: %@"),
+                    treeURL.path
+                )
+            } else {
+                return try self.recursiveContent(for: pod, weight: 1, context: context)
+            }
+        } catch {
+            if let url = context.fileURL {
+                try? FileManager.default.removeItem(at: url)
+            }
+
+            return ""
+        }
+    }
+
+    @inline(__always)
+    func updateProgress(append: Double) {
+        DispatchQueue.main.async {
+            self.copyProgress += append
+        }
+    }
+
+    @discardableResult
+    func recursiveContent(
+        for pod: Pod,
+        weight: Double,
+        currentPrefix: Data = .init(),
+        nextPrefix: Data = .init(),
+        context: CopyStaticContext
+    ) throws -> String {
+        guard !Task.isCancelled else { throw CopyError.cancelled }
 
         func formatNames(_ input: inout [String]) -> String {
             if input.isEmpty { return "" }
@@ -65,43 +130,89 @@ extension TreeData {
             }
         }
 
-        switch deepMode {
+        switch context.deepMode {
         case .none:
-            return node.name
+            updateProgress(append: weight)
+            return pod.name
         case .single:
-            var result: String = node.name
-            if var next = node.nextLevel(isImpact) {
+            var result: String = pod.name
+
+            if var next = pod.nextLevel(isImpact) {
                 result += formatNames(&next)
             }
+            updateProgress(append: weight)
+
             return result
 
         case .recursive:
-            var result = node.name
+            let currentWeight: Double
+            let nextsWeight: Double
 
-            if let nodes = node.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }) {
-                if nodes.count == 1 {
-                    result = result + "\n└── " +
-                    innerContent(for: nodes.first!, with: deepMode, cache: &cache)
-                        .split(separator: "\n")
-                        .joined(separator: "\n    ")
-                } else {
-                    var nexts = nodes.map { self.innerContent(for: $0, with: .recursive, cache: &cache) }
-                    let last = nexts.removeLast()
+            let realtimeProgressUpdate = weight > 1e-5
 
-                    let next = nexts
-                        .map { ("├── " + $0).split(separator: "\n").joined(separator: "\n│   ") }
-                        .joined(separator: "\n")
-                    + "\n"
-                    + ("└── " + last).split(separator: "\n").joined(separator: "\n    ")
-
-                    result = result + "\n" + next
-                }
+            if realtimeProgressUpdate {
+                currentWeight = weight * 0.01
+                nextsWeight = weight * 0.99
+            } else {
+                currentWeight = 0
+                nextsWeight = 0
             }
-            cache[key] = result
-            return result
+
+            context.fileHandle.write(currentPrefix)
+            context.fileHandle.write(pod.name)
+            context.fileHandle.write(Data([10]))
+
+            if realtimeProgressUpdate {
+                updateProgress(append: currentWeight)
+            }
+
+            guard var next = pod.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }) else {
+                if realtimeProgressUpdate {
+                    updateProgress(append: nextsWeight)
+                }
+
+                return ""
+            }
+
+            switch next.count {
+            case 0: break
+
+            case 1: try recursiveContent(
+                for: next.first!,
+                weight: nextsWeight,
+                currentPrefix: nextPrefix + Constant.connector1,
+                nextPrefix: nextPrefix + Constant.prefix1,
+                context: context)
+
+            default:
+                let partOfWeight = nextsWeight / Double(next.count)
+                let last = next.removeLast()
+
+                for pod in next {
+                    try recursiveContent(
+                        for: pod,
+                        weight: partOfWeight,
+                        currentPrefix: nextPrefix + Constant.connector2,
+                        nextPrefix: nextPrefix + Constant.prefix2,
+                        context: context)
+                }
+
+                try recursiveContent(
+                    for: last,
+                    weight: partOfWeight,
+                    currentPrefix: nextPrefix + Constant.connector1,
+                    nextPrefix: nextPrefix + Constant.prefix1,
+                    context: context)
+            }
+
+            if !realtimeProgressUpdate {
+                updateProgress(append: weight)
+            }
+
+            return ""
 
         case .stripRecursive:
-            var subNames = node.nextLevel(isImpact) ?? []
+            var subNames = pod.nextLevel(isImpact) ?? []
             var index = 0
 
             while index < subNames.count {
@@ -110,8 +221,17 @@ extension TreeData {
                     .filter({ !subNames.contains($0) }) ?? []
                 index += 1
             }
+            updateProgress(append: weight)
 
-            return node.name + formatNames(&subNames)
+            return pod.name + formatNames(&subNames)
+        }
+    }
+}
+
+fileprivate extension FileHandle {
+    func write(_ content: String) {
+        if let data = content.data(using: .utf8) {
+            write(data)
         }
     }
 }

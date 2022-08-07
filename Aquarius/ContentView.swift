@@ -19,9 +19,7 @@ struct ContentView: View {
 
     @StateObject private var globalState = GlobalState.shared
     @State private var isTargeted: Bool = false
-
     @State private var selection: Lock?
-
     @State private var isPresented: Bool = false
 
     private static let supportType = UTType.fileURL
@@ -77,7 +75,7 @@ private extension ContentView {
     func showItems() -> some View {
         ForEach(items) { item in
             if let name = item.name, let data = data(for: item) {
-                NavigationLink(destination: TreeContent(treeData: data)) {
+                NavigationLink(destination: TreeContent(treeData: data, globalState: globalState)) {
                     Text(name)
                 }
                 .tag(item)
