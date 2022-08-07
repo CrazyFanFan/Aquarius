@@ -10,20 +10,29 @@ import Foundation
 enum Utils {
     static let fileManager = FileManager.default
 
+    private static var systemCacheDirectory: URL { fileManager.temporaryDirectory }
+    private static var applicationCacheDirectory: URL? { fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first }
+
     private static func rootCacheDir() -> URL {
         switch GlobalState.shared.locationOfCacheFile {
-        case .system: break
-        case .application:
-            if let url = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first {
-                return url
-            }
+        case .system: return systemCacheDirectory
+        case .application: return applicationCacheDirectory ?? systemCacheDirectory
         }
-
-        return fileManager.temporaryDirectory
     }
 
     static func refrashCacheDir() {
         cacheDir = rootCacheDir()
+    }
+
+    static func clear() {
+        [systemCacheDirectory, applicationCacheDirectory]
+            .compactMap({ $0 })
+            .forEach { url in
+                if fileManager.fileExists(atPath: url.path) {
+                    try? fileManager.removeItem(at: url)
+                    try? fileManager.createDirectory(at: url, withIntermediateDirectories: true)
+                }
+            }
     }
 
     static private(set) var cacheDir: URL = rootCacheDir()

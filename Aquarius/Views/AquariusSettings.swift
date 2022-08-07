@@ -26,6 +26,10 @@ struct AquariusSettings: View {
                     Text(LocalizedStringKey($0.rawValue)).tag($0)
                 }
             }
+
+            Button("Clean the cache") {
+                Utils.clear()
+            }
         }
         .padding()
         .scaledToFill()

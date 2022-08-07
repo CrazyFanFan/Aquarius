@@ -34,6 +34,7 @@
 "Location of cache file" = "缓存路径";
 "system" = "系统目录";
 "application" = "应用目录";
+"Clean the cache" = "清理缓存";
 "Model: " = "模式：";
 "Delete" = "删除";
 "Copy path" = "拷贝路径"; // Podspec view use again

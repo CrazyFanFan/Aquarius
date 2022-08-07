@@ -32,6 +32,7 @@
 "Location of cache file" = "Cache path";
 "system" = "System";
 "application" = "application";
+"Clean the cache" = "Clean the cache";
 "Model: " = "Model: ";
 "Delete" = "Delete";
 "Copy path" = "Copy path"; // Podspec view use again
