@@ -19,9 +19,7 @@ struct ContentView: View {
 
     @StateObject private var globalState = GlobalState.shared
     @State private var isTargeted: Bool = false
-
     @State private var selection: Lock?
-
     @State private var isPresented: Bool = false
 
     private static let supportType = UTType.fileURL

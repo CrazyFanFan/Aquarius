@@ -71,19 +71,7 @@ private extension TreeData {
 
         do {
             if deepMode == .recursive {
-                let fileManager = FileManager.default
-                guard let url = fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-                    return ""
-                }
-
-                if !fileManager.fileExists(atPath: url.path) {
-                    try fileManager.createDirectory(at: url, withIntermediateDirectories: true)
-                }
-                let treeURL = url.appendingPathComponent(UUID().uuidString + ".tree.txt")
-
-                if !fileManager.fileExists(atPath: treeURL.path) {
-                    fileManager.createFile(atPath: treeURL.path, contents: nil)
-                }
+                let treeURL = try Utils.cacheFile()
 
                 context.fileHandle = try FileHandle(forWritingTo: treeURL)
                 context.fileURL = treeURL

@@ -12,18 +12,20 @@ struct AquariusSettings: View {
 
     var body: some View {
         Form {
-            Group {
-                Toggle("Bookmark", isOn: $config.isBookmarkEnable)
-                Toggle("Ignore Last Modified time", isOn: $config.isIgnoreLastModificationDate)
-            }
-            .toggleStyle(.switch)
+            Toggle("Bookmark", isOn: $config.isBookmarkEnable)
+            Toggle("Ignore Last Modified time", isOn: $config.isIgnoreLastModificationDate)
 
             Picker("Indentation", selection: $config.isIgnoreNodeDeep) {
                 ForEach([true, false], id: \.self) {
                     Text($0 ? "Ignore" : "Automatic").tag($0)
                 }
             }
-            .pickerStyle(.segmented)
+
+            Picker("Location of cache file", selection: $config.locationOfCacheFile) {
+                ForEach(LocationOfCacheFile.allCases, id: \.rawValue) {
+                    Text(LocalizedStringKey($0.rawValue)).tag($0)
+                }
+            }
         }
         .padding()
         .scaledToFill()

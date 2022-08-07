@@ -29,6 +29,9 @@
 "Indentation" = "Indentation";
 "Ignore" = "Ignore";
 "Automatic" = "Automatic";
+"Location of cache file" = "Cache path";
+"system" = "System";
+"application" = "application";
 "Model: " = "Model: ";
 "Delete" = "Delete";
 "Copy path" = "Copy path"; // Podspec view use again

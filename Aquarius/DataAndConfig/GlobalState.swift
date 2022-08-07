@@ -9,6 +9,11 @@
 import Combine
 import SwiftUI
 
+enum LocationOfCacheFile: String, CaseIterable {
+    case system
+    case application
+}
+
 class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
@@ -17,6 +22,7 @@ class GlobalState: ObservableObject {
     @AppStorage("isBookmarkEnable") var isBookmarkEnable: Bool = false
     @AppStorage("isIgnoreLastModificationDate") var isIgnoreLastModificationDate: Bool = false
     @AppStorage("isIgnoreNodeDeep") var isIgnoreNodeDeep = false
+    @AppStorage("locationOfCacheFile") var locationOfCacheFile: LocationOfCacheFile = .application
 
      public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}

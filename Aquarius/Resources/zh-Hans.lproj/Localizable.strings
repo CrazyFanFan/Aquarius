@@ -31,6 +31,9 @@
 "Indentation" = "缩进";
 "Ignore" = "忽略";
 "Automatic" = "自动";
+"Location of cache file" = "缓存路径";
+"system" = "系统目录";
+"application" = "应用目录";
 "Model: " = "模式：";
 "Delete" = "删除";
 "Copy path" = "拷贝路径"; // Podspec view use again
