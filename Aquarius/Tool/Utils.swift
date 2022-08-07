@@ -51,4 +51,19 @@ enum Utils {
         return tmp
     }
 
+    static func size(of fileURL: URL) -> UInt64? {
+        do {
+            let attr = try fileManager.attributesOfItem(atPath: fileURL.path)
+            var fileSize = attr[FileAttributeKey.size] as? UInt64
+
+            if fileSize == nil {
+                let dict = attr as NSDictionary
+                fileSize = dict.fileSize()
+            }
+
+            return fileSize
+        } catch {
+            return nil
+        }
+    }
 }

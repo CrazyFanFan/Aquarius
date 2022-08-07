@@ -78,6 +78,13 @@ private extension TreeData {
 
                 try self.recursiveContent(for: pod, weight: 1, context: context)
 
+                if let size = Utils.size(of: treeURL), size <= 4096 {
+                    if let data = try? Data(contentsOf: treeURL), let string = String(data: data, encoding: .utf8) {
+                        try? FileManager.default.removeItem(at: treeURL) // delete cache file
+                        return string
+                    }
+                }
+
                 return String(
                     format: String(localized: "Tree content is too large, writed to cache file: %@"),
                     treeURL.path
