@@ -79,24 +79,8 @@ struct TreeContent: View {
     }
 
     private func copy(with pod: Pod, and type: TreeData.NodeContentDeepMode) {
-        treeData.copyTask?.cancel()
-
-        treeData.copyTask = Task.detached(priority: .medium) {
-            DispatchQueue.main.async {
-                treeData.isCopying = true
-            }
-            defer {
-                DispatchQueue.main.async {
-                    treeData.isCopying = false
-                }
-            }
-
-            guard let content = await treeData.copy(for: pod, with: type), !Task.isCancelled else {
-                return
-            }
-
-            Pasteboard.write(content)
-        }
+        treeData.cancelCurrentCopyTask()
+        treeData.startCopyStatus(with: pod, and: type)
     }
 }
 

@@ -58,7 +58,7 @@ private extension TreeControlModifier {
             }.progressViewStyle(.linear)
 
             Button {
-                treeData.cancelCopyTask()
+                treeData.cancelCurrentCopyTask()
             } label: {
                 Image("xmark.circle.fill")
             }
