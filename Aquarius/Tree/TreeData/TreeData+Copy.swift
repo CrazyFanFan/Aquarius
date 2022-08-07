@@ -29,7 +29,7 @@ extension TreeData {
         resetCopyStatus()
         isCopying = true
 
-        self.copyTask = Task.detached(priority: .medium) {
+        self.copyTask = Task.detached(priority: .userInitiated) {
             defer {
                 print(start.distance(to: Date()))
             }
@@ -39,10 +39,13 @@ extension TreeData {
             }
 
             Pasteboard.write(content)
+
+            await self.resetCopyStatus()
         }
     }
 
     @MainActor func resetCopyStatus() {
+        isCopying = false
         copyProgress = 0
     }
 
@@ -50,7 +53,6 @@ extension TreeData {
         copyTask?.cancel()
         copyTask = nil
         resetCopyStatus()
-        isCopying = false
     }
 }
 
@@ -66,7 +68,6 @@ private extension TreeData {
     }
 
     func copy(for pod: Pod, with deepMode: NodeContentDeepMode) async -> String? {
-
         var context = CopyStaticContext(deepMode: deepMode, fileHandle: .nullDevice)
 
         do {
