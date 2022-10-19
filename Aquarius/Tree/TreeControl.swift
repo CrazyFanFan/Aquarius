@@ -30,7 +30,7 @@ struct TreeControlModifier: ViewModifier {
                 }
             }
 
-            Picker("Model: ", selection: $treeData.detailMode) {
+            Picker("Model:", selection: $treeData.detailMode) {
                 ForEach(DetailMode.allCases) {
                     Text(NSLocalizedString($0.rawValue.capitalized, comment: "")).tag($0)
                 }

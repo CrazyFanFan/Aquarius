@@ -10,7 +10,8 @@ import SwiftUI
 import Combine
 
 class TreeData: ObservableObject {
-    // is on processing
+    private var config: GlobalState = .shared
+
     private var podToNodeCache: [Pod: TreeNode] = [:]
     private var nameToNodeCache: [String: TreeNode] = [:]
     private var nodes: [TreeNode] = []
@@ -19,7 +20,7 @@ class TreeData: ObservableObject {
     private var loadShowNodesTmp: [TreeNode] = []
     @Published private(set) var showNodes: [TreeNode] = []
 
-    @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
+    private var isIgnoreLastModificationDate: Bool { config.isIgnoreLastModificationDate }
 
     /// for copy
     var copyProgress: Double = 0 {
@@ -67,19 +68,7 @@ class TreeData: ObservableObject {
         }
     }
 
-    /// Mark is impact mode
-    ///
-    ///
-    /// When a module depends on another module and the dependent module
-    /// changes, the module that depends on that module will be affected.
-    /// I call it the impact mode.
-    ///
-    /// 标记”影响树“
-    ///
-    /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
-    /// 递归的找下去，会形成一棵树，我称之为”影响树“
-    ///
-    @AppStorage("detailMode") var detailMode: DetailMode = .predecessors {
+    @Published var detailMode: DetailMode = GlobalState.shared.detailMode {
         didSet {
             if detailMode != oldValue {
                 loadData(isImpact: isImpact, resetIsExpanded: true)
@@ -87,7 +76,7 @@ class TreeData: ObservableObject {
         }
     }
 
-    @AppStorage("orderRule") var orderRule: OrderBy = .alphabeticalAscending {
+    @Published var orderRule: OrderBy = GlobalState.shared.orderRule {
         didSet {
             if orderRule != oldValue {
                 loadData(isImpact: isImpact, resetIsExpanded: false)
@@ -104,6 +93,10 @@ class TreeData: ObservableObject {
     @Published var isPodspecShow: Bool = false
 
     var podspecCache: [Pod: PodspecInfo] = [:]
+
+    private var isSubspecIgnore: Bool { config.isSubspecIgnore }
+    private var oldIsSubspecIgnore: Bool = false
+    private var cancelable: AnyCancellable?
 
     init(lockFile: PodfileLockFile) {
         self.lockFile = lockFile
@@ -175,7 +168,12 @@ private extension TreeData {
         podspecCache.removeAll()
         queue.async {
             // top level
-            self.podfileLock?.pods.forEach { (pod) in
+            var pods = self.podfileLock?.pods
+            if self.isSubspecIgnore {
+                pods?.removeAll(where: { $0.name.contains("/" ) })
+            }
+
+            pods?.forEach { (pod) in
                 self.nameToPodCache[pod.name] = pod
                 let node = TreeNode(deep: 0, pod: pod)
                 self.podToNodeCache[pod] = node

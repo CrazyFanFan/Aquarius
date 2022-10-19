@@ -20,22 +20,12 @@
 "Show podspec" = "展示 podspec";
 "Show in finder" = "在文件夹中显示";
 "Recursive" = "递归";
-"Successors" = "依赖树";
-"Predecessors" = "影响树";
 "Search" = "搜索";
-"Bookmark" = "书签";
-"Ignore Last Modified time" = "忽略最后修改时间";
 "Displayed as a tree" = "以树形显示";
 "Ignore subnode deep" = "忽略子节点深度";
 "Cancel" = "取消";
-"Indentation" = "缩进";
-"Ignore" = "忽略";
-"Automatic" = "自动";
-"Location of cache file" = "缓存路径";
 "system" = "系统目录";
 "application" = "应用目录";
-"Clean the cache" = "清理缓存";
-"Model: " = "模式：";
 "Delete" = "删除";
 "Copy path" = "拷贝路径"; // Podspec view use again
 "Select a Podfile.lock" = "请选择一个 Podfile.lock";
@@ -54,3 +44,35 @@
 // --- Podspec view end ---
 
 "Tree content is too large, writed to cache file: %@" = "子树过大，写到了缓存文件: %@";
+
+// --- Settings start ---
+
+"Globel Settings" = "全局设置";
+
+"Bookmark" = "书签";
+"Ignore Last Modified time" = "忽略最后修改时间";
+"Ignore Subspec" = "忽略Subspec";
+
+"Indentation" = "缩进";
+"Ignore" = "忽略";
+"Automatic" = "自动";
+
+"Location of cache file" = "缓存";
+
+"Sort by:" = "排序";
+
+"Model:" = "模式";
+"Successors" = "依赖树";
+"Predecessors" = "影响树";
+
+"Default Settings" = "默认设置";
+
+"This is the default setting that will be followed
+when a new file is opened.
+The Settings on the details page will override the
+global Settings, but killing the app will lose this." = "这里是默认设置，会在首次打开文件时使用.
+在详情页的变更会覆盖全局设置；
+关闭应用会丢失页面内修改的设置。";
+
+"Clean the cache" = "清理缓存";
+// --- Settings end ---

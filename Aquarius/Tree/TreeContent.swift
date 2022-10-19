@@ -10,7 +10,6 @@ import SwiftUI
 
 struct TreeContent: View {
     @StateObject var treeData: TreeData
-    @StateObject var globalState: GlobalState
 
     var body: some View {
         // List，用 LazyVGrid 是为了更好的性能
@@ -86,6 +85,6 @@ struct TreeContent: View {
 
 struct TreeContent_Previews: PreviewProvider {
     static var previews: some View {
-        TreeContent(treeData: .init(lockFile: .preview), globalState: .shared)
+        TreeContent(treeData: .init(lockFile: .preview))
     }
 }

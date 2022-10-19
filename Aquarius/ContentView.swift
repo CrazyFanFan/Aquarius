@@ -75,7 +75,7 @@ private extension ContentView {
     func showItems() -> some View {
         ForEach(items) { item in
             if let name = item.name, let data = data(for: item) {
-                NavigationLink(destination: TreeContent(treeData: data, globalState: globalState)) {
+                NavigationLink(destination: TreeContent(treeData: data)) {
                     Text(name)
                 }
                 .tag(item)
@@ -94,11 +94,16 @@ private extension ContentView {
         }
     }
 
-    func data(for item: Lock) -> TreeData? {
-        if let data = globalState.cache.object(forKey: item) { return data }
+    func data(for lock: Lock) -> TreeData? {
+        if let data = globalState.cache.object(forKey: lock) {
+            return data
+        }
 
-        if let url = item.url {
-            return TreeData(lockFile: PodfileLockFile(url: url))
+        if let url = lock.url {
+            let data = TreeData(lockFile: PodfileLockFile(url: url))
+            globalState.cache.setObject(data, forKey: lock)
+
+            return data
         }
 
         return nil

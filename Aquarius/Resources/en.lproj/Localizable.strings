@@ -18,22 +18,13 @@
 "Show podspec" = "Show podspec";
 "Show in finder" = "Show in finder";
 "Recursive" = "Recursive";
-"Successors" = "Successors";
-"Predecessors" = "Predecessors";
 "Search" = "Search";
-"Bookmark" = "Bookmark";
-"Ignore Last Modified time" = "Ignore Last Modified time";
 "Displayed as a tree" = "Displayed as a tree";
 "Ignore subnode deep" = "Ignore subnode deep";
 "Cancel" = "Cancel";
-"Indentation" = "Indentation";
-"Ignore" = "Ignore";
-"Automatic" = "Automatic";
-"Location of cache file" = "Cache path";
 "system" = "System";
 "application" = "application";
-"Clean the cache" = "Clean the cache";
-"Model: " = "Model: ";
+
 "Delete" = "Delete";
 "Copy path" = "Copy path"; // Podspec view use again
 "Select a Podfile.lock" = "Select a Podfile.lock";
@@ -52,3 +43,36 @@
 // --- Podspec view end ---
 
 "Tree content is too large, writed to cache file: %@" = "Tree content is too large, writed to cache file: %@";
+
+// --- Settings start ---
+
+"Globel Settings" = "Globel Settings";
+
+"Bookmark" = "Bookmark";
+"Ignore Last Modified time" = "Ignore Last Modified time";
+"Ignore Subspec" = "Ignore Subspec";
+
+"Indentation" = "Indentation";
+"Ignore" = "Ignore";
+"Automatic" = "Automatic";
+
+"Location of cache file" = "Cache path";
+
+"Sort by:" = "Sort by";
+
+"Model:" = "Model: ";
+"Successors" = "Successors";
+"Predecessors" = "Predecessors";
+
+"Default Settings" = "Default Settings";
+
+"This is the default setting that will be followed
+when a new file is opened.
+The Settings on the details page will override the
+global Settings, but killing the app will lose this." = "This is the default setting that will be followed
+when a new file is opened.
+The Settings on the details page will override the
+global Settings, but killing the app will lose this.";
+
+"Clean the cache" = "Clean the cache";
+// --- Settings end ---
