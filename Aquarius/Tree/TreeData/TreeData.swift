@@ -72,19 +72,11 @@ class TreeData: ObservableObject {
     }
 
     @Published var detailMode: DetailMode = GlobalState.shared.detailMode {
-        didSet {
-            if detailMode != oldValue {
-                loadData(isImpact: isImpact, resetIsExpanded: true)
-            }
-        }
+        didSet { if detailMode != oldValue { loadData(isImpact: isImpact, resetIsExpanded: true) } }
     }
 
     @Published var orderRule: OrderBy = GlobalState.shared.orderRule {
-        didSet {
-            if orderRule != oldValue {
-                loadData(isImpact: isImpact, resetIsExpanded: false)
-            }
-        }
+        didSet { if orderRule != oldValue { loadData(isImpact: isImpact, resetIsExpanded: false) } }
     }
 
     var isImpact: Bool { detailMode == .predecessors }

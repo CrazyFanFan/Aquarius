@@ -56,7 +56,7 @@ struct AquariusSettings: View {
                         Text(NSLocalizedString($0 ? "Show" : "Hidden", comment: "")).tag($0)
                     }
                 }
-                
+
             } header: {
                 Text("Default Settings")
                     .font(.title3)
@@ -78,12 +78,10 @@ struct AquariusSettings: View {
             Button("Clean the cache") {
                 Utils.clear()
             }
-
         }
         .padding()
-        .scaledToFill()
         .navigationTitle("Preferences")
-        //        .frame(width: 350)
+        .fixedSize()
     }
 }
 

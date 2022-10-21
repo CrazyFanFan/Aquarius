@@ -46,16 +46,11 @@
 "Tree content is too large, writed to cache file: %@" = "子树过大，写到了缓存文件: %@";
 
 // --- Settings start ---
-
+// section one
 "Globel Settings" = "全局设置";
 
 "Bookmark" = "书签";
 "Ignore Last Modified time" = "忽略最后修改时间";
-
-"Hidden Subspecs" = "隐藏 Subspecs";
-"Show Subspecs" = "展示 Subspecs";
-"Hidden" = "隐藏";
-"Show" = "展示";
 
 "Indentation" = "缩进";
 "Ignore" = "忽略";
@@ -63,11 +58,17 @@
 
 "Location of cache file" = "缓存";
 
+// section two
 "Sort by:" = "排序";
 
 "Model:" = "模式";
 "Successors" = "依赖树";
 "Predecessors" = "影响树";
+
+"Hidden Subspecs" = "隐藏 Subspecs";
+"Show Subspecs" = "展示 Subspecs";
+"Hidden" = "隐藏";
+"Show" = "展示";
 
 "Default Settings" = "默认设置";
 
@@ -75,8 +76,10 @@
 when a new file is opened.
 The Settings on the details page will override the
 global Settings, but killing the app will lose this." = "这里是默认设置，会在首次打开文件时使用.
-在详情页的变更会覆盖全局设置；
+在详情页的变更不会覆盖全局设置；
 关闭应用会丢失页面内修改的设置。";
 
 "Clean the cache" = "清理缓存";
+
+"Preferences" = "偏好设置";
 // --- Settings end ---
