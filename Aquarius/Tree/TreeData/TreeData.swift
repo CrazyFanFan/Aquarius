@@ -52,9 +52,12 @@ class TreeData: ObservableObject {
 
     private var lastReadDataTime: Date?
 
-    private(set) var podfileLock: PodfileLock? {
-        didSet { buildTree() }
+    var lock: PodfileLock? {
+        isSubspecIgnore ? noSubspecLock : sourceLock
     }
+
+    private(set) var sourceLock: PodfileLock?
+    private(set) var noSubspecLock: PodfileLock?
 
     var searchKey = "" {
         didSet {
@@ -94,13 +97,22 @@ class TreeData: ObservableObject {
 
     var podspecCache: [Pod: PodspecInfo] = [:]
 
-    private var isSubspecIgnore: Bool { config.isSubspecIgnore }
-    private var oldIsSubspecIgnore: Bool = false
+    private var isSubspecIgnore: Bool
     private var cancelable: AnyCancellable?
 
     init(lockFile: PodfileLockFile) {
         self.lockFile = lockFile
+        self.isSubspecIgnore = config.isSubspecIgnore
+
         self.loadFile()
+
+        cancelable = config.objectWillChange
+            .map { self.config.isSubspecIgnore }
+            .sink { newValue in
+                guard newValue != self.isSubspecIgnore else { return }
+                self.isSubspecIgnore = newValue
+                self.buildTree()
+            }
     }
 
     func onSelected(node: TreeNode) {
@@ -150,10 +162,13 @@ private extension TreeData {
             guard let info = self.lockFile else { return }
             self.queue.async {
                 self.lastReadDataTime = Date()
-                if let lock = DataReader(file: info).readData() {
+                if let (sourceLock, noSubspecLock) = DataReader(file: info).readData() {
+
                     DispatchQueue.main.async {
                         // update lock data
-                        self.podfileLock = lock
+                        self.sourceLock = sourceLock
+                        self.noSubspecLock = noSubspecLock
+                        self.buildTree()
                     }
                 }
             }
@@ -166,14 +181,12 @@ private extension TreeData {
     func buildTree() {
         nodes.removeAll()
         podspecCache.removeAll()
+        nameToPodCache.removeAll()
+        podToNodeCache.removeAll()
+
         queue.async {
             // top level
-            var pods = self.podfileLock?.pods
-            if self.isSubspecIgnore {
-                pods?.removeAll(where: { $0.name.contains("/" ) })
-            }
-
-            pods?.forEach { (pod) in
+            self.lock?.pods.forEach { (pod) in
                 self.nameToPodCache[pod.name] = pod
                 let node = TreeNode(deep: 0, pod: pod)
                 self.podToNodeCache[pod] = node
@@ -189,7 +202,7 @@ private extension TreeData {
                 return node
             }
 
-            if let pod = self.podfileLock?.pods.first(where: { $0.name == dependence }),
+            if let pod = self.lock?.pods.first(where: { $0.name == dependence }),
                let node = podToNodeCache[pod]?.copy(with: deep, isImpact: isImpact) {
                 return node
             }

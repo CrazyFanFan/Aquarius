@@ -110,7 +110,7 @@ extension TreeData {
     }
 
     func asyncShowPodspec(of pod: Pod) {
-        guard let lock = podfileLock else {
+        guard let lock = lock else {
             assert(false, "Should never here.")
             return
         }

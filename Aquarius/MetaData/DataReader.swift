@@ -16,7 +16,7 @@ class DataReader {
         self.file = file
     }
 
-    func readData() -> PodfileLock? {
+    func readData() -> (lock: PodfileLock, noSubspecLock: PodfileLock)? {
         guard let file = file else { return nil }
 
         guard file.url.startAccessingSecurityScopedResource() else { return nil }
@@ -63,7 +63,8 @@ class DataReader {
         }
 
         // TODO: more info
-        return lock
+
+        return (lock, noSubspecLock(from: lock))
     }
 
     @discardableResult
@@ -92,5 +93,65 @@ class DataReader {
             }
         }
         return true
+    }
+
+    private func noSubspecLock(from lock: PodfileLock) -> PodfileLock {
+        func rootName(of name: String, splitIndex: String.Index? = nil) -> String {
+            if let index = splitIndex ?? name.firstIndex(of: "/") {
+                return String(name[..<index])
+            }
+            return name
+        }
+
+        let pods = lock.pods.map { $0.copy() }.reduce(into: [String: Pod]()) { partialResult, pod in
+            if let index = pod.name.firstIndex(of: "/") {
+                let name = rootName(of: pod.name, splitIndex: index)
+
+                let mainPod = partialResult[name] ?? pod
+
+                if !partialResult.keys.contains(name) {
+                    pod.name = rootName(of: pod.name)
+                    partialResult[name] = mainPod
+                }
+
+                var successors = mainPod.successors ?? []
+                var predecessors = mainPod.predecessors ?? []
+
+                if let subpodSuccessors = pod.successors {
+                    successors.append(contentsOf: subpodSuccessors)
+                }
+
+                if let subpodPredecessors = pod.predecessors {
+                    predecessors.append(contentsOf: subpodPredecessors)
+                }
+
+                mainPod.successors = successors
+                mainPod.predecessors = predecessors
+
+            } else {
+                partialResult[pod.name] = pod
+            }
+        }
+        .values
+        .sorted(by: { $0.name < $1.name })
+
+        func removeDuplicates(_ strings: [String], podName: String) -> [String]? {
+            var names = Set(strings.map { rootName(of: $0) })
+            names.remove(podName)
+            return names.isEmpty ? nil : names.sorted()
+        }
+
+        for index in pods.indices {
+            if let successors = pods[index].successors {
+                pods[index].successors = removeDuplicates(successors, podName: pods[index].name)
+            }
+            if let predecessors = pods[index].predecessors {
+                pods[index].predecessors = removeDuplicates(predecessors, podName: pods[index].name)
+            }
+        }
+
+        var lock = lock
+        lock.pods = pods
+        return lock
     }
 }

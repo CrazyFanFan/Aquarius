@@ -8,12 +8,12 @@
 
 import Foundation
 
-class Pod {
-//    enum Relation: Int, Codable {
-//        case equal
-//        case moreThan
-//        case lessThan
-//    }
+extension Pod {
+    //    enum Relation: Int, Codable {
+    //        case equal
+    //        case moreThan
+    //        case lessThan
+    //    }
 
     struct Info: Hashable, Codable {
         var version: String
@@ -28,7 +28,9 @@ class Pod {
             // self.relation = .equal
         }
     }
+}
 
+class Pod {
     var name: String
     var info: Info?
     var successors: [String]?
@@ -45,6 +47,16 @@ class Pod {
         } else {
             return nil
         }
+    }
+
+    func copy() -> Pod {
+        let new = Pod(podValue: self.name)
+
+        new.info = self.info
+        new.successors = self.successors
+        new.predecessors = self.predecessors
+
+        return new
     }
 }
 
