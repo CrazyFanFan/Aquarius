@@ -53,7 +53,7 @@ class TreeData: ObservableObject {
     private var lastReadDataTime: Date?
 
     var lock: PodfileLock? {
-        isSubspecIgnore ? noSubspecLock : sourceLock
+        isSubspecShow ? sourceLock : noSubspecLock
     }
 
     private(set) var sourceLock: PodfileLock?
@@ -97,22 +97,15 @@ class TreeData: ObservableObject {
 
     var podspecCache: [Pod: PodspecInfo] = [:]
 
-    private var isSubspecIgnore: Bool
-    private var cancelable: AnyCancellable?
+    @Published var isSubspecShow: Bool {
+        didSet { if isSubspecShow != oldValue { buildTree() }}
+    }
 
     init(lockFile: PodfileLockFile) {
         self.lockFile = lockFile
-        self.isSubspecIgnore = config.isSubspecIgnore
+        self.isSubspecShow = config.isSubspecShow
 
         self.loadFile()
-
-        cancelable = config.objectWillChange
-            .map { self.config.isSubspecIgnore }
-            .sink { newValue in
-                guard newValue != self.isSubspecIgnore else { return }
-                self.isSubspecIgnore = newValue
-                self.buildTree()
-            }
     }
 
     func onSelected(node: TreeNode) {

@@ -51,7 +51,11 @@
 
 "Bookmark" = "书签";
 "Ignore Last Modified time" = "忽略最后修改时间";
-"Ignore Subspec" = "忽略Subspec";
+
+"Hidden Subspecs" = "隐藏 Subspecs";
+"Show Subspecs" = "展示 Subspecs";
+"Hidden" = "隐藏";
+"Show" = "展示";
 
 "Indentation" = "缩进";
 "Ignore" = "忽略";

@@ -15,7 +15,6 @@ struct AquariusSettings: View {
             Section {
                 Toggle("Bookmark", isOn: $config.isBookmarkEnable) // 书签
                 Toggle("Ignore Last Modified time", isOn: $config.isIgnoreLastModificationDate) // 忽略最后修改时间
-                Toggle("Ignore Subspec", isOn: $config.isSubspecIgnore) //
 
                 Picker("Indentation", selection: $config.isIgnoreNodeDeep) { // 缩进
                     ForEach([true, false], id: \.self) {
@@ -51,6 +50,13 @@ struct AquariusSettings: View {
                         Text(NSLocalizedString($0.rawValue.capitalized, comment: "")).tag($0)
                     }
                 }
+
+                Picker("Subspecs:", selection: $config.isSubspecShow) {
+                    ForEach([true, false], id: \.self) {
+                        Text(NSLocalizedString($0 ? "Show" : "Hidden", comment: "")).tag($0)
+                    }
+                }
+                
             } header: {
                 Text("Default Settings")
                     .font(.title3)

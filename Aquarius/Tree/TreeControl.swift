@@ -37,6 +37,13 @@ struct TreeControlModifier: ViewModifier {
             }
             .scaledToFit()
 
+            Picker("", selection: $treeData.isSubspecShow) {
+                ForEach([true, false], id: \.self) {
+                    Text(NSLocalizedString($0 ? "Show Subspecs" : "Hidden Subspecs", comment: "")).tag($0)
+                }
+            }
+            .scaledToFit()
+
             Button("Copy all") {
                 let content = self.treeData.showNodes
                     .map { (0..<$0.deep).map { _ in "\t" }.joined() + $0.pod.name }
