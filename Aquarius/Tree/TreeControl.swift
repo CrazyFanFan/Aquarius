@@ -50,11 +50,11 @@ struct TreeControlModifier: ViewModifier {
 private extension TreeControlModifier {
     func copyProgress() -> some View {
         HStack {
-            ProgressView(value: treeData.copyProgress) {
+            ProgressView(value: treeData.displayCopyProgress) {
                 Text("Copying...")
                     .font(.system(size: 10))
             } currentValueLabel: {
-                Text(String(format: "%0.2f%%", treeData.copyProgress * 100))
+                Text(String(format: "%0.2f%%", treeData.displayCopyProgress * 100))
             }.progressViewStyle(.linear)
 
             Button {

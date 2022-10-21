@@ -22,7 +22,14 @@ class TreeData: ObservableObject {
     @AppStorage("isIgnoreLastModificationDate") private var isIgnoreLastModificationDate: Bool = false
 
     /// for copy
-    @Published var copyProgress: Double = 0
+    var copyProgress: Double = 0 {
+        didSet {
+            if copyProgress == 0 || copyProgress == 1 || copyProgress - displayCopyProgress > 0.01 {
+                displayCopyProgress = copyProgress
+            }
+        }
+    }
+    @Published var displayCopyProgress: Double = 0
     @Published var isCopying: Bool = false
     var copyTask: Task<Void, Error>?
 

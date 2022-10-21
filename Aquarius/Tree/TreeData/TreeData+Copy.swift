@@ -29,7 +29,7 @@ extension TreeData {
         resetCopyStatus()
         isCopying = true
 
-        self.copyTask = Task.detached(priority: .userInitiated) {
+        self.copyTask = Task.detached(priority: .background) {
             defer {
                 print(start.distance(to: Date()))
             }
