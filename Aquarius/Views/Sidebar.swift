@@ -83,8 +83,15 @@ private extension Sidebar {
                             self.selection = nil
                         }
                     }
+
                     Button("Copy path") {
                         Pasteboard.write(item.url?.path ?? "")
+                    }
+
+                    if let url = item.url {
+                        Button("Show in finder") {
+                            NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
+                        }
                     }
                 }
             }
