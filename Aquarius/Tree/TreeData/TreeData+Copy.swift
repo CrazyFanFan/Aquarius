@@ -87,7 +87,7 @@ private extension TreeData {
                 }
 
                 return String(
-                    format: String(localized: "Tree content is too large, writed to cache file: %@"),
+                    format: String(localized: "Tree content is too large, written to cache file: %@"),
                     treeURL.path
                 )
             } else {

@@ -33,7 +33,7 @@ struct PageControl: View {
                 PageCommonSettings(
                     orderRule: $treeData.orderRule,
                     detailMode: $treeData.detailMode,
-                    isSubspecShow: $treeData.isSubspecShow
+                    isSubspeciesShow: $treeData.isSubspeciesShow
                 )
             }
             .padding(5)
@@ -41,7 +41,7 @@ struct PageControl: View {
         PageCommonSettings(
             orderRule: $treeData.orderRule,
             detailMode: $treeData.detailMode,
-            isSubspecShow: $treeData.isSubspecShow
+            isSubspeciesShow: $treeData.isSubspeciesShow
         )
         .fixedSize()
 

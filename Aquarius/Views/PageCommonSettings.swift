@@ -10,7 +10,7 @@ import SwiftUI
 struct PageCommonSettings: View {
     @Binding var orderRule: OrderBy
     @Binding var detailMode: DetailMode
-    @Binding var isSubspecShow: Bool
+    @Binding var isSubspeciesShow: Bool
 
     var body: some View {
         Group {
@@ -29,7 +29,7 @@ struct PageCommonSettings: View {
                 }
             }
 
-            Picker("Subspecs:", selection: $isSubspecShow) {
+            Picker("Subspecies:", selection: $isSubspeciesShow) {
                 ForEach([true, false], id: \.self) {
                     (
                         Text("\(Image($0 ? "eye" : "eye.slash")) ") +
@@ -43,6 +43,6 @@ struct PageCommonSettings: View {
 
 struct PageSettings_Previews: PreviewProvider {
     static var previews: some View {
-        PageCommonSettings(orderRule: .constant(.alphabeticalAscending), detailMode: .constant(.predecessors), isSubspecShow: .constant(false))
+        PageCommonSettings(orderRule: .constant(.alphabeticalAscending), detailMode: .constant(.predecessors), isSubspeciesShow: .constant(false))
     }
 }

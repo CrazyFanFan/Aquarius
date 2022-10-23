@@ -41,7 +41,7 @@ class GlobalState: ObservableObject {
     @AppStorage("isIgnoreLastModificationDate") var isIgnoreLastModificationDate: Bool = false
     @AppStorage("isIgnoreNodeDeep") var isIgnoreNodeDeep = false
     @AppStorage("locationOfCacheFile") var locationOfCacheFile: LocationOfCacheFile = .application
-    @AppStorage("isSubspecShow") var isSubspecShow: Bool = false
+    @AppStorage("isSubspeciesShow") var isSubspeciesShow: Bool = false
 
     public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}

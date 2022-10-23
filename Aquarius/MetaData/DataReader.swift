@@ -16,7 +16,7 @@ class DataReader {
         self.file = file
     }
 
-    func readData() -> (lock: PodfileLock, noSubspecLock: PodfileLock)? {
+    func readData() -> (lock: PodfileLock, noSubspeciesLock: PodfileLock)? {
         guard let file = file else { return nil }
 
         guard file.url.startAccessingSecurityScopedResource() else { return nil }
@@ -64,7 +64,7 @@ class DataReader {
 
         // TODO: more info
 
-        return (lock, noSubspecLock(from: lock))
+        return (lock, noSubspeciesLock(from: lock))
     }
 
     @discardableResult
@@ -95,7 +95,7 @@ class DataReader {
         return true
     }
 
-    private func noSubspecLock(from lock: PodfileLock) -> PodfileLock {
+    private func noSubspeciesLock(from lock: PodfileLock) -> PodfileLock {
         func rootName(of name: String, splitIndex: String.Index? = nil) -> String {
             if let index = splitIndex ?? name.firstIndex(of: "/") {
                 return String(name[..<index])
@@ -117,12 +117,12 @@ class DataReader {
                 var successors = mainPod.successors ?? []
                 var predecessors = mainPod.predecessors ?? []
 
-                if let subpodSuccessors = pod.successors {
-                    successors.append(contentsOf: subpodSuccessors)
+                if let subspeciesSuccessors = pod.successors {
+                    successors.append(contentsOf: subspeciesSuccessors)
                 }
 
-                if let subpodPredecessors = pod.predecessors {
-                    predecessors.append(contentsOf: subpodPredecessors)
+                if let subspeciesPredecessors = pod.predecessors {
+                    predecessors.append(contentsOf: subspeciesPredecessors)
                 }
 
                 mainPod.successors = successors

@@ -24,11 +24,11 @@ struct AquariusSettings: View {
 
                 Picker("Location of cache file", selection: $config.locationOfCacheFile) { // 缓存路径
                     ForEach(LocationOfCacheFile.allCases, id: \.rawValue) {
-                        Text(LocalizedStringKey($0.rawValue)).tag($0)
+                        Text(LocalizedStringKey($0.rawValue.capitalized)).tag($0)
                     }
                 }
             } header: {
-                Text("Globel Settings")
+                Text("Global Settings")
                     .font(.title3)
                     .foregroundColor(.secondary)
             }
@@ -39,7 +39,7 @@ struct AquariusSettings: View {
                 PageCommonSettings(
                     orderRule: $config.orderRule,
                     detailMode: $config.detailMode,
-                    isSubspecShow: $config.isIgnoreNodeDeep
+                    isSubspeciesShow: $config.isIgnoreNodeDeep
                 )
             } header: {
                 Text("Default Settings")

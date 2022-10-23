@@ -14,18 +14,14 @@
 "Copying..." = "复制中...";
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
-"Copy child nodes (Recursive, Ignore Subspec)" = "复制子节点(递归、忽略Subspec)";
 "Copy child nodes (Recursive, Strip)"="复制子节点(递归、裁剪)";
-"Copy child nodes (Recursive, Strip, Ignore Subspec)" = "复制子节点(递归、裁剪、忽略Subspec)";
-"Show podspec" = "展示 podspec";
+"Show Podspec" = "展示 Podspec";
 "Show in finder" = "在文件夹中显示";
 "Recursive" = "递归";
-"Search" = "搜索";
 "Displayed as a tree" = "以树形显示";
-"Ignore subnode deep" = "忽略子节点深度";
 "Cancel" = "取消";
-"system" = "系统目录";
-"application" = "应用目录";
+"System" = "系统目录";
+"Application" = "应用目录";
 "Delete" = "删除";
 "Copy path" = "拷贝路径"; // Podspec view use again
 "Select a Podfile.lock" = "请选择一个 Podfile.lock";
@@ -43,11 +39,11 @@
 "Copy repo URL" = "拷贝Repo地址";
 // --- Podspec view end ---
 
-"Tree content is too large, writed to cache file: %@" = "子树过大，写到了缓存文件: %@";
+"Tree content is too large, written to cache file: %@" = "子树过大，写到了缓存文件: %@";
 
 // --- Settings start ---
 // section one
-"Globel Settings" = "全局设置";
+"Global Settings" = "全局设置";
 
 "Bookmark" = "书签";
 "Ignore Last Modified time" = "忽略最后修改时间";
@@ -65,7 +61,7 @@
 "Successors" = "依赖树";
 "Predecessors" = "影响树";
 
-"Subspecs:" = "Subspecs";
+"Subspecies:" = "Subspecies";
 "Hidden" = "隐藏";
 "Show" = "展示";
 

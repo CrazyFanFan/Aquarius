@@ -131,7 +131,7 @@ extension TreeData {
     }
 }
 
-// MARK: - show podspec
+// MARK: - show Podspec
 private extension TreeData {
     func normalized(name: String) -> String {
         name.components(separatedBy: "/").first ?? name

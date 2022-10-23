@@ -20,7 +20,7 @@ enum Utils {
         }
     }
 
-    static func refrashCacheDir() {
+    static func refreshCacheDir() {
         cacheDir = rootCacheDir()
     }
 

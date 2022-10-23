@@ -82,7 +82,7 @@ struct TreeContent: View {
                 }
             }
 
-            Button("Show podspec") {
+            Button("Show Podspec") {
                 self.treeData.showPodspec(of: pod)
             }
         }

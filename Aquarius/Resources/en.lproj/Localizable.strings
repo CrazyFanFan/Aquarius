@@ -12,18 +12,16 @@
 "Copy all" = "Copy all";
 "Copy" = "Copy";
 "Copying..." = "Copying...";
-"Copy child nodes"="Copy child nodes";
-"Copy child nodes (Recursive)"="Copy child nodes (Recursive)";
+"Copy child nodes"="复制子节点";
+"Copy child nodes (Recursive)"="复制子节点(递归)";
 "Copy child nodes (Recursive, Strip)"="Copy child nodes (Recursive, Strip)";
-"Show podspec" = "Show podspec";
+"Show Podspec" = "Show Podspec";
 "Show in finder" = "Show in finder";
 "Recursive" = "Recursive";
-"Search" = "Search";
 "Displayed as a tree" = "Displayed as a tree";
-"Ignore subnode deep" = "Ignore subnode deep";
 "Cancel" = "Cancel";
-"system" = "System";
-"application" = "application";
+"System" = "System";
+"Application" = "Application";
 
 "Delete" = "Delete";
 "Copy path" = "Copy path"; // Podspec view use again
@@ -42,11 +40,11 @@
 "Copy repo URL" = "Copy repo URL";
 // --- Podspec view end ---
 
-"Tree content is too large, writed to cache file: %@" = "Tree content is too large, writed to cache file: %@";
+"Tree content is too large, written to cache file: %@" = "Tree content is too large, written to cache file: %@";
 
 // --- Settings start ---
 // section one
-"Globel Settings" = "Globel Settings";
+"Global Settings" = "Global Settings";
 
 "Bookmark" = "Bookmark";
 "Ignore Last Modified time" = "Ignore Last Modified time";
@@ -64,7 +62,7 @@
 "Successors" = "Successors";
 "Predecessors" = "Predecessors";
 
-"Subspecs:" = "Subspecs:";
+"Subspecies:" = "Subspecies:";
 "Hidden" = "Hidden";
 "Show" = "Show";
 

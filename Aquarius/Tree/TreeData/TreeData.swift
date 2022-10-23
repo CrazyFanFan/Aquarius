@@ -53,11 +53,11 @@ class TreeData: ObservableObject {
     private var lastReadDataTime: Date?
 
     var lock: PodfileLock? {
-        isSubspecShow ? sourceLock : noSubspecLock
+        isSubspeciesShow ? sourceLock : noSubspeciesLock
     }
 
     private(set) var sourceLock: PodfileLock?
-    private(set) var noSubspecLock: PodfileLock?
+    private(set) var noSubspeciesLock: PodfileLock?
 
     var searchKey = "" {
         didSet {
@@ -83,19 +83,19 @@ class TreeData: ObservableObject {
 
     private(set) var queue = DispatchQueue(label: "aquarius_data_parse_queue")
 
-    // for show podspec
+    // for show Podspec
     var podspec: PodspecInfo?
     @Published var isPodspecShow: Bool = false
 
     var podspecCache: [Pod: PodspecInfo] = [:]
 
-    @Published var isSubspecShow: Bool {
-        didSet { if isSubspecShow != oldValue { buildTree() }}
+    @Published var isSubspeciesShow: Bool {
+        didSet { if isSubspeciesShow != oldValue { buildTree() }}
     }
 
     init(lockFile: PodfileLockFile) {
         self.lockFile = lockFile
-        self.isSubspecShow = config.isSubspecShow
+        self.isSubspeciesShow = config.isSubspeciesShow
 
         self.loadFile()
     }
@@ -147,12 +147,12 @@ private extension TreeData {
             guard let info = self.lockFile else { return }
             self.queue.async {
                 self.lastReadDataTime = Date()
-                if let (sourceLock, noSubspecLock) = DataReader(file: info).readData() {
+                if let (sourceLock, noSubspeciesLock) = DataReader(file: info).readData() {
 
                     DispatchQueue.main.async {
                         // update lock data
                         self.sourceLock = sourceLock
-                        self.noSubspecLock = noSubspecLock
+                        self.noSubspeciesLock = noSubspeciesLock
                         self.buildTree()
                     }
                 }
