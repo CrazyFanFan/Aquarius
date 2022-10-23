@@ -13,24 +13,35 @@ struct TreeContent: View {
 
     var body: some View {
         // List，用 LazyVGrid 是为了更好的性能
-        ScrollView {
-            LazyVGrid(
-                columns: [GridItem(.flexible())],
-                alignment: .center,
-                spacing: nil,
-                pinnedViews: []
-            ) {
-                makeItem()
+        VStack {
+            HStack {
+                PageControl(treeData: treeData)
             }
             .padding(5)
-            .animation(.default, value: treeData.showNodes)
+
+            Divider()
+
+            ScrollView {
+                LazyVGrid(
+                    columns: [GridItem(.flexible())],
+                    alignment: .center,
+                    spacing: nil,
+                    pinnedViews: []
+                ) {
+                    makeItem()
+                }
+                .padding(5)
+                .animation(.default, value: treeData.showNodes)
+            }
         }
         .sheet(isPresented: $treeData.isPodspecShow, content: {
             PodspecView(podspec: treeData.podspec)
         })
         .searchable(text: $treeData.searchKey)
         .frame(minWidth: 1000, minHeight: 400, alignment: .center)
-        .modifier(TreeControlModifier(treeData: treeData))
+//        .toolbar {
+//            PageControl(treeData: treeData)
+//        }
     }
 
     /// 创建Cell

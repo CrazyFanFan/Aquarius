@@ -36,27 +36,11 @@ struct AquariusSettings: View {
             Divider()
 
             Section {
-                Picker("Sort by:", selection: $config.orderRule) {
-                    ForEach(OrderBy.allCases, id: \.self) { rule in
-                        HStack {
-                            Image("arrow.up.arrow.down.square.fill")
-                            Text(rule.rawValue)
-                        }.tag(rule)
-                    }
-                }
-
-                Picker("Model:", selection: $config.detailMode) {
-                    ForEach(DetailMode.allCases) {
-                        Text(LocalizedStringKey($0.rawValue.capitalized)).tag($0)
-                    }
-                }
-
-                Picker("Subspecs:", selection: $config.isSubspecShow) {
-                    ForEach([true, false], id: \.self) {
-                        Text(LocalizedStringKey($0 ? "Show" : "Hidden")).tag($0)
-                    }
-                }
-
+                PageCommonSettings(
+                    orderRule: $config.orderRule,
+                    detailMode: $config.detailMode,
+                    isSubspecShow: $config.isIgnoreNodeDeep
+                )
             } header: {
                 Text("Default Settings")
                     .font(.title3)

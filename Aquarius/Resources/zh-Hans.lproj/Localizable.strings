@@ -65,8 +65,7 @@
 "Successors" = "依赖树";
 "Predecessors" = "影响树";
 
-"Hidden Subspecs" = "隐藏 Subspecs";
-"Show Subspecs" = "展示 Subspecs";
+"Subspecs:" = "Subspecs";
 "Hidden" = "隐藏";
 "Show" = "展示";
 
