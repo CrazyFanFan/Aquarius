@@ -14,7 +14,6 @@
 		2E5171C21EFAA76463F7149B2BB75DEC /* README_CN.md in Resources */ = {isa = PBXBuildFile; fileRef = 7AA331021A9A32BDF804E477A2DE02DA /* README_CN.md */; };
 		320306E38D46E9057798768D8AA5A891 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1951EF075364A96ECB20A7F6BB2D5994 /* Persistence.swift */; };
 		33CDFC27ACD4BC44840A03E3BCCC65F0 /* Aquarius.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02FA363A9E65F76535E065C4CCB348E6 /* Aquarius.xcdatamodeld */; };
-		39962FCF98FA7BC30152C2675FEFB72F /* Podfile.lock in Resources */ = {isa = PBXBuildFile; fileRef = D3420D56B2C3E7069F443FACECDA5CFC /* Podfile.lock */; };
 		4157C7731C58A6DBEC6E297BABD16916 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1BDD59FE72D025A9A8BF7AD38A49E966 /* Localizable.strings */; };
 		46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAD7D930854906F524A62EA108D0511C /* PodfileLock.swift */; };
 		487B7FFEEA1FFE8ED27DBEFB3DD0770E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56BB9BB4E09AE79EADFB516F72675D3D /* ContentView.swift */; };
@@ -25,6 +24,8 @@
 		5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AED5E016CBD591C71066F0CB8E099F /* DataReader.swift */; };
 		630F29FB289FF50F007E5246 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630F29FA289FF50F007E5246 /* Utils.swift */; };
 		63120CC927BE8C7B000A9458 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63120CC827BE8C7B000A9458 /* Yams */; };
+		63E44B6D2905326F00F0ED6A /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E44B6C2905326F00F0ED6A /* Sidebar.swift */; };
+		63E44B6F2905383D00F0ED6A /* DropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E44B6E2905383D00F0ED6A /* DropModifier.swift */; };
 		63E5924C2904FE8F008CD4C9 /* PageCommonSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */; };
 		63E5924E2904FFAD008CD4C9 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924D2904FFAD008CD4C9 /* PageControl.swift */; };
 		7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */; };
@@ -54,6 +55,8 @@
 		59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lock+.swift"; sourceTree = "<group>"; };
 		5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodfileLockFile.swift; sourceTree = "<group>"; };
 		630F29FA289FF50F007E5246 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		63E44B6C2905326F00F0ED6A /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
+		63E44B6E2905383D00F0ED6A /* DropModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropModifier.swift; sourceTree = "<group>"; };
 		63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCommonSettings.swift; sourceTree = "<group>"; };
 		63E5924D2904FFAD008CD4C9 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		6B8F5A52192C95321FB019A5F85A046A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -146,6 +149,7 @@
 		76C4B362227EC413935D92E4743A2F33 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				67B67501587DC2F3D262FC24EA1D07C8 /* TestData */,
 				DE2F0CE822A9E69431ADCBA4923E4BCE /* Assets.xcassets */,
 				8B2091AB78F75C814B023B37F630A96B /* InfoPlist.strings */,
 				1BDD59FE72D025A9A8BF7AD38A49E966 /* Localizable.strings */,
@@ -202,6 +206,8 @@
 				A47B9A4EB6F7F088D8190DA9BDAD1CAA /* AquariusSettings.swift */,
 				76EB096455D84CCC0B81786C92F611C8 /* SingleDataTreeView.swift */,
 				63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */,
+				63E44B6C2905326F00F0ED6A /* Sidebar.swift */,
+				63E44B6E2905383D00F0ED6A /* DropModifier.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -211,10 +217,8 @@
 			children = (
 				4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */,
 				FBFF8C04850F007D8DA9597F02B0B33A /* DataAndConfig */,
-				1B2B512663567F7EF67B3E9316DD76DF /* MetaData */,
 				0833A089F5391066BCDB9B9DCA323E0D /* Preview Content */,
 				76C4B362227EC413935D92E4743A2F33 /* Resources */,
-				67B67501587DC2F3D262FC24EA1D07C8 /* TestData */,
 				A5862EA6E9B5D3BE840F157A33C2590E /* Tool */,
 				D2EF5C8144ECF2B319AF3C5A01705FFD /* Tree */,
 				D8639A94B002133DDADBA31722EDDC34 /* Views */,
@@ -228,6 +232,7 @@
 		FBFF8C04850F007D8DA9597F02B0B33A /* DataAndConfig */ = {
 			isa = PBXGroup;
 			children = (
+				1B2B512663567F7EF67B3E9316DD76DF /* MetaData */,
 				BD6360C600918A90779721494C9DB67E /* CoreData */,
 				31C0D31171741D4D80905B5C97528737 /* GlobalState.swift */,
 			);
@@ -301,7 +306,6 @@
 				ED58AADC737AEC8D050204ED3C92F574 /* Assets.xcassets in Resources */,
 				BC1432A2F5B750724277FEA55A7584FE /* InfoPlist.strings in Resources */,
 				4157C7731C58A6DBEC6E297BABD16916 /* Localizable.strings in Resources */,
-				39962FCF98FA7BC30152C2675FEFB72F /* Podfile.lock in Resources */,
 				AC23EF05D5D5AF0384D9C8B8A90AFC82 /* Preview Assets.xcassets in Resources */,
 				CCEB7621F1C69343F428A1A24A84920E /* README.md in Resources */,
 				2E5171C21EFAA76463F7149B2BB75DEC /* README_CN.md in Resources */,
@@ -331,6 +335,8 @@
 				504F3B0CAEE38CE5FCE068E780833F3A /* Pod.swift in Sources */,
 				46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */,
 				A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */,
+				63E44B6D2905326F00F0ED6A /* Sidebar.swift in Sources */,
+				63E44B6F2905383D00F0ED6A /* DropModifier.swift in Sources */,
 				1E3E1494E17845CECFB79617A326409F /* PodspecView.swift in Sources */,
 				F73DC28C70C53FF3C85849148C191EFB /* AquariusSettings.swift in Sources */,
 				18B2CD5C6ED2823429A420200D412D3E /* SingleDataTreeView.swift in Sources */,
