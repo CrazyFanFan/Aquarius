@@ -47,13 +47,13 @@ struct AquariusSettings: View {
 
                 Picker("Model:", selection: $config.detailMode) {
                     ForEach(DetailMode.allCases) {
-                        Text(NSLocalizedString($0.rawValue.capitalized, comment: "")).tag($0)
+                        Text(LocalizedStringKey($0.rawValue.capitalized)).tag($0)
                     }
                 }
 
                 Picker("Subspecs:", selection: $config.isSubspecShow) {
                     ForEach([true, false], id: \.self) {
-                        Text(NSLocalizedString($0 ? "Show" : "Hidden", comment: "")).tag($0)
+                        Text(LocalizedStringKey($0 ? "Show" : "Hidden")).tag($0)
                     }
                 }
 

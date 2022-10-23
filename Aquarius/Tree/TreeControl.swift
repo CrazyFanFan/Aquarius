@@ -32,14 +32,14 @@ struct TreeControlModifier: ViewModifier {
 
             Picker("Model:", selection: $treeData.detailMode) {
                 ForEach(DetailMode.allCases) {
-                    Text(NSLocalizedString($0.rawValue.capitalized, comment: "")).tag($0)
+                    Text(LocalizedStringKey($0.rawValue.capitalized)).tag($0)
                 }
             }
             .scaledToFit()
 
             Picker("", selection: $treeData.isSubspecShow) {
                 ForEach([true, false], id: \.self) {
-                    Text(NSLocalizedString($0 ? "Show Subspecs" : "Hidden Subspecs", comment: "")).tag($0)
+                    Text(LocalizedStringKey($0 ? "Show Subspecs" : "Hidden Subspecs")).tag($0)
                 }
             }
             .scaledToFit()
