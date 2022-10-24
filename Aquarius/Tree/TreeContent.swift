@@ -10,22 +10,22 @@ import SwiftUI
 
 struct TreeContent: View {
     @StateObject var lock: Lock
-    @StateObject var config: GlobalState
+    @StateObject var global: GlobalState
     @StateObject private var treeData: TreeData
 
-    init?(lock: Lock, config: GlobalState) {
-        guard let data = config.data(for: lock) else {
+    init?(lock: Lock, global: GlobalState) {
+        guard let data = global.data(for: lock) else {
             return nil
         }
 
         _lock = StateObject(wrappedValue: lock)
-        _config = StateObject(wrappedValue: config)
+        _global = StateObject(wrappedValue: global)
         _treeData = StateObject(wrappedValue: data)
     }
 
     var body: some View {
         // List，用 LazyVGrid 是为了更好的性能
-        if config.selection != nil {
+        if global.selection != nil {
             mainContent()
         } else {
             Text("Select a Podfile.lock")
@@ -115,6 +115,6 @@ private extension TreeContent {
 
 struct TreeContent_Previews: PreviewProvider {
     static var previews: some View {
-        TreeContent(lock: .init(), config: .shared)
+        TreeContent(lock: .init(), global: .shared)
     }
 }

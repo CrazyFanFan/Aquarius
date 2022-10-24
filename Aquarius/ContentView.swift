@@ -9,27 +9,27 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-    @StateObject private var globalState = GlobalState.shared
+    @StateObject private var global = GlobalState.shared
 
     var body: some View {
         ZStack {
             NavigationView {
-                Sidebar(globalState: globalState)
+                Sidebar(global: global)
 
-                if let selection = globalState.selection {
-                    TreeContent(lock: selection, config: globalState)
+                if let selection = global.selection {
+                    TreeContent(lock: selection, global: global)
                 } else {
                     Text("Select a Podfile.lock")
                 }
             }
 
-            if globalState.isLoading {
+            if global.isLoading {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .scaleEffect(x: 1.5, y: 1.5, anchor: .center)
             }
         }
-        .modifier(DropModifier(globalState: globalState))
+        .modifier(DropModifier(global: global))
     }
 }
 

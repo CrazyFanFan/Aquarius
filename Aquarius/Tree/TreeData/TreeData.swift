@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 class TreeData: ObservableObject {
-    private var config: GlobalState = .shared
+    private var global: GlobalState = .shared
 
     private var podToNodeCache: [Pod: TreeNode] = [:]
     private var nameToNodeCache: [String: TreeNode] = [:]
@@ -20,7 +20,7 @@ class TreeData: ObservableObject {
     private var loadShowNodesTmp: [TreeNode] = []
     @Published private(set) var showNodes: [TreeNode] = []
 
-    private var isIgnoreLastModificationDate: Bool { config.isIgnoreLastModificationDate }
+    private var isIgnoreLastModificationDate: Bool { global.isIgnoreLastModificationDate }
 
     /// for copy
     var copyProgress: Double = 0 {
@@ -95,7 +95,7 @@ class TreeData: ObservableObject {
 
     init(lockFile: PodfileLockFile) {
         self.lockFile = lockFile
-        self.isSubspeciesShow = config.isSubspeciesShow
+        self.isSubspeciesShow = global.isSubspeciesShow
 
         self.loadFile()
     }

@@ -15,12 +15,12 @@ struct Sidebar: View {
         animation: .default)
     private var items: FetchedResults<Lock>
 
-    @StateObject var globalState: GlobalState
+    @StateObject var global: GlobalState
 
     @State private var isPresented: Bool = false
 
     var body: some View {
-        List(selection: $globalState.selection) {
+        List(selection: $global.selection) {
             showItems()
         }
         .listStyle(SidebarListStyle())
@@ -33,13 +33,13 @@ struct Sidebar: View {
                 Image("c_gearshape")
             }
             .popover(isPresented: $isPresented) {
-                AquariusSettings(config: .shared)
+                AquariusSettings(global: .shared)
             }
         }
         .frame(minWidth: 250, alignment: .leading)
         .onAppear {
-            if globalState.isBookmarkEnable {
-                globalState.selection = items.first
+            if global.isBookmarkEnable {
+                global.selection = items.first
             } else {
                 delete(items: Array(items))
             }
@@ -55,15 +55,15 @@ struct Sidebar: View {
 private extension Sidebar {
     func showItems() -> some View {
         ForEach(items) { item in
-            NavigationLink(destination: TreeContent(lock: item, config: globalState)) {
+            NavigationLink(destination: TreeContent(lock: item, global: global)) {
                 Text(item.name ?? "Unknow")
             }
             .tag(item)
             .contextMenu {
                 Button("Delete") {
                     self.delete(items: [item])
-                    if item == globalState.selection {
-                        globalState.selection = nil
+                    if item == global.selection {
+                        global.selection = nil
                     }
                 }
 
@@ -115,6 +115,6 @@ private extension Sidebar {
 
 struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
-        Sidebar(globalState: .shared)
+        Sidebar(global: .shared)
     }
 }

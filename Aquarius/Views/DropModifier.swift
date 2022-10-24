@@ -17,7 +17,7 @@ struct DropModifier: ViewModifier {
         animation: .default)
     private var items: FetchedResults<Lock>
 
-    @StateObject var globalState: GlobalState
+    @StateObject var global: GlobalState
     @State private var isTargeted: Bool = false
 
     private static let supportType = UTType.fileURL
@@ -26,7 +26,7 @@ struct DropModifier: ViewModifier {
         content
         .onOpenURL { addItem(with: $0) }
         .onDrop(
-            of: globalState.isLoading ? [] : [Self.supportType],
+            of: global.isLoading ? [] : [Self.supportType],
             isTargeted: $isTargeted
         ) {
             self.loadPath(from: $0)
@@ -62,7 +62,7 @@ private extension DropModifier {
             do {
                 try viewContext.save()
                 DispatchQueue.main.async {
-                    globalState.selection = newItem
+                    global.selection = newItem
                 }
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
@@ -101,6 +101,6 @@ struct DropModifier_Previews: PreviewProvider {
     static var previews: some View {
         EmptyView()
             .frame(width: 100, height: 100)
-            .modifier(DropModifier(globalState: .shared))
+            .modifier(DropModifier(global: .shared))
     }
 }

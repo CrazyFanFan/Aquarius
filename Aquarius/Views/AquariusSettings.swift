@@ -8,21 +8,21 @@
 import SwiftUI
 
 struct AquariusSettings: View {
-    @StateObject var config: GlobalState
+    @StateObject var global: GlobalState
 
     var body: some View {
         Form {
             Section {
-                Toggle("Bookmark", isOn: $config.isBookmarkEnable) // 书签
-                Toggle("Ignore Last Modified time", isOn: $config.isIgnoreLastModificationDate) // 忽略最后修改时间
+                Toggle("Bookmark", isOn: $global.isBookmarkEnable) // 书签
+                Toggle("Ignore Last Modified time", isOn: $global.isIgnoreLastModificationDate) // 忽略最后修改时间
 
-                Picker("Indentation", selection: $config.isIgnoreNodeDeep) { // 缩进
+                Picker("Indentation", selection: $global.isIgnoreNodeDeep) { // 缩进
                     ForEach([true, false], id: \.self) {
                         Text($0 ? "Ignore" : "Automatic").tag($0)
                     }
                 }
 
-                Picker("Location of cache file", selection: $config.locationOfCacheFile) { // 缓存路径
+                Picker("Location of cache file", selection: $global.locationOfCacheFile) { // 缓存路径
                     ForEach(LocationOfCacheFile.allCases, id: \.rawValue) {
                         Text(LocalizedStringKey($0.rawValue.capitalized)).tag($0)
                     }
@@ -37,9 +37,9 @@ struct AquariusSettings: View {
 
             Section {
                 PageCommonSettings(
-                    orderRule: $config.orderRule,
-                    detailMode: $config.detailMode,
-                    isSubspeciesShow: $config.isIgnoreNodeDeep
+                    orderRule: $global.orderRule,
+                    detailMode: $global.detailMode,
+                    isSubspeciesShow: $global.isIgnoreNodeDeep
                 )
             } header: {
                 Text("Default Settings")
@@ -71,6 +71,6 @@ struct AquariusSettings: View {
 
 struct AquariusSettings_Previews: PreviewProvider {
     static var previews: some View {
-        AquariusSettings(config: .shared)
+        AquariusSettings(global: .shared)
     }
 }
