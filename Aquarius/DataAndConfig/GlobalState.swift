@@ -45,6 +45,8 @@ class GlobalState: ObservableObject {
     @AppStorage("locationOfCacheFile") var locationOfCacheFile: LocationOfCacheFile = .application
     @AppStorage("isSubspeciesShow") var isSubspeciesShow: Bool = false
 
+    @AppStorage("newListStyle") var useNewListStyle: Bool = true
+
     public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}
 }

@@ -10,18 +10,20 @@
 "Nothing" = "什么也没有~~";
 "Total: %lld" = "共计: %lld";
 "Copy all" = "复制所有";
+
+// --- NodeViewModifier start ---
 "Copy" = "复制";
 "Copying..." = "复制中...";
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
 "Copy child nodes (Recursive, Strip)"="复制子节点(递归、裁剪)";
 "Show Podspec" = "展示 Podspec";
+// --- NodeViewModifier end ---
+
 "Show in finder" = "在文件夹中显示";
 "Recursive" = "递归";
 "Displayed as a tree" = "以树形显示";
 "Cancel" = "取消";
-"System" = "系统目录";
-"Application" = "应用目录";
 "Delete" = "删除";
 "Copy path" = "拷贝路径"; // Podspec view use again
 "Select a Podfile.lock" = "请选择一个 Podfile.lock";
@@ -53,6 +55,8 @@
 "Automatic" = "自动";
 
 "Location of cache file" = "缓存";
+"System" = "系统目录";
+"Application" = "应用目录";
 
 // section two
 "Sort by:" = "排序";
@@ -64,6 +68,10 @@
 "Subspecies:" = "Subspecies";
 "Hidden" = "隐藏";
 "Show" = "展示";
+
+"List view style" = "列表样式";
+"Columns" = "分栏";
+"Single column" = "单栏";
 
 "Default Settings" = "默认设置";
 
@@ -78,3 +86,8 @@ global Settings, but killing the app will lose this." = "这里是默认设置�
 
 "Preferences" = "偏好设置";
 // --- Settings end ---
+
+// --- TreeContent start ---
+"Nodes" = "结点";
+"Version" = "版本";
+// --- TreeContent end ---

@@ -10,18 +10,20 @@
 "Nothing" = "Nothing";
 "Total: %lld" = "Total: %lld";
 "Copy all" = "Copy all";
+
+// --- NodeViewModifier start ---
 "Copy" = "Copy";
 "Copying..." = "Copying...";
 "Copy child nodes"="复制子节点";
 "Copy child nodes (Recursive)"="复制子节点(递归)";
 "Copy child nodes (Recursive, Strip)"="Copy child nodes (Recursive, Strip)";
 "Show Podspec" = "Show Podspec";
+// --- NodeViewModifier end ---
+
 "Show in finder" = "Show in finder";
 "Recursive" = "Recursive";
 "Displayed as a tree" = "Displayed as a tree";
 "Cancel" = "Cancel";
-"System" = "System";
-"Application" = "Application";
 
 "Delete" = "Delete";
 "Copy path" = "Copy path"; // Podspec view use again
@@ -54,6 +56,12 @@
 "Automatic" = "Automatic";
 
 "Location of cache file" = "Cache path";
+"System" = "System";
+"Application" = "Application";
+
+"List view style" = "List view style";
+"Columns" = "Columns";
+"Single column" = "Single column";
 
 // section two
 "Sort by:" = "Sort by";
@@ -80,3 +88,8 @@ and killing the app will lose the Settings on the details page.";
 
 "Preferences" = "Preferences";
 // --- Settings end ---
+
+// --- TreeContent start ---
+"Nodes" = "Nodes";
+"Version" = "Version";
+// --- TreeContent end ---
