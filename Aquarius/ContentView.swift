@@ -10,14 +10,17 @@ import CoreData
 
 struct ContentView: View {
     @StateObject private var globalState = GlobalState.shared
-    @State private var selection: Lock?
 
     var body: some View {
         ZStack {
             NavigationView {
-                Sidebar(globalState: globalState, selection: $selection)
+                Sidebar(globalState: globalState)
 
-                Text("Select a Podfile.lock")
+                if let selection = globalState.selection {
+                    TreeContent(lock: selection, config: globalState)
+                } else {
+                    Text("Select a Podfile.lock")
+                }
             }
 
             if globalState.isLoading {
@@ -26,7 +29,7 @@ struct ContentView: View {
                     .scaleEffect(x: 1.5, y: 1.5, anchor: .center)
             }
         }
-        .modifier(DropModifier(globalState: globalState, selection: $selection))
+        .modifier(DropModifier(globalState: globalState))
     }
 }
 

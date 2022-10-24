@@ -20,6 +20,8 @@ enum LocationOfCacheFile: String, CaseIterable {
 class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
+    @Published var selection: Lock?
+
     @Published var isLoading: Bool = false
 
     /// Mark is impact mode
@@ -45,4 +47,21 @@ class GlobalState: ObservableObject {
 
     public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}
+}
+
+extension GlobalState {
+    func data(for lock: Lock) -> TreeData? {
+        if let data = self.cache.object(forKey: lock) {
+            return data
+        }
+
+        if let url = lock.url {
+            let data = TreeData(lockFile: PodfileLockFile(url: url))
+            self.cache.setObject(data, forKey: lock)
+
+            return data
+        }
+
+        return nil
+    }
 }

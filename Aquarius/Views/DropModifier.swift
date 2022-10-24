@@ -18,8 +18,6 @@ struct DropModifier: ViewModifier {
     private var items: FetchedResults<Lock>
 
     @StateObject var globalState: GlobalState
-    @Binding var selection: Lock?
-
     @State private var isTargeted: Bool = false
 
     private static let supportType = UTType.fileURL
@@ -63,7 +61,9 @@ private extension DropModifier {
 
             do {
                 try viewContext.save()
-                selection = newItem
+                DispatchQueue.main.async {
+                    globalState.selection = newItem
+                }
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
                 // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
@@ -101,6 +101,6 @@ struct DropModifier_Previews: PreviewProvider {
     static var previews: some View {
         EmptyView()
             .frame(width: 100, height: 100)
-            .modifier(DropModifier(globalState: .shared, selection: .constant(.none)))
+            .modifier(DropModifier(globalState: .shared))
     }
 }

@@ -9,10 +9,32 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @StateObject var treeData: TreeData
+    @StateObject var lock: Lock
+    @StateObject var config: GlobalState
+    @StateObject private var treeData: TreeData
+
+    init?(lock: Lock, config: GlobalState) {
+        guard let data = config.data(for: lock) else {
+            return nil
+        }
+
+        _lock = StateObject(wrappedValue: lock)
+        _config = StateObject(wrappedValue: config)
+        _treeData = StateObject(wrappedValue: data)
+    }
 
     var body: some View {
         // List，用 LazyVGrid 是为了更好的性能
+        if config.selection != nil {
+            mainContent()
+        } else {
+            Text("Select a Podfile.lock")
+        }
+    }
+}
+
+private extension TreeContent {
+    func mainContent() -> some View {
         VStack {
             HStack {
                 PageControl(treeData: treeData)
@@ -39,15 +61,12 @@ struct TreeContent: View {
         })
         .searchable(text: $treeData.searchKey)
         .frame(minWidth: 1000, minHeight: 400, alignment: .center)
-//        .toolbar {
-//            PageControl(treeData: treeData)
-//        }
     }
 
     /// 创建Cell
     /// - Returns: Cell
     @inline(__always)
-    private func makeItem() -> some View {
+    func makeItem() -> some View {
         ForEach(treeData.showNodes) { node in
             SingleDataTreeView(node: node, isImpactMode: self.treeData.isImpact)
                 .contentShape(Rectangle())
@@ -65,7 +84,7 @@ struct TreeContent: View {
     /// - Parameter pod: 当前点击的 Pod
     /// - Returns: 菜单Items
     @inline(__always)
-    private func menus(_ pod: Pod) -> some View {
+    func menus(_ pod: Pod) -> some View {
         typealias MenuItem = (name: String, type: TreeData.NodeContentDeepMode)
 
         let menus: [MenuItem] = [
@@ -88,7 +107,7 @@ struct TreeContent: View {
         }
     }
 
-    private func copy(with pod: Pod, and type: TreeData.NodeContentDeepMode) {
+    func copy(with pod: Pod, and type: TreeData.NodeContentDeepMode) {
         treeData.cancelCurrentCopyTask()
         treeData.startCopyStatus(with: pod, and: type)
     }
@@ -96,6 +115,6 @@ struct TreeContent: View {
 
 struct TreeContent_Previews: PreviewProvider {
     static var previews: some View {
-        TreeContent(treeData: .init(lockFile: .preview))
+        TreeContent(lock: .init(), config: .shared)
     }
 }
