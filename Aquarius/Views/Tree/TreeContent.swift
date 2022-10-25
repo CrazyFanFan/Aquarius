@@ -27,7 +27,14 @@ struct TreeContent: View {
 
     var body: some View {
         if global.selection != nil {
-            mainContent() // main content
+            if treeData.isLockLoadFailed {
+                Text("""
+                Failed to parse Podfile.lock.
+                Check the files for conflicts or other formatting exceptions.
+                """)
+            } else {
+                mainContent() // main content
+            }
         } else {
             Text("Select a Podfile.lock") // Default info when selection is nil
         }

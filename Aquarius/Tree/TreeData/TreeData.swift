@@ -36,6 +36,7 @@ class TreeData: ObservableObject {
 
     @Published var copyResult: (content: String, isWriteToFile: Bool)?
 
+    // load file
     var lockFile: LockFileInfo? {
         didSet {
             if isIgnoreLastModificationDate {
@@ -49,12 +50,9 @@ class TreeData: ObservableObject {
             }
         }
     }
-
     private var lastReadDataTime: Date?
-
-    var lock: PodfileLock? {
-        isSubspeciesShow ? sourceLock : noSubspeciesLock
-    }
+    var lock: PodfileLock? { isSubspeciesShow ? sourceLock : noSubspeciesLock }
+    @Published var isLockLoadFailed: Bool = false
 
     private(set) var sourceLock: PodfileLock?
     private(set) var noSubspeciesLock: PodfileLock?
@@ -148,13 +146,15 @@ private extension TreeData {
             self.queue.async {
                 self.lastReadDataTime = Date()
                 if let (sourceLock, noSubspeciesLock) = DataReader(file: info).readData() {
-
                     DispatchQueue.main.async {
                         // update lock data
                         self.sourceLock = sourceLock
                         self.noSubspeciesLock = noSubspeciesLock
                         self.buildTree()
+                        self.isLockLoadFailed = false
                     }
+                } else {
+                    self.isLockLoadFailed = true
                 }
             }
         }

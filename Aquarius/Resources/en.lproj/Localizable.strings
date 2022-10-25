@@ -92,4 +92,7 @@ and killing the app will lose the Settings on the details page.";
 // --- TreeContent start ---
 "Nodes" = "Nodes";
 "Version" = "Version";
+"Failed to parse Podfile.lock.
+Check the files for conflicts or other formatting exceptions." = "Failed to parse Podfile.lock.
+Check the files for conflicts or other formatting exceptions.";
 // --- TreeContent end ---

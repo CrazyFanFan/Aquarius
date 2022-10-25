@@ -90,4 +90,7 @@ global Settings, but killing the app will lose this." = "这里是默认设置�
 // --- TreeContent start ---
 "Nodes" = "结点";
 "Version" = "版本";
+"Failed to parse Podfile.lock.
+Check the files for conflicts or other formatting exceptions." = "解析 Podfile.lock 失败，
+请检查文件是否存在冲突或者其他格式异常。";
 // --- TreeContent end ---
