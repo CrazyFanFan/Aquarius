@@ -9,6 +9,8 @@
 import Foundation
 
 class BookmarkTool {
+    private static var cache: [Data: (URL, Bool)] = [:]
+
     static func bookmark(for url: URL) -> Data? {
         do {
             return try url.bookmarkData(
@@ -24,6 +26,7 @@ class BookmarkTool {
 
     static func url(for bookmark: Data?) -> (URL, Bool)? {
         guard let bookmark = bookmark else { return nil }
+        if let result = cache[bookmark] { return result }
 
         do {
             var isStale = false
@@ -37,8 +40,11 @@ class BookmarkTool {
                 // bookmarks could become stale as the OS changes
                 print("Bookmark is stale, need to save a new one... ")
             }
+            
+            let result = (url, isStale)
+            cache[bookmark] = result
 
-            return (url, isStale)
+            return result
 
         } catch {
             print("Error resolving bookmark:", error)
