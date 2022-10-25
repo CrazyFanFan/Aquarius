@@ -8,8 +8,8 @@
 
 import Foundation
 
-struct PodfileLockFile: Hashable {
-    static let preview: PodfileLockFile = PodfileLockFile(
+struct LockFileInfo: Hashable {
+    static let preview: LockFileInfo = LockFileInfo(
         url: Bundle.main.url(forResource: "Podfile", withExtension: "lock")!)
 
     var url: URL

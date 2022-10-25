@@ -36,7 +36,7 @@ class TreeData: ObservableObject {
 
     @Published var copyResult: (content: String, isWriteToFile: Bool)?
 
-    var lockFile: PodfileLockFile? {
+    var lockFile: LockFileInfo? {
         didSet {
             if isIgnoreLastModificationDate {
                 self.loadFile()
@@ -93,7 +93,7 @@ class TreeData: ObservableObject {
         didSet { if isSubspeciesShow != oldValue { buildTree() }}
     }
 
-    init(lockFile: PodfileLockFile) {
+    init(lockFile: LockFileInfo) {
         self.lockFile = lockFile
         self.isSubspeciesShow = global.isSubspeciesShow
 
@@ -112,7 +112,7 @@ class TreeData: ObservableObject {
 
 // MARK: - Load File
 private extension TreeData {
-    func checkShouldReloadData(oldLockFile: PodfileLockFile?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
+    func checkShouldReloadData(oldLockFile: LockFileInfo?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
         guard let completion = completion else { return }
 
         // If is form bookmark or the old and new path do not match, the data must be reloaded.

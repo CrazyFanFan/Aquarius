@@ -53,12 +53,12 @@ class GlobalState: ObservableObject {
 
 extension GlobalState {
     func data(for lock: Lock) -> TreeData? {
-        if let data = self.cache.object(forKey: lock) {
+        if let data = self.cache.object(forKey: lock), data.lock != nil {
             return data
         }
 
         if let url = lock.url {
-            let data = TreeData(lockFile: PodfileLockFile(url: url))
+            let data = TreeData(lockFile: LockFileInfo(url: url))
             self.cache.setObject(data, forKey: lock)
 
             return data

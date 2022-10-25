@@ -32,7 +32,7 @@
 		63E5924E2904FFAD008CD4C9 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924D2904FFAD008CD4C9 /* PageControl.swift */; };
 		7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */; };
 		9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */; };
-		A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */; };
+		A0A4801B4905C485302DFE8CB9CCD9E3 /* LockFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D76A75D3FBDFB1082AAB2211D7C684F /* LockFileInfo.swift */; };
 		AC23EF05D5D5AF0384D9C8B8A90AFC82 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAD41DF167E77D9689639F8B6A4F2CE9 /* Preview Assets.xcassets */; };
 		BC1432A2F5B750724277FEA55A7584FE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8B2091AB78F75C814B023B37F630A96B /* InfoPlist.strings */; };
 		C9451A1E3596AFCFCDA0367772B6D809 /* TreeNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD99C6956BBEB6BBD0C350A3B2BC5C5E /* TreeNode.swift */; };
@@ -55,7 +55,7 @@
 		4C219A956759AA52DDD3B65C58D3C2D8 /* Aquarius.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Aquarius.entitlements; path = DataAndConfig/CoreData/Aquarius.entitlements; sourceTree = "<group>"; };
 		56BB9BB4E09AE79EADFB516F72675D3D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lock+.swift"; sourceTree = "<group>"; };
-		5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PodfileLockFile.swift; sourceTree = "<group>"; };
+		5D76A75D3FBDFB1082AAB2211D7C684F /* LockFileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockFileInfo.swift; sourceTree = "<group>"; };
 		630F29FA289FF50F007E5246 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		63969CF82906CF58002C76C9 /* NodeViewInfoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeViewInfoHelper.swift; sourceTree = "<group>"; };
 		63969CFB2906D1B3002C76C9 /* NodeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeViewModifier.swift; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 				76B5BFD9BFDE193F60E5F0F787A55CB5 /* Details.swift */,
 				FBF73CFFC898849D2AEF6C72EAE48EC7 /* Pod.swift */,
 				BAD7D930854906F524A62EA108D0511C /* PodfileLock.swift */,
-				5D76A75D3FBDFB1082AAB2211D7C684F /* PodfileLockFile.swift */,
+				5D76A75D3FBDFB1082AAB2211D7C684F /* LockFileInfo.swift */,
 				CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */,
 			);
 			path = MetaData;
@@ -349,7 +349,7 @@
 				63969CF92906CF58002C76C9 /* NodeViewInfoHelper.swift in Sources */,
 				504F3B0CAEE38CE5FCE068E780833F3A /* Pod.swift in Sources */,
 				46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */,
-				A0A4801B4905C485302DFE8CB9CCD9E3 /* PodfileLockFile.swift in Sources */,
+				A0A4801B4905C485302DFE8CB9CCD9E3 /* LockFileInfo.swift in Sources */,
 				63969CFC2906D1B3002C76C9 /* NodeViewModifier.swift in Sources */,
 				63E44B6D2905326F00F0ED6A /* Sidebar.swift in Sources */,
 				63E44B6F2905383D00F0ED6A /* DropModifier.swift in Sources */,

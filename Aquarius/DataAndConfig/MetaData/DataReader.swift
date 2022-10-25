@@ -10,9 +10,9 @@ import Foundation
 import Yams
 // 可以用系统组件，先只给一层数据
 class DataReader {
-    private var file: PodfileLockFile?
+    private var file: LockFileInfo?
 
-    init(file: PodfileLockFile?) {
+    init(file: LockFileInfo?) {
         self.file = file
     }
 
