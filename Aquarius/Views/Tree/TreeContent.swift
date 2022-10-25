@@ -83,6 +83,7 @@ private extension TreeContent {
             .width(ideal: 60)
         }
         .font(.system(size: 14))
+        .animation(.default, value: treeData.showNodes)
     }
 
     /// Single column
