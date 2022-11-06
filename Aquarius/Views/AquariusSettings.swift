@@ -27,12 +27,12 @@ struct AquariusSettings: View {
                         Text(LocalizedStringKey($0.rawValue.capitalized)).tag($0)
                     }
                 }
-
+                /*
                 Picker("List view style", selection: $global.useNewListStyle) {
                     ForEach([true, false], id: \.self) {
                         Text($0 ? "Columns" : "Single column").tag($0)
                     }
-                }
+                }*/
 
             } header: {
                 Text("Global Settings")

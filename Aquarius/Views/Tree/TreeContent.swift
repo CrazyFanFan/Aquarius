@@ -51,13 +51,13 @@ private extension TreeContent {
 
             Divider()
 
-            if global.useNewListStyle {
-                tableContent()
-            } else {
-                SingleColumn()
-            }
+            // if global.useNewListStyle {
+            //      tableContent()
+            // } else {
+            SingleColumn()
+            // }
         }
-        .animation(.easeIn, value: global.useNewListStyle)
+        // .animation(.easeIn, value: global.useNewListStyle)
         .sheet(isPresented: $treeData.isPodspecShow) {
             PodspecView(podspec: treeData.podspec)
         }
