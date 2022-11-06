@@ -55,7 +55,16 @@ struct Sidebar: View {
 private extension Sidebar {
     func showItems() -> some View {
         ForEach(items) { item in
-            NavigationLink(destination: TreeContent(lock: item, global: global)) {
+            NavigationLink {
+                if let data = global.data(for: item) {
+                    TreeContent(global: global, treeData: data)
+                } else {
+                    Text("""
+                        Failed to parse Podfile.lock.
+                        Check the files for conflicts or other formatting exceptions.
+                        """)
+                }
+            } label: {
                 Text(item.name ?? "Unknow")
             }
             .tag(item)

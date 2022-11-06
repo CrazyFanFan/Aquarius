@@ -154,7 +154,9 @@ private extension TreeData {
                         self.isLockLoadFailed = false
                     }
                 } else {
-                    self.isLockLoadFailed = true
+                    DispatchQueue.main.async {
+                        self.isLockLoadFailed = true
+                    }
                 }
             }
         }

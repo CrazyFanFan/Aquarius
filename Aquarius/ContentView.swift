@@ -16,8 +16,8 @@ struct ContentView: View {
             NavigationView {
                 Sidebar(global: global)
 
-                if let selection = global.selection {
-                    TreeContent(lock: selection, global: global)
+                if let selection = global.selection, let data = global.data(for: selection) {
+                    TreeContent(global: global, treeData: data)
                 } else {
                     Text("Select a Podfile.lock")
                 }

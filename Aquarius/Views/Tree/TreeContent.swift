@@ -9,21 +9,10 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @StateObject var lock: Lock
     @StateObject var global: GlobalState
-    @StateObject private var treeData: TreeData
+    @StateObject var treeData: TreeData
 
     @State private var isFullVersionShow: Bool = false
-
-    init?(lock: Lock, global: GlobalState) {
-        guard let data = global.data(for: lock) else {
-            return nil
-        }
-
-        _lock = StateObject(wrappedValue: lock)
-        _global = StateObject(wrappedValue: global)
-        _treeData = StateObject(wrappedValue: data)
-    }
 
     var body: some View {
         if global.selection != nil {
@@ -107,8 +96,8 @@ private extension TreeContent {
     }
 }
 
-struct TreeContent_Previews: PreviewProvider {
-    static var previews: some View {
-        TreeContent(lock: .init(), global: .shared)
-    }
-}
+//struct TreeContent_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TreeContent(lock: .init(), global: .shared)
+//    }
+//}
