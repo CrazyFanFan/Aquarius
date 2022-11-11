@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 enum NodeViewInfoHelper {
-    static func more(_ node: TreeNode, isImpactMode: Bool) -> Text {
+     static func more(_ node: TreeNode, isImpactMode: Bool) -> Text {
         guard let count = node.nextCount(isImpactMode) else {
             return Text("=·(0) ")
                 .foregroundColor(Color.gray.opacity(0.6))

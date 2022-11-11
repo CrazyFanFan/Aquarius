@@ -96,8 +96,8 @@ private extension TreeContent {
     }
 }
 
-//struct TreeContent_Previews: PreviewProvider {
-//    static var previews: some View {
-//        TreeContent(lock: .init(), global: .shared)
-//    }
-//}
+struct TreeContent_Previews: PreviewProvider {
+    static var previews: some View {
+        TreeContent(global: .shared, treeData: .init(lockFile: .preview))
+    }
+}

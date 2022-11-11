@@ -40,7 +40,7 @@ class BookmarkTool {
                 // bookmarks could become stale as the OS changes
                 print("Bookmark is stale, need to save a new one... ")
             }
-            
+
             let result = (url, isStale)
             cache[bookmark] = result
 

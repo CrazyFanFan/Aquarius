@@ -49,11 +49,11 @@ struct PodspecView: View {
 }
 
 private extension PodspecView {
-    func contentView(_ content: String?) -> some View {
+    @ViewBuilder func contentView(_ content: String?) -> some View {
         if let content = content {
-            return Text(content)
+            Text(content)
         } else {
-            return Text("Load podspec content failed.")
+            Text("Load podspec content failed.")
         }
     }
 
