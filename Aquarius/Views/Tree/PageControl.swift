@@ -12,15 +12,15 @@ struct PageControl: View {
     @State private var isShow: Bool = false
 
     var body: some View {
-        if treeData.isCopying {
-            copyProgress()
-        }
-
         Text("Total: \(treeData.showNodes.filter { $0.deep == 0 }.count)")
             .foregroundColor(.primary)
             .font(.headline)
 
         Spacer()
+
+        if treeData.isCopying {
+            copyProgress()
+        }
 
         /*
         Button {
@@ -57,18 +57,27 @@ struct PageControl: View {
 private extension PageControl {
     func copyProgress() -> some View {
         HStack {
-            ProgressView(value: treeData.displayCopyProgress) {
-                Text("Copying...")
-                    .font(.system(size: 10))
-            } currentValueLabel: {
-                Text(String(format: "%0.2f%%", treeData.displayCopyProgress * 100))
-            }.progressViewStyle(.linear)
+            Text("Copying...")
+            Divider().frame(maxHeight: 20)
+            ProgressView(value: treeData.displayCopyProgress).progressViewStyle(.linear)
+            Text(String(format: "%0.2f%%", treeData.displayCopyProgress * 100))
+
+            Divider().frame(maxHeight: 20)
 
             Button {
                 treeData.cancelCurrentCopyTask()
             } label: {
                 Image("xmark.circle.fill")
             }
+            .buttonStyle(.borderless)
+        }
+        .padding([.leading, .trailing], 3.5)
+        .clipShape(RoundedRectangle(cornerRadius: 5))
+        .contentShape(RoundedRectangle(cornerRadius: 5))
+        .overlay {
+            RoundedRectangle(cornerRadius: 5)
+                .stroke(lineWidth: 1)
+                .opacity(0.5)
         }
     }
 }
