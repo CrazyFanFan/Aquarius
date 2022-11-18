@@ -9,6 +9,24 @@
 import SwiftUI
 import Combine
 
+private extension String {
+    func fuzzyMatch(_ filter: String) -> [String.Index]? {
+        var indexs: [Index] = []
+        if filter.isEmpty { return [] }
+
+        var remainder = filter[...].utf8
+        for index in utf8.indices {
+            let char = utf8[index]
+            if char == remainder[remainder.startIndex] {
+                indexs.append(index)
+                remainder.removeFirst()
+                if remainder.isEmpty { return indexs }
+            }
+        }
+        return nil
+    }
+}
+
 class TreeData: ObservableObject {
     private var global: GlobalState = .shared
 
@@ -223,7 +241,13 @@ private extension TreeData {
 
         if !self.searchKey.isEmpty {
             let lowerKey = self.searchKey.lowercased()
-            tmpNodes = nodes.filter { $0.pod.name.lowercased().contains(lowerKey) }
+            tmpNodes = nodes.compactMap { node in
+                guard let indices = node.pod.name.lowercased().fuzzyMatch(lowerKey) else { return nil }
+                node.indices = indices
+                return node
+            }
+        } else {
+            nodes.forEach { $0.indices = nil }
         }
 
         let sortClosure = orderRule.sortClosure(isImpact: isImpact)

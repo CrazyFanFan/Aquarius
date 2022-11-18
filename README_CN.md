@@ -34,6 +34,15 @@ cd Aquarius
 open Aquarius.xcodeproj
 ```
 
+## 修改日志
+
+### 2022-11-18
+
+- **功能**
+    - 搜索支持简单的模糊匹配和高亮。
+- 其他
+    - 修改了少量文本颜色。
+
 ## 作者
 Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 

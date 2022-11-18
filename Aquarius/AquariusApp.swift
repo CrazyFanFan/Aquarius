@@ -15,6 +15,9 @@ struct AquariusApp: App {
         WindowGroup(id: "main") {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                // #if DEBUG
+                // .preferredColorScheme(Bool.random() ? .dark : .light) // for debug
+                // #endif
         }
         .commands {
             SidebarCommands()

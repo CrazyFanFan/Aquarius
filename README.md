@@ -30,5 +30,16 @@ open Aquarius.xcodeproj
 ## Author
 Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 
+
+## ChangeLog
+
+### 2022-11-18
+
+- **Feature**
+    - Search supports simple fuzzy matching and highlighting.
+- Other
+    - Change color of some text.
+
+
 ## License
 Aquarius is released under the MIT license. See [LICENSE](https://github.com/CrazyFanFan/Aquarius/blob/master/LICENSE) for details.

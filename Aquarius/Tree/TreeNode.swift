@@ -16,6 +16,8 @@ class TreeNode: NSObject {
     var deep: Int
     var isExpanded: Bool = false
 
+    var indices: [String.Index]?
+
     init(deep: Int, pod: Pod, successors: [TreeNode]? = nil, predecessors: [TreeNode]? = nil) {
         self.deep = deep
         self.pod = pod
