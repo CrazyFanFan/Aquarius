@@ -11,8 +11,27 @@ import Combine
 
 private extension String {
     func fuzzyMatch(_ filter: String) -> [String.Index]? {
+        func match(_ source: Substring, key: Substring) -> [String.Index]? {
+            if let range = source.range(of: key) {
+                var result: [String.Index] = []
+                var index = range.lowerBound
+                while index < range.upperBound {
+                    result.append(index)
+                    index = source.index(after: index)
+                }
+                return result
+            }
+
+            return nil
+        }
+
         var indexs: [Index] = []
-        if filter.isEmpty { return [] }
+        if filter.isEmpty { return nil }
+
+        // perfect match first.
+        if let matchs = match(self[self.startIndex...], key: filter[filter.startIndex...]) {
+            return matchs
+        }
 
         var remainder = filter[...].utf8
         for index in utf8.indices {
@@ -20,6 +39,12 @@ private extension String {
             if char == remainder[remainder.startIndex] {
                 indexs.append(index)
                 remainder.removeFirst()
+
+                // try perfect match.
+                if let matchs = match(self[index...], key: filter[remainder.startIndex...]) {
+                    return indexs + matchs
+                }
+
                 if remainder.isEmpty { return indexs }
             }
         }
