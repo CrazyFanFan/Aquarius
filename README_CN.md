@@ -5,7 +5,13 @@
 [English](https://github.com/CrazyFanFan/Aquarius/blob/master/README.md)
 
 一个通过分析"Podfile.lock"获取各个库之间的依赖关系的工具。
+
+## 机器翻译
+
+> :warning: **英文版的 README 和应用中的英文都是机器翻译的结果，如有错误请斧正。**
+
 支持以下操作：
+
 - “依赖树”分析；
 - “影响树”分析；
 - 搜索
@@ -21,9 +27,11 @@
 - OSX: 版本 ≥ 11.0
 
 ## 预览
+
 ![Image](./Screenshots/s_1.jpg)
 
 ## 使用
+
 - 克隆这个仓库
 - 打开 **Aquarius.xcodeproj** （要求Xcode版本 ≥ 11.0）
 - 等待“Swift Packages”处理完， 按下`Command` + `R`即可。
@@ -39,12 +47,14 @@ open Aquarius.xcodeproj
 ### 2022-11-18
 
 - **功能**
-    - 搜索支持简单的模糊匹配和高亮。
+  - 搜索支持简单的模糊匹配和高亮。
 - 其他
-    - 修改了少量文本颜色。
+  - 修改了少量文本颜色。
 
 ## 作者
+
 Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 
 ## License
+
 [LICENSE](https://github.com/CrazyFanFan/Aquarius/blob/master/LICENSE)
