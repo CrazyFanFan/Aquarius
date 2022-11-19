@@ -29,7 +29,10 @@
 "Select a Podfile.lock" = "请选择一个 Podfile.lock";
 
 // --- Podspec view start ---
-"Load podspec content failed." = "读取Podspec内容失败";
+"Load podspec content failed." = "读取 Podspec 内容失败";
+"Load podspec content failed.
+Sorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself." = "读取 Podspec 内容失败
+抱歉，当前没有 Podspec 文件的访问权限，请使用“在文件夹中显示”功能自行打开文件。";
 "Copy content" = "拷贝内容";
 "Close" = "关闭";
 

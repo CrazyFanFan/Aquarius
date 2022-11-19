@@ -65,9 +65,15 @@ private extension PodspecView {
 
             Divider()
 
-            List {
-                ForEach(spec.podspecContent.indices, id: \.self) {
-                    Text(spec.podspecContent[$0])
+            switch spec.podspecContent {
+            case .content(let contents):
+                List(contents.indices, id: \.self) {
+                    Text(contents[$0])
+                }
+            case .error(let error):
+                Group {
+                    Text(error).foregroundColor(.close)
+                    MyPreview(url: spec.podspecFileURL)
                 }
             }
         }
@@ -76,8 +82,11 @@ private extension PodspecView {
                 Button("Copy path") {
                     Pasteboard.write(spec.podspecFileURL.path)
                 }
-                Button("Copy content") {
-                    Pasteboard.write(spec.podspecContent.joined(separator: "\n"))
+
+                if case let .content(contents) = spec.podspecContent {
+                    Button("Copy content") {
+                        Pasteboard.write(contents.joined(separator: "\n"))
+                    }
                 }
                 Button("Show in finder") {
                     NSWorkspace.shared.selectFile(spec.podspecFileURL.path, inFileViewerRootedAtPath: "")

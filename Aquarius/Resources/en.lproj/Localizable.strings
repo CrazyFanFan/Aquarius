@@ -31,7 +31,10 @@
 
 // --- Podspec view start ---
 "Load podspec content failed." = "Load podspec content failed.";
-"Copy content" = "Copy content";
+"Load podspec content failed.
+Sorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself." = "Load podspec content failed.
+Sorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself.
+";
 "Close" = "Close";
 
 "Commit: %@" = "Commit: %@";

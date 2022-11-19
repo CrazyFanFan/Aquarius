@@ -62,17 +62,49 @@ extension TreeData {
         var local: LocalSpec
     }
 
+    enum PodspecContent {
+    case content([String])
+    case error(String)
+    }
+
     struct LocalSpec {
         var podspecFileURL: URL
-        var podspecContent: [String]
+        var podspecContent: PodspecContent
 
         init(podspecFileURL: URL, podspecContent: String? = nil) {
-            let string = podspecContent ??
-            (try? String(contentsOfFile: podspecFileURL.path))?.prettied() ??
-            "Load podspec content failed."
+            func urlContent() -> PodspecContent {
+                do {
+                    let isAcccessing = podspecFileURL.startAccessingSecurityScopedResource()
+                    defer {
+                        if isAcccessing {
+                            podspecFileURL.stopAccessingSecurityScopedResource()
+                        }
+                    }
+
+                    guard isAcccessing else {
+                        return .error(NSLocalizedString("""
+                        Load podspec content failed.
+                        Sorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself.
+                        """, comment: ""))
+                    }
+                    return .content(
+                        try String(contentsOf: URL(fileURLWithPath: podspecFileURL.path))
+                            .prettied()
+                            .components(separatedBy: "\n")
+                    )
+                } catch {
+                    print(error)
+                    return .error(NSLocalizedString("Load podspec content failed.", comment: ""))
+                }
+            }
 
             self.podspecFileURL = podspecFileURL
-            self.podspecContent = string.components(separatedBy: "\n")
+
+            if let string = podspecContent {
+                self.podspecContent = .content(string.components(separatedBy: "\n"))
+            } else {
+                self.podspecContent = urlContent()
+            }
         }
     }
 
