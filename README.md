@@ -40,12 +40,20 @@ Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 
 ## ChangeLog
 
-### 2022-11-18
+### [2022-11-18]
 
 - **Feature**
   - Search supports simple fuzzy matching and highlighting.
 - Other
   - Change color of some text.
+  
+### [2020-11-30]
+
+- Add custom order support.
+- Switch to core data to save bookmark.
+- Support to open multiple Podfile.lock files.
+- Support open Podfile.lock by drop on dock icon.
+- Some UI details.
 
 ## License
 
