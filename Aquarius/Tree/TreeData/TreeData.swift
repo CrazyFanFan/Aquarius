@@ -58,6 +58,7 @@ class TreeData: ObservableObject {
     private var podToNodeCache: [Pod: TreeNode] = [:]
     private var nameToNodeCache: [String: TreeNode] = [:]
     private var nodes: [TreeNode] = []
+    private(set) var searchSuggestions: [TreeNode] = []
     private(set) var nameToPodCache: [String: Pod] = [:]
 
     private var loadShowNodesTmp: [TreeNode] = []
@@ -109,6 +110,7 @@ class TreeData: ObservableObject {
             }
 
             loadData(isImpact: isImpact, resetIsExpanded: true)
+            loadSearchSuggestions()
         }
     }
 
@@ -267,7 +269,7 @@ private extension TreeData {
         if !self.searchKey.isEmpty {
             let lowerKey = self.searchKey.lowercased()
             tmpNodes = nodes.compactMap { node in
-                guard let indices = node.pod.name.lowercased().fuzzyMatch(lowerKey) else { return nil }
+                guard let indices = node.pod.lowercasedName.fuzzyMatch(lowerKey) else { return nil }
                 node.indices = indices
                 return node
             }
@@ -301,6 +303,21 @@ private extension TreeData {
 
         DispatchQueue.main.async {
             self.showNodes = self.loadShowNodesTmp
+        }
+    }
+
+    func loadSearchSuggestions() {
+        guard !searchKey.isEmpty else {
+            searchSuggestions = []
+            return
+        }
+
+        let lowercasedSearchKey = searchKey.lowercased()
+        let searchSuggestions = nodes.filter { $0.pod.lowercasedName.fuzzyMatch(lowercasedSearchKey) != nil }
+        if searchSuggestions.count <= 25 {
+            self.searchSuggestions = searchSuggestions
+        } else {
+            self.searchSuggestions = []
         }
     }
 }

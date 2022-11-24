@@ -32,12 +32,14 @@ extension Pod {
 
 class Pod {
     var name: String
+    var lowercasedName: String
     var info: Info?
     var successors: [String]?
     var predecessors: [String]?
 
     init(podValue: String) {
         (name, info) = Self.format(podValue: podValue)
+        lowercasedName = name.lowercased()
     }
 
     init?(map: [String: [String]]) {
@@ -47,6 +49,7 @@ class Pod {
         } else {
             return nil
         }
+        lowercasedName = name.lowercased()
     }
 
     func copy() -> Pod {

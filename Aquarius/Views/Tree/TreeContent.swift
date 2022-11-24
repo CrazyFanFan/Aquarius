@@ -51,8 +51,8 @@ private extension TreeContent {
             PodspecView(podspec: treeData.podspec)
         }
         .searchable(text: $treeData.searchKey) {
-            if treeData.showNodes.count <= 25 {
-                ForEach(treeData.showNodes, id: \.self) { node in
+            if !treeData.searchSuggestions.isEmpty {
+                ForEach(treeData.searchSuggestions, id: \.self) { node in
                     NodeViewInfoHelper.name(node).searchCompletion(node.pod.name)
                 }
             }
