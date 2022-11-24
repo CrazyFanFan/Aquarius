@@ -38,10 +38,15 @@ enum NodeViewInfoHelper {
         }
     }
 
+    @inline(__always)
+    static func name(_ node: TreeNode) -> some View {
+        highlight(string: node.pod.name, indices: node.indices)
+    }
+
     static func nameAndCount(_ node: TreeNode, isImpactMode: Bool, isIgnoreNodeDeep: Bool) -> some View {
         HStack {
             more(node, isImpactMode: isImpactMode).bold()
-            highlight(string: node.pod.name, indices: node.indices)
+            name(node)
             Spacer()
         }
         .padding(.leading, CGFloat(node.deep > 0 ? (isIgnoreNodeDeep ? 30 : node.deep * 30) : 0))

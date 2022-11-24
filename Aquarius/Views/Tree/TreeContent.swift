@@ -50,7 +50,13 @@ private extension TreeContent {
         .sheet(isPresented: $treeData.isPodspecShow) {
             PodspecView(podspec: treeData.podspec)
         }
-        .searchable(text: $treeData.searchKey)
+        .searchable(text: $treeData.searchKey) {
+            if treeData.showNodes.count <= 25 {
+                ForEach(treeData.showNodes, id: \.self) { node in
+                    NodeViewInfoHelper.name(node).searchCompletion(node.pod.name)
+                }
+            }
+        }
         .frame(minWidth: 700, minHeight: 400, alignment: .center)
     }
 
