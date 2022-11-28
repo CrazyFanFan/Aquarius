@@ -26,11 +26,11 @@ struct Sidebar: View {
         .listStyle(SidebarListStyle())
         .toolbar {
             Spacer()
-            Button(action: toggleSidebar, label: { Image("c_sidebar.left") })
+            Button(action: toggleSidebar, label: { Image(systemName: "sidebar.left") })
             Button {
                 isPresented.toggle()
             } label: {
-                Image("c_gearshape")
+                Image(systemName: "gearshape")
             }
             .popover(isPresented: $isPresented) {
                 AquariusSettings(global: .shared)

@@ -67,7 +67,7 @@ private extension PageControl {
             Button {
                 treeData.cancelCurrentCopyTask()
             } label: {
-                Image("xmark.circle.fill")
+                Image(systemName: "xmark.circle.fill")
             }
             .buttonStyle(.borderless)
         }

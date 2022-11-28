@@ -16,23 +16,27 @@ struct PageCommonSettings: View {
         Group {
             Picker("Sort by:", selection: $orderRule) {
                 ForEach(OrderBy.allCases, id: \.self) { rule in
-                    Text("\(Image("arrow.down")) \(rule.rawValue)").tag(rule)
+                    Text("\(Image(systemName: "arrow.down")) \(rule.rawValue)").tag(rule)
                 }
             }
 
             Picker("Model:", selection: $detailMode) {
                 ForEach(DetailMode.allCases) { mode in
-                    (
-                        Text("\(Image(mode == .successors ? "arrow.triangle.branch.180" : "arrow.triangle.branch")) ") +
+                    HStack {
+                        if mode == .successors {
+                            Image("arrow.triangle.branch.180")
+                        } else {
+                            Image(systemName: "arrow.triangle.branch")
+                        }
                         Text(LocalizedStringKey(mode.rawValue.capitalized))
-                    ).tag(mode)
+                    }.tag(mode)
                 }
             }
 
             Picker("Subspecies:", selection: $isSubspeciesShow) {
                 ForEach([true, false], id: \.self) {
                     (
-                        Text("\(Image($0 ? "eye" : "eye.slash")) ") +
+                        Text("\(Image(systemName: $0 ? "eye" : "eye.slash")) ") +
                         Text(LocalizedStringKey($0 ? "Show" : "Hidden"))
                     ).tag($0)
                 }

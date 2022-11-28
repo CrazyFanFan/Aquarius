@@ -18,13 +18,18 @@ struct AquariusSettings: View {
 
                 Picker("Indentation", selection: $global.isIgnoreNodeDeep) { // 缩进
                     ForEach([true, false], id: \.self) {
-                        Text($0 ? "Ignore" : "Automatic").tag($0)
+                        if $0 {
+                            (Text("\(Image(systemName: "list.bullet")) ") + Text("Ignore")).tag($0)
+                        } else {
+                            (Text("\(Image(systemName: "list.bullet.indent")) ") + Text("Automatic")).tag($0)
+                        }
                     }
                 }
 
                 Picker("Location of cache file", selection: $global.locationOfCacheFile) { // 缓存路径
                     ForEach(LocationOfCacheFile.allCases, id: \.rawValue) {
-                        Text(LocalizedStringKey($0.rawValue.capitalized)).tag($0)
+                        (Text("\(Image(systemName: $0 == .system ? "gear" : "app")) ") + Text(LocalizedStringKey($0.rawValue.capitalized)))
+                            .tag($0)
                     }
                 }
                 /*
