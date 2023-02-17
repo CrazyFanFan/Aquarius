@@ -34,7 +34,7 @@ extension TreeData {
                 print(start.distance(to: Date()))
             }
 
-            guard let content = await self.copy(for: pod, with: deepMode), !Task.isCancelled else {
+            guard let content = self.copy(for: pod, with: deepMode), !Task.isCancelled else {
                 return
             }
 
@@ -67,7 +67,7 @@ private extension TreeData {
         case cancelled
     }
 
-    func copy(for pod: Pod, with deepMode: NodeContentDeepMode) async -> String? {
+    func copy(for pod: Pod, with deepMode: NodeContentDeepMode) -> String? {
         var context = CopyStaticContext(deepMode: deepMode, fileHandle: .nullDevice)
 
         do {

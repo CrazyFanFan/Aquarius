@@ -350,6 +350,7 @@ private extension TreeData {
         } else if let repoFileURL = findRepoFileURL(at: url, with: repoGitURLString) {
             podspecFileURL = findPod(pod, in: repoFileURL)
         } else {
+            // TODO: Add custom repo path support.
             assert(false, "Should never here.")
             podspecFileURL = nil
         }
