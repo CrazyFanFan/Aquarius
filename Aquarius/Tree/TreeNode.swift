@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TreeNode: NSObject {
+final class TreeNode: NSObject {
     var pod: Pod
     var successors: [TreeNode]?
     var predecessors: [TreeNode]?

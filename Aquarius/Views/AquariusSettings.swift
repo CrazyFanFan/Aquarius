@@ -18,26 +18,23 @@ struct AquariusSettings: View {
 
                 Picker("Indentation", selection: $global.isIgnoreNodeDeep) { // 缩进
                     ForEach([true, false], id: \.self) {
-                        if $0 {
-                            (Text("\(Image(systemName: "list.bullet")) ") + Text("Ignore")).tag($0)
-                        } else {
-                            (Text("\(Image(systemName: "list.bullet.indent")) ") + Text("Automatic")).tag($0)
-                        }
+                        text($0, ("list.bullet", "Ignore"), ("list.bullet.indent", "Automatic"), $0)
                     }
                 }
 
                 Picker("Location of cache file", selection: $global.locationOfCacheFile) { // 缓存路径
                     ForEach(LocationOfCacheFile.allCases, id: \.rawValue) {
-                        (Text("\(Image(systemName: $0 == .system ? "gear" : "app")) ") + Text(LocalizedStringKey($0.rawValue.capitalized)))
-                            .tag($0)
+                        text($0 == .system, ("gear", $0.rawValue.capitalized), ("app", $0.rawValue.capitalized), $0)
                     }
                 }
-                /*
-                Picker("List view style", selection: $global.useNewListStyle) {
-                    ForEach([true, false], id: \.self) {
-                        Text($0 ? "Columns" : "Single column").tag($0)
+
+                if #available(macOS 13, *) {
+                    Picker("List view style", selection: $global.useNewListStyle) {
+                        ForEach([true, false], id: \.self) {
+                            text($0, ("tablecells", "Columns"), ("list.triangle", "Single Column"), $0)
+                        }
                     }
-                }*/
+                }
 
             } header: {
                 Text("Global Settings")
@@ -78,6 +75,26 @@ struct AquariusSettings: View {
         .padding()
         .navigationTitle("Preferences")
         .fixedSize()
+    }
+}
+
+private extension AquariusSettings {
+
+    typealias ItmeInfo = (imageName: String, message: String)
+
+    @inline(__always)
+    func text(_ info: ItmeInfo) -> Text {
+        // Split for localized
+        Text("\(Image(systemName: info.imageName)) ") + Text(LocalizedStringKey(info.message))
+    }
+
+    func text<TAG: Hashable>(
+        _ condition: Bool,
+        _ trueInfo: ItmeInfo,
+        _ falseInfo: ItmeInfo,
+        _ tag: TAG
+    ) -> some View {
+        (condition ? text(trueInfo) : text(falseInfo)).tag(tag)
     }
 }
 

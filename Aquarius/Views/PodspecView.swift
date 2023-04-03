@@ -88,6 +88,7 @@ private extension PodspecView {
                         Pasteboard.write(contents.joined(separator: "\n"))
                     }
                 }
+
                 Button("Show in finder") {
                     NSWorkspace.shared.selectFile(spec.podspecFileURL.path, inFileViewerRootedAtPath: "")
                 }

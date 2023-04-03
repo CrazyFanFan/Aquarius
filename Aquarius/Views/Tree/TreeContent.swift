@@ -14,6 +14,8 @@ struct TreeContent: View {
 
     @State private var isFullVersionShow: Bool = false
 
+    @State private var tableAnimation: Animation?
+
     var body: some View {
         if global.selection != nil {
             if treeData.isLockLoadFailed {
@@ -40,13 +42,12 @@ private extension TreeContent {
 
             Divider()
 
-            // if global.useNewListStyle {
-            //      tableContent()
-            // } else {
-            SingleColumn()
-            // }
+            if global.useNewListStyle, #available(macOS 13, *) {
+                tableContent()
+            } else {
+                SingleColumn()
+            }
         }
-        // .animation(.easeIn, value: global.useNewListStyle)
         .sheet(isPresented: $treeData.isPodspecShow) {
             PodspecView(podspec: treeData.podspec)
         }
@@ -61,6 +62,7 @@ private extension TreeContent {
     }
 
     /// Columns style
+    @available(macOS 13, *)
     func tableContent() -> some View {
         Table(treeData.showNodes) {
             TableColumn("Nodes") { node in
@@ -75,10 +77,11 @@ private extension TreeContent {
             TableColumn("Version") { node in
                 NodeViewInfoHelper.version(node)
             }
-            .width(ideal: 60)
+            .width(ideal: 60, max: 220)
         }
         .font(.system(size: 14))
-        .animation(.default, value: treeData.showNodes)
+        .animation(tableAnimation, value: treeData.showNodes)
+        .onAppear { self.tableAnimation = .default }
     }
 
     /// Single column

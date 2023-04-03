@@ -52,7 +52,7 @@ private extension String {
     }
 }
 
-class TreeData: ObservableObject {
+final class TreeData: ObservableObject {
     private var global: GlobalState = .shared
 
     private var podToNodeCache: [Pod: TreeNode] = [:]

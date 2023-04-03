@@ -17,7 +17,7 @@ enum LocationOfCacheFile: String, CaseIterable {
 // 接下来需要在 TreeData 内置页面内配置，并且优化逻辑；
 // 优先访问全局配置，全局配置失效则访问页面内配置
 
-class GlobalState: ObservableObject {
+final class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
     @Published var selection: Lock?
@@ -45,7 +45,7 @@ class GlobalState: ObservableObject {
     @AppStorage("locationOfCacheFile") var locationOfCacheFile: LocationOfCacheFile = .application
     @AppStorage("isSubspeciesShow") var isSubspeciesShow: Bool = false
 
-    // @AppStorage("newListStyle") var useNewListStyle: Bool = true
+    @AppStorage("newListStyle") var useNewListStyle: Bool = false
 
     public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}

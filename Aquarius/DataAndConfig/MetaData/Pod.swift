@@ -30,7 +30,7 @@ extension Pod {
     }
 }
 
-class Pod {
+final class Pod {
     var name: String
     var lowercasedName: String
     var info: Info?

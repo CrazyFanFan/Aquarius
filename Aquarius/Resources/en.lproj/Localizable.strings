@@ -64,7 +64,7 @@ Sorry, you do not have permission to access the podspec file. Please use the 'Sh
 
 "List view style" = "List view style";
 "Columns" = "Columns";
-"Single column" = "Single column";
+"Single Column" = "Single Column";
 
 // section two
 "Sort by:" = "Sort by";
