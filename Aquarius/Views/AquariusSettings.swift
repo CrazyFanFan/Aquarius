@@ -48,7 +48,7 @@ struct AquariusSettings: View {
                 PageCommonSettings(
                     orderRule: $global.orderRule,
                     detailMode: $global.detailMode,
-                    isSubspeciesShow: $global.isIgnoreNodeDeep
+                    isSubspeciesShow: $global.isSubspeciesShow
                 )
             } header: {
                 Text("Default Settings")

@@ -22,14 +22,10 @@ struct PageCommonSettings: View {
 
             Picker("Model:", selection: $detailMode) {
                 ForEach(DetailMode.allCases) { mode in
-                    HStack {
-                        if mode == .successors {
-                            Image("arrow.triangle.branch.180")
-                        } else {
-                            Image(systemName: "arrow.triangle.branch")
-                        }
+                    (
+                        Text("\(mode == .successors ? Image("arrow.triangle.branch.180") : Image(systemName: "arrow.triangle.branch"))") +
                         Text(LocalizedStringKey(mode.rawValue.capitalized))
-                    }.tag(mode)
+                    ).tag(mode)
                 }
             }
 
