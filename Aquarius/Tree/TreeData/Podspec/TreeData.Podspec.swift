@@ -1,5 +1,5 @@
 //
-//  TreeData+Podspec.swift
+//  TreeData.Podspec.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2021/12/4.
@@ -42,91 +42,6 @@ import Foundation
      :git: https://github.com/Alamofire/Alamofire.git
      :tag: 5.4.4
  */
-
-extension String {
-    func prettied() -> String {
-        if let stringData = data(using: .utf8),
-        let json = try? JSONSerialization.jsonObject(with: stringData, options: []),
-        let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
-           let newString = String(data: data, encoding: .utf8) {
-            return newString
-        }
-
-        return self
-    }
-}
-
-extension TreeData {
-    struct RepoSpec {
-        var repoURLString: String
-        var local: LocalSpec
-    }
-
-    enum PodspecContent {
-    case content([String])
-    case error(String)
-    }
-
-    struct LocalSpec {
-        var podspecFileURL: URL
-        var podspecContent: PodspecContent
-
-        init(podspecFileURL: URL, podspecContent: String? = nil) {
-            func urlContent() -> PodspecContent {
-                do {
-                    let isAcccessing = podspecFileURL.startAccessingSecurityScopedResource()
-                    defer {
-                        if isAcccessing {
-                            podspecFileURL.stopAccessingSecurityScopedResource()
-                        }
-                    }
-
-                    guard isAcccessing else {
-                        return .error(NSLocalizedString("""
-                        Load podspec content failed.
-                        Sorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself.
-                        """, comment: ""))
-                    }
-                    return .content(
-                        try String(contentsOf: URL(fileURLWithPath: podspecFileURL.path))
-                            .prettied()
-                            .components(separatedBy: "\n")
-                    )
-                } catch {
-                    print(error)
-                    return .error(NSLocalizedString("Load podspec content failed.", comment: ""))
-                }
-            }
-
-            self.podspecFileURL = podspecFileURL
-
-            if let string = podspecContent {
-                self.podspecContent = .content(string.components(separatedBy: "\n"))
-            } else {
-                self.podspecContent = urlContent()
-            }
-        }
-    }
-
-    enum GitRevision: Hashable {
-        /// branch and commit
-        case branch(String, String)
-        case tag(String)
-        case commit(String)
-        case autoCommit(String)
-    }
-
-    struct GitSpec {
-        var gitURLString: String
-        var revision: GitRevision
-    }
-
-    enum PodspecInfo {
-        case repo(RepoSpec)
-        case local(LocalSpec)
-        case git(GitSpec)
-    }
-}
 
 extension TreeData {
     func showPodspec(of pod: Pod) {
@@ -204,23 +119,13 @@ private extension TreeData {
             return
         }
 
-        var newURL = url
+        let newURL = url
             .deletingLastPathComponent()
+            .appendingPathComponent(path)
+            .appendingPathComponent("\(name).podspec")
+            .resolvingSymlinksInPath()
 
-        var path = path
-        if path.hasPrefix("./") {
-            path.removeFirst(2)
-        }
-
-        while path.hasPrefix("../") {
-            newURL.deleteLastPathComponent()
-            path.removeFirst(3)
-        }
-
-        newURL.appendPathComponent(path)
-        newURL.appendPathComponent("\(name).podspec")
-
-        show(with: .local(.init(podspecFileURL: newURL)), and: pod)
+        show(with: .local(.init(url: newURL)), and: pod)
     }
 
     func loadGitPodspec(_ config: [String: String], checkoutOption: [String: String]?, pod: Pod) {
@@ -230,14 +135,14 @@ private extension TreeData {
             return
         }
 
-        let revision: GitRevision
+        let revision: GitSpec.GitRevision
 
         if let commit = config[":commit"] {
             revision = .commit(commit)
         } else if let tag = config[":tag"] {
             revision = .tag(tag)
         } else if let branch = config[":branch"], let commit = checkoutOption?[":commit"] {
-            revision = .branch(branch, commit)
+            revision = .branch(branch: branch, commit: commit)
         } else if let commit = checkoutOption?[":commit"] {
             revision = .autoCommit(commit)
         } else {
@@ -271,16 +176,16 @@ private extension TreeData {
         return (output, task.terminationStatus)
     }
 
-    func checkFileURL(_ url: URL, with gitURLString: String) -> Bool {
+    func check(repo: URL, match gitURLString: String) -> Bool {
         var isDirectory: ObjCBool = .init(false)
 
-        guard FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory),
+        guard FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDirectory),
            isDirectory.boolValue,
-           FileManager.default.fileExists(atPath: url.appendingPathComponent(".git").path) else {
+           FileManager.default.fileExists(atPath: repo.appendingPathComponent(".git").path) else {
                return false
            }
 
-        let result = shell("git -C \(url.path) remote -v")
+        let result = shell("git -C \(repo.path) remote -v")
 
         guard result.1 == 0 else {
             return false
@@ -290,7 +195,7 @@ private extension TreeData {
     }
 
     /// Find podspec in repo
-    func findPod(_ pod: Pod, in filePathURL: URL) -> URL? {
+    func findPod(_ pod: Pod, in repoURL: URL) -> URL? {
         guard let version = normalized(version: pod.info?.version) else {
             return nil
         }
@@ -298,12 +203,12 @@ private extension TreeData {
         let name = normalized(name: pod.name)
 
         // try simple repo first
-        let tmpPath = filePathURL.appendingPathComponent("\(name)/\(version)/\(name).podspec.json")
+        let tmpPath = repoURL.appendingPathComponent("\(name)/\(version)/\(name).podspec.json")
         if FileManager.default.fileExists(atPath: tmpPath.path) {
             return tmpPath
         }
 
-        let result = shell("find \(filePathURL.path) -type d -name \(name)")
+        let result = shell("find \(repoURL.path) -type d -name \(name)")
 
         guard result.1 == 0 else { return nil }
 
@@ -317,6 +222,7 @@ private extension TreeData {
         return nil
     }
 
+    /// Find repo in repos root dir
     func findRepoFileURL(at repoRootURL: URL, with repoGitURLString: String) -> URL? {
         let repoGitURLString = repoGitURLString.lowercased()
 
@@ -328,12 +234,12 @@ private extension TreeData {
 
         let names = result.0.replacingOccurrences(of: "\n", with: " ")
             .components(separatedBy: " ")
-            .filter { !$0.isEmpty }
+            .filter { !$0.isEmpty && $0 != "trunk" }
 
-        for name in names where name != "trunk" {
-            let tmpRepoURL = repoRootURL.appendingPathComponent(name)
-            if checkFileURL(tmpRepoURL, with: repoGitURLString) {
-                return tmpRepoURL
+        for name in names {
+            let repoURL = repoRootURL.appendingPathComponent(name)
+            if check(repo: repoURL, match: repoGitURLString) {
+                return repoURL
             }
         }
 
@@ -341,7 +247,7 @@ private extension TreeData {
     }
 
     func loadRepoPodspec(_ repoGitURLString: String, for pod: Pod) {
-        let url = FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".cocoapods/repos/")
+        let url = Utils.userHome.appendingPathComponent(".cocoapods/repos/")
 
         let podspecFileURL: URL?
         // trunk is key for cdn
@@ -351,7 +257,7 @@ private extension TreeData {
             podspecFileURL = findPod(pod, in: repoFileURL)
         } else {
             // TODO: Add custom repo path support.
-            assert(false, "Should never here.")
+            // assert(false, "Should never here.")
             podspecFileURL = nil
         }
 
@@ -359,8 +265,6 @@ private extension TreeData {
             return
         }
 
-        show(
-            with: .repo(.init(repoURLString: repoGitURLString, local: .init(podspecFileURL: podspecFileURL))),
-            and: pod)
+        show(with: .repo(.init(repoURLString: repoGitURLString, local: .init(url: podspecFileURL))), and: pod)
     }
 }

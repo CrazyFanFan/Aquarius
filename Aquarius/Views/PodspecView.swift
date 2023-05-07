@@ -49,23 +49,15 @@ struct PodspecView: View {
 }
 
 private extension PodspecView {
-    @ViewBuilder func contentView(_ content: String?) -> some View {
-        if let content = content {
-            Text(content)
-        } else {
-            Text("Load podspec content failed.")
-        }
-    }
-
     func localView(for spec: TreeData.LocalSpec) -> some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(spec.podspecFileURL.path)
+                Text(spec.url.path)
             }
 
             Divider()
 
-            switch spec.podspecContent {
+            switch spec.content {
             case .content(let contents):
                 List(contents.indices, id: \.self) {
                     Text(contents[$0])
@@ -73,24 +65,24 @@ private extension PodspecView {
             case .error(let error):
                 Group {
                     Text(error).foregroundColor(.close)
-                    MyPreview(url: spec.podspecFileURL)
+                    MyPreview(url: spec.url)
                 }
             }
         }
         .toolbar {
             ToolbarItemGroup(placement: .automatic) {
                 Button("Copy path") {
-                    Pasteboard.write(spec.podspecFileURL.path)
+                    Pasteboard.write(spec.url.path)
                 }
 
-                if case let .content(contents) = spec.podspecContent {
+                if case let .content(contents) = spec.content {
                     Button("Copy content") {
                         Pasteboard.write(contents.joined(separator: "\n"))
                     }
                 }
 
                 Button("Show in finder") {
-                    NSWorkspace.shared.selectFile(spec.podspecFileURL.path, inFileViewerRootedAtPath: "")
+                    NSWorkspace.shared.selectFile(spec.url.path, inFileViewerRootedAtPath: "")
                 }
             }
 
@@ -161,6 +153,6 @@ private extension PodspecView {
 struct PodspecView_Previews: PreviewProvider {
     static var previews: some View {
         PodspecView(
-            podspec: .local(.init(podspecFileURL: URL(fileURLWithPath: "/tmp"), podspecContent: "Test content")))
+            podspec: .local(.init(url: URL(fileURLWithPath: "/tmp"), content: "Test content")))
     }
 }
