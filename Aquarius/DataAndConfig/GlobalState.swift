@@ -14,6 +14,25 @@ enum LocationOfCacheFile: String, CaseIterable {
     case application
 }
 
+extension Dictionary: RawRepresentable where Key: Codable, Value: Codable {
+    public init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let result = try? JSONDecoder().decode([Key: Value].self, from: data)
+        else {
+            return nil
+        }
+        self = result
+    }
+
+    public var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let result = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
+        }
+        return result
+    }
+}
 // 接下来需要在 TreeData 内置页面内配置，并且优化逻辑；
 // 优先访问全局配置，全局配置失效则访问页面内配置
 
@@ -22,7 +41,7 @@ final class GlobalState: ObservableObject {
 
     @Published var selection: Lock?
 
-    @Published var isLoading: Bool = false
+    @MainActor @Published var isLoading: Bool = false
 
     /// Mark is impact mode
     ///
@@ -46,6 +65,8 @@ final class GlobalState: ObservableObject {
     @AppStorage("isSubspeciesShow") var isSubspeciesShow: Bool = false
 
     @AppStorage("newListStyle") var useNewListStyle: Bool = false
+
+    @AppStorage("repoBookMark") var repoBookMark: [URL: Data] = [:]
 
     public var cache: NSCache<Lock, TreeData> = .init()
     private init() {}

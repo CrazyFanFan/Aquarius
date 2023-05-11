@@ -21,27 +21,26 @@ extension String {
 }
 
 extension TreeData {
-    struct LocalSpec {
-        enum PodspecContent {
+    struct PodspecFile {
+        enum Content {
             case content([String])
             case error(String)
         }
 
         var url: URL
-        var content: PodspecContent
+        var content: Content
 
-        init(url: URL, content: String? = nil) {
-            func urlContent(of url: URL) -> PodspecContent {
+        init(url: URL, content: String? = nil, requireAccessing: Bool = false) {
+            func urlContent(of url: URL) -> Content {
                 do {
-                    let url = URL(fileURLWithPath: url.path)
-                    let isAcccessing = url.startAccessingSecurityScopedResource()
+                    let isAcccessing = requireAccessing && url.startAccessingSecurityScopedResource()
                     defer {
                         if isAcccessing {
                             url.stopAccessingSecurityScopedResource()
                         }
                     }
 
-                    guard isAcccessing else {
+                    guard !requireAccessing || isAcccessing else {
                         return .error(NSLocalizedString("""
                         Load podspec content failed.
                         Sorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself.
@@ -70,8 +69,8 @@ extension TreeData {
     }
 
     struct RepoSpec {
-        var repoURLString: String
-        var local: LocalSpec
+        var repoGitString: String
+        var podspecFile: PodspecFile
     }
 
     struct GitSpec {
@@ -89,7 +88,7 @@ extension TreeData {
 
     enum PodspecInfo {
         case repo(RepoSpec)
-        case local(LocalSpec)
+        case local(PodspecFile)
         case git(GitSpec)
     }
 }

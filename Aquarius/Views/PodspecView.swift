@@ -49,7 +49,7 @@ struct PodspecView: View {
 }
 
 private extension PodspecView {
-    func localView(for spec: TreeData.LocalSpec) -> some View {
+    func localView(for spec: TreeData.PodspecFile) -> some View {
         VStack(alignment: .leading) {
             HStack {
                 Text(spec.url.path)
@@ -134,18 +134,18 @@ private extension PodspecView {
     func repoView(for spec: TreeData.RepoSpec) -> some View {
         VStack(alignment: .leading) {
             HStack {
-                Text(spec.repoURLString)
+                Text(spec.repoGitString)
 
                 Spacer()
 
                 Button("Copy repo URL") {
-                    Pasteboard.write(spec.repoURLString)
+                    Pasteboard.write(spec.repoGitString)
                 }
             }
 
             Divider()
 
-            localView(for: spec.local)
+            localView(for: spec.podspecFile)
         }
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import AppKit
 
 enum DiskAccessHelper {
-    static func requireReadAccess(of url: URL) -> URL? {
+    @MainActor static func requireReadAccess(of url: URL, directoryURL: URL? = nil) -> URL? {
         let panel = NSOpenPanel()
 
         // Sets up so user can only select a single directory
@@ -17,9 +17,10 @@ enum DiskAccessHelper {
         panel.canChooseDirectories = true
         panel.allowsMultipleSelection = true
         panel.showsHiddenFiles = false
-        panel.title = "Select Cocoapod's Repo Directory"
-        panel.prompt = "Select Cocoapod's Repo Directory"
-        panel.directoryURL = url
+        panel.title = "Select Cocoapod's Repo Root Directory"
+        panel.prompt = "Select Cocoapod's Repo Root Directory"
+        panel.directoryURL = directoryURL ?? url
+        panel.representedURL = url
 
         let response = panel.runModal()
         if response == .OK, let panelURL = panel.url, panelURL.path == url.path {
