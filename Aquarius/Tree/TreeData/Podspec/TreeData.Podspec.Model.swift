@@ -11,7 +11,7 @@ extension String {
     func prettied() -> String {
         if let stringData = data(using: .utf8),
            let json = try? JSONSerialization.jsonObject(with: stringData, options: []),
-           let data = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted),
+           let data = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted, .withoutEscapingSlashes]),
            let newString = String(data: data, encoding: .utf8) {
             return newString
         }
@@ -23,7 +23,7 @@ extension String {
 extension TreeData {
     struct PodspecFile {
         enum Content {
-            case content([String])
+            case content(String)
             case error(String)
         }
 
@@ -47,11 +47,7 @@ extension TreeData {
                         """, comment: ""))
                     }
 
-                    let prettiedContent = try String(contentsOf: url)
-                        .prettied()
-                        .components(separatedBy: "\n")
-
-                    return .content(prettiedContent)
+                    return .content(try String(contentsOf: url).prettied())
                 } catch {
                     print(error)
                     return .error(NSLocalizedString("Load podspec content failed.", comment: ""))
@@ -61,7 +57,7 @@ extension TreeData {
             self.url = url
 
             if let string = content {
-                self.content = .content(string.components(separatedBy: "\n"))
+                self.content = .content(string)
             } else {
                 self.content = urlContent(of: url)
             }

@@ -59,8 +59,9 @@ private extension PodspecView {
 
             switch spec.content {
             case .content(let contents):
-                List(contents.indices, id: \.self) {
-                    Text(contents[$0])
+                ScrollView {
+                    Text(contents)
+                        .textSelection(.enabled)
                 }
             case .error(let error):
                 Group {
@@ -77,7 +78,7 @@ private extension PodspecView {
 
                 if case let .content(contents) = spec.content {
                     Button("Copy content") {
-                        Pasteboard.write(contents.joined(separator: "\n"))
+                        Pasteboard.write(contents)
                     }
                 }
 
