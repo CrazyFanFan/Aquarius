@@ -55,8 +55,7 @@ extension TreeData {
 
         asyncShowPodspecTask = Task.detached(priority: .userInitiated) {
             await self.asyncShowPodspec(of: pod)
-
-            DispatchQueue.main.async {
+            self.runWithMainActor {
                 GlobalState.shared.isLoading = false
             }
         }
@@ -87,21 +86,14 @@ private extension TreeData {
     }
 
     func normalized(name: String) -> String {
-        name.components(separatedBy: "/").first ?? name
+        if let index = name.firstIndex(of: "/") {
+            return String(name[..<index])
+        }
+        return name
     }
 
     func normalized(version: String?) -> String? {
-        guard var version = version?.trimmingCharacters(in: .whitespacesAndNewlines) else { return nil }
-
-        if version.hasPrefix("(") {
-            version.removeFirst()
-        }
-
-        if version.hasSuffix(")") {
-            version.removeLast()
-        }
-
-        return version
+        version?.trimmingCharacters(in: .whitespacesAndNewlines.union(.init(charactersIn: "()")))
     }
 
     /// UI show podspec
@@ -113,7 +105,8 @@ private extension TreeData {
             podspecCache[pod] = podspec
         }
         self.podspec = podspec
-        DispatchQueue.main.async {
+
+        runWithMainActor {
             self.isPodspecShow = true
             GlobalState.shared.isLoading = false
         }
@@ -126,7 +119,7 @@ private extension TreeData {
             .appendingPathComponent("\(name).podspec")
             .resolvingSymlinksInPath()
 
-        // TODO requireAccessing 
+        // TODO requireAccessing
         show(with: .local(.init(url: newURL, requireAccessing: true)), and: pod)
     }
 

@@ -39,7 +39,7 @@ extension Dictionary: RawRepresentable where Key: Codable, Value: Codable {
 final class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
-    @Published var selection: Lock?
+    @MainActor @Published var selection: Lock?
 
     @MainActor @Published var isLoading: Bool = false
 

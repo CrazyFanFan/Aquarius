@@ -60,25 +60,26 @@ final class TreeData: ObservableObject {
     private var nodes: [TreeNode] = []
     private(set) var searchSuggestions: [TreeNode] = []
     private(set) var nameToPodCache: [String: Pod] = [:]
+    private var buildTreeTask: Task<Void, Never>?
 
     private var loadShowNodesTmp: [TreeNode] = []
-    @Published private(set) var showNodes: [TreeNode] = []
+    @MainActor @Published private(set) var showNodes: [TreeNode] = []
 
     private var isIgnoreLastModificationDate: Bool { global.isIgnoreLastModificationDate }
 
     /// for copy
-    var copyProgress: Double = 0 {
+    @MainActor var copyProgress: Double = 0 {
         didSet {
             if copyProgress == 0 || copyProgress == 1 || copyProgress - displayCopyProgress > 0.01 {
                 displayCopyProgress = copyProgress
             }
         }
     }
-    @Published var displayCopyProgress: Double = 0
-    @Published var isCopying: Bool = false
+    @MainActor @Published var displayCopyProgress: Double = 0
+    @MainActor @Published var isCopying: Bool = false
     var copyTask: Task<Void, Error>?
 
-    @Published var copyResult: (content: String, isWriteToFile: Bool)?
+    @MainActor @Published var copyResult: (content: String, isWriteToFile: Bool)?
 
     // load file
     var lockFile: LockFileInfo {
@@ -94,9 +95,10 @@ final class TreeData: ObservableObject {
             }
         }
     }
+
     private var lastReadDataTime: Date?
     var lock: PodfileLock? { isSubspeciesShow ? sourceLock : noSubspeciesLock }
-    @Published var isLockLoadFailed: Bool = false
+    @MainActor @Published var isLockLoadFailed: Bool = false
 
     private(set) var sourceLock: PodfileLock?
     private(set) var noSubspeciesLock: PodfileLock?
@@ -124,11 +126,9 @@ final class TreeData: ObservableObject {
 
     var isImpact: Bool { detailMode == .predecessors }
 
-    private(set) var queue = DispatchQueue(label: "aquarius_data_parse_queue")
-
     // for show Podspec
     var podspec: PodspecInfo?
-    @Published var isPodspecShow: Bool = false
+    @MainActor @Published var isPodspecShow: Bool = false
 
     var podspecCache: [Pod: PodspecInfo] = [:]
 
@@ -150,6 +150,12 @@ final class TreeData: ObservableObject {
 
         updateNext(for: node, isImpact: isImpact)
         loadData(isImpact: isImpact)
+    }
+
+    func runWithMainActor(_ action: @Sendable @escaping @MainActor () -> Void) {
+        Task {
+            await MainActor.run(body: action)
+        }
     }
 }
 
@@ -188,21 +194,20 @@ private extension TreeData {
     }
 
     func loadFile() {
-        DispatchQueue.main.async {
-            self.queue.async {
-                self.lastReadDataTime = Date()
-                if let (sourceLock, noSubspeciesLock) = DataReader(file: self.lockFile).readData() {
-                    DispatchQueue.main.async {
-                        // update lock data
-                        self.sourceLock = sourceLock
-                        self.noSubspeciesLock = noSubspeciesLock
-                        self.buildTree()
-                        self.isLockLoadFailed = false
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        self.isLockLoadFailed = true
-                    }
+        Task {
+            self.lastReadDataTime = Date()
+            if let (sourceLock, noSubspeciesLock) = DataReader(file: lockFile).readData() {
+
+                // update lock data
+                self.sourceLock = sourceLock
+                self.noSubspeciesLock = noSubspeciesLock
+                self.buildTree()
+                runWithMainActor {
+                    self.isLockLoadFailed = false
+                }
+            } else {
+                runWithMainActor {
+                    self.isLockLoadFailed = true
                 }
             }
         }
@@ -217,7 +222,8 @@ private extension TreeData {
         nameToPodCache.removeAll()
         podToNodeCache.removeAll()
 
-        queue.async {
+        buildTreeTask?.cancel()
+        buildTreeTask = Task.detached {
             // top level
             self.lock?.pods.forEach { (pod) in
                 self.nameToPodCache[pod.name] = pod
@@ -302,7 +308,7 @@ private extension TreeData {
             }
         }
 
-        DispatchQueue.main.async {
+        runWithMainActor {
             self.showNodes = self.loadShowNodesTmp
         }
     }

@@ -104,7 +104,7 @@ private extension TreeData {
 
     @inline(__always)
     func updateProgress(append: Double) {
-        DispatchQueue.main.async {
+        runWithMainActor {
             self.copyProgress += append
         }
     }
