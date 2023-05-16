@@ -10,15 +10,13 @@ import Foundation
 import Yams
 // 可以用系统组件，先只给一层数据
 final class DataReader {
-    private var file: LockFileInfo?
+    private var file: LockFileInfo
 
-    init(file: LockFileInfo?) {
+    init(file: LockFileInfo) {
         self.file = file
     }
 
     func readData() -> (lock: PodfileLock, noSubspeciesLock: PodfileLock)? {
-        guard let file = file else { return nil }
-
         guard file.url.startAccessingSecurityScopedResource() else { return nil }
 
         defer {

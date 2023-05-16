@@ -120,12 +120,7 @@ private extension TreeData {
     }
 
     func loadLocalPodspec(_ path: String, name: String, pod: Pod) async {
-        guard let url = lockFile?.url else {
-            assert(false, "Should never here.")
-            return
-        }
-
-        let newURL = url
+        let newURL = lockFile.url
             .deletingLastPathComponent()
             .appendingPathComponent(path)
             .appendingPathComponent("\(name).podspec")

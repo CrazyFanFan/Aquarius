@@ -81,7 +81,7 @@ final class TreeData: ObservableObject {
     @Published var copyResult: (content: String, isWriteToFile: Bool)?
 
     // load file
-    var lockFile: LockFileInfo? {
+    var lockFile: LockFileInfo {
         didSet {
             if isIgnoreLastModificationDate {
                 self.loadFile()
@@ -164,8 +164,10 @@ private extension TreeData {
             return
         }
 
-        // The data needs to be reloaded. if new path is nil or empty.
-        guard let file = lockFile, !file.url.path.isEmpty else {
+        let file = lockFile
+
+        // The data needs to be reloaded. if new path is empty.
+        guard !file.url.path.isEmpty else {
             completion(false)
             return
         }
@@ -187,10 +189,9 @@ private extension TreeData {
 
     func loadFile() {
         DispatchQueue.main.async {
-            guard let info = self.lockFile else { return }
             self.queue.async {
                 self.lastReadDataTime = Date()
-                if let (sourceLock, noSubspeciesLock) = DataReader(file: info).readData() {
+                if let (sourceLock, noSubspeciesLock) = DataReader(file: self.lockFile).readData() {
                     DispatchQueue.main.async {
                         // update lock data
                         self.sourceLock = sourceLock
