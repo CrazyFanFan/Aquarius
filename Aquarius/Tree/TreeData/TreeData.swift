@@ -105,6 +105,8 @@ final class TreeData: ObservableObject {
 
     var searchKey = "" {
         didSet {
+            guard searchKey != oldValue else { return }
+            
             let value = searchKey.trimmingCharacters(in: .whitespacesAndNewlines)
 
             if searchKey != value {
