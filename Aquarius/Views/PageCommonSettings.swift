@@ -23,7 +23,7 @@ struct PageCommonSettings: View {
             Picker("Model:", selection: $detailMode) {
                 ForEach(DetailMode.allCases) { mode in
                     (
-                        Text("\(mode == .successors ? Image("arrow.triangle.branch.180") : Image(systemName: "arrow.triangle.branch"))") +
+                        Text("\(Image(systemName: mode == .successors ? "arrow.triangle.merge" : "arrow.triangle.branch")) ") +
                         Text(LocalizedStringKey(mode.rawValue.capitalized))
                     ).tag(mode)
                 }
