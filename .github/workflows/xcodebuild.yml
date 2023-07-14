@@ -2,17 +2,17 @@ name: Swift
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main feature/xcode_15 ]
   pull_request:
-    branches: [ main ]
+    branches: [ main feature/xcode_15 ]
 
 jobs:
   build:
     name: Xcode ${{ matrix.xcode }} on ${{ matrix.os }}
     strategy:
       matrix:
-        os: ['macos-12']
-        xcode: ['14.0', '14.1']
+        os: ['macos-13']
+        xcode: ['15.0-beta']
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
