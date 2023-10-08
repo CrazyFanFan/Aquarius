@@ -79,7 +79,6 @@ private extension TreeContent {
             }
             .width(ideal: 60, max: 220)
         }
-        .font(.system(size: 14))
         .animation(tableAnimation, value: treeData.showNodes)
         .onAppear { self.tableAnimation = .default }
     }

@@ -20,8 +20,8 @@ struct Sidebar: View {
     @State private var isPresented: Bool = false
 
     var body: some View {
-        List(selection: $global.selection) {
-            showItems()
+        List(items, id: \.self, selection: $global.selection) {
+            view(for: $0)
         }
         .listStyle(SidebarListStyle())
         .toolbar {
@@ -53,37 +53,34 @@ struct Sidebar: View {
 }
 
 private extension Sidebar {
-    func showItems() -> some View {
-        ForEach(items) { item in
-            NavigationLink {
-                if let data = global.data(for: item) {
-                    TreeContent(global: global, treeData: data)
-                } else {
-                    Text("""
-                        Failed to parse Podfile.lock.
-                        Check the files for conflicts or other formatting exceptions.
-                        """)
-                }
-            } label: {
-                Text(item.name ?? "Unknow")
+    func view(for item: Lock) -> some View {
+        NavigationLink {
+            if let data = global.data(for: item) {
+                TreeContent(global: global, treeData: data)
+            } else {
+                Text("""
+                    Failed to parse Podfile.lock.
+                    Check the files for conflicts or other formatting exceptions.
+                    """)
             }
-            .tag(item)
-            .contextMenu {
-                Button("Delete") {
-                    self.delete(items: [item])
-                    if item == global.selection {
-                        global.selection = nil
-                    }
+        } label: {
+            Text(item.name ?? "Unknow")
+        }
+        .contextMenu {
+            Button("Delete") {
+                self.delete(items: [item])
+                if item == global.selection {
+                    global.selection = nil
                 }
+            }
 
-                Button("Copy path") {
-                    Pasteboard.write(item.url?.path ?? "")
-                }
+            Button("Copy path") {
+                Pasteboard.write(item.url?.path ?? "")
+            }
 
-                if let url = item.url {
-                    Button("Show in finder") {
-                        NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
-                    }
+            if let url = item.url {
+                Button("Show in finder") {
+                    NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
                 }
             }
         }
