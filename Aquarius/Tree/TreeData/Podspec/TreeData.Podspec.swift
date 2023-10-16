@@ -66,7 +66,7 @@ extension TreeData {
 private extension TreeData {
     func asyncShowPodspec(of pod: Pod) async {
         guard let lock = lock else {
-            assert(false, "Should never here.")
+            assertionFailure("Should never here.")
             return
         }
 
@@ -81,7 +81,7 @@ private extension TreeData {
         } else if let repo = lock.specRepos.first(where: { repo in repo.pods.contains(name) }) {
             await loadRepoPodspec(repo.repo, for: pod)
         } else {
-            assert(false, "Should never here.")
+            assertionFailure("Should never here.")
         }
     }
 
@@ -126,7 +126,7 @@ private extension TreeData {
     func loadGitPodspec(_ config: [String: String], checkoutOption: [String: String]?, pod: Pod) {
         guard let gitURLString = config[":git"] else {
             // todo error
-            assert(false, "Should never here.")
+            assertionFailure("Should never here.")
             return
         }
 
@@ -141,7 +141,7 @@ private extension TreeData {
         } else if let commit = checkoutOption?[":commit"] {
             revision = .autoCommit(commit)
         } else {
-            assert(false, "Should never here.")
+            assertionFailure("Should never here.")
             return
         }
 
@@ -177,7 +177,8 @@ private extension TreeData {
 
         guard FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDirectory),
               isDirectory.boolValue,
-              FileManager.default.fileExists(atPath: repo.appendingPathComponent(".git").path) else {
+              FileManager.default.fileExists(atPath: repo.appendingPathComponent(".git").path)
+        else {
             return false
         }
 

@@ -5,8 +5,8 @@
 //  Created by Crazy凡 on 2023/5/7.
 //
 
-import Foundation
 import AppKit
+import Foundation
 
 enum DiskAccessHelper {
     @MainActor static func requireReadAccess(of url: URL, directoryURL: URL? = nil) -> URL? {

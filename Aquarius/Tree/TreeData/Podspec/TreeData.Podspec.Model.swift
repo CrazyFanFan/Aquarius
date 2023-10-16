@@ -47,7 +47,7 @@ extension TreeData {
                         """, comment: ""))
                     }
 
-                    return .content(try String(contentsOf: url).prettied())
+                    return try .content(String(contentsOf: url).prettied())
                 } catch {
                     print(error)
                     return .error(NSLocalizedString("Load podspec content failed.", comment: ""))

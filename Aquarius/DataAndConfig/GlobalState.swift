@@ -1,5 +1,5 @@
 //
-//  Config.swift
+//  GlobalState.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2021/6/26.
@@ -33,6 +33,7 @@ extension Dictionary: RawRepresentable where Key: Codable, Value: Codable {
         return result
     }
 }
+
 // 接下来需要在 TreeData 内置页面内配置，并且优化逻辑；
 // 优先访问全局配置，全局配置失效则访问页面内配置
 

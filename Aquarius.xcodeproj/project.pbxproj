@@ -33,7 +33,7 @@
 		63E44B6D2905326F00F0ED6A /* Sidebar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E44B6C2905326F00F0ED6A /* Sidebar.swift */; };
 		63E44B6F2905383D00F0ED6A /* DropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E44B6E2905383D00F0ED6A /* DropModifier.swift */; };
 		63E5924C2904FE8F008CD4C9 /* PageCommonSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */; };
-		63E5924E2904FFAD008CD4C9 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924D2904FFAD008CD4C9 /* PageControl.swift */; };
+		63E5924E2904FFAD008CD4C9 /* PageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924D2904FFAD008CD4C9 /* PageMenu.swift */; };
 		7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */; };
 		9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */; };
 		A0A4801B4905C485302DFE8CB9CCD9E3 /* LockFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D76A75D3FBDFB1082AAB2211D7C684F /* LockFileInfo.swift */; };
@@ -68,7 +68,7 @@
 		63E44B6C2905326F00F0ED6A /* Sidebar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sidebar.swift; sourceTree = "<group>"; };
 		63E44B6E2905383D00F0ED6A /* DropModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropModifier.swift; sourceTree = "<group>"; };
 		63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCommonSettings.swift; sourceTree = "<group>"; };
-		63E5924D2904FFAD008CD4C9 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
+		63E5924D2904FFAD008CD4C9 /* PageMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageMenu.swift; sourceTree = "<group>"; };
 		6B8F5A52192C95321FB019A5F85A046A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76B5BFD9BFDE193F60E5F0F787A55CB5 /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		76EB096455D84CCC0B81786C92F611C8 /* NodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeView.swift; sourceTree = "<group>"; };
@@ -143,7 +143,7 @@
 				63969CF82906CF58002C76C9 /* NodeViewInfoHelper.swift */,
 				63969CFB2906D1B3002C76C9 /* NodeViewModifier.swift */,
 				AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */,
-				63E5924D2904FFAD008CD4C9 /* PageControl.swift */,
+				63E5924D2904FFAD008CD4C9 /* PageMenu.swift */,
 			);
 			path = Tree;
 			sourceTree = "<group>";
@@ -351,7 +351,7 @@
 				33CDFC27ACD4BC44840A03E3BCCC65F0 /* Aquarius.xcdatamodeld in Sources */,
 				DAA5B90916B09DE920A0A86F4D7A2038 /* AquariusApp.swift in Sources */,
 				63CF6CBC2A0775290082CFE7 /* DiskAccessHelper.swift in Sources */,
-				63E5924E2904FFAD008CD4C9 /* PageControl.swift in Sources */,
+				63E5924E2904FFAD008CD4C9 /* PageMenu.swift in Sources */,
 				FB789A5733C629F01F04500ABCCAF139 /* BookmarkTool.swift in Sources */,
 				D2872FB1EC6599222D831357442A8669 /* Constants.swift in Sources */,
 				487B7FFEEA1FFE8ED27DBEFB3DD0770E /* ContentView.swift in Sources */,
@@ -530,6 +530,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kongkaikai.aquarius;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -560,6 +561,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				MARKETING_VERSION = 2.1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.kongkaikai.aquarius;
 				PRODUCT_NAME = "$(TARGET_NAME)";

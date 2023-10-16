@@ -28,7 +28,6 @@ struct NodeView: View {
             Divider()
         }
         .font(.system(size: 14))
-
     }
 }
 

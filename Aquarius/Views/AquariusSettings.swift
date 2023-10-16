@@ -79,7 +79,6 @@ struct AquariusSettings: View {
 }
 
 private extension AquariusSettings {
-
     typealias ItmeInfo = (imageName: String, message: String)
 
     @inline(__always)

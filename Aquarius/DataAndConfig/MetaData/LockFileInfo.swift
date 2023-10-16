@@ -9,7 +9,7 @@
 import Foundation
 
 struct LockFileInfo: Hashable {
-    static let preview: LockFileInfo = LockFileInfo(
+    static let preview: LockFileInfo = .init(
         url: Bundle.main.url(forResource: "Podfile", withExtension: "lock")!)
 
     var url: URL

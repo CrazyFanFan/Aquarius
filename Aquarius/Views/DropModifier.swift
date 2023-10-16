@@ -5,9 +5,9 @@
 //  Created by Crazy凡 on 2022/10/23.
 //
 
+import CoreData
 import SwiftUI
 import UniformTypeIdentifiers
-import CoreData
 
 struct DropModifier: ViewModifier {
     @Environment(\.managedObjectContext) private var viewContext

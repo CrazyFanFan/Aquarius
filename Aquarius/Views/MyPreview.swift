@@ -5,8 +5,8 @@
 //  Created by Crazy凡 on 2022/11/20.
 //
 
-import SwiftUI
 import QuickLookUI
+import SwiftUI
 
 struct MyPreview: NSViewRepresentable {
     typealias NSViewType = QLPreviewView
@@ -20,6 +20,5 @@ struct MyPreview: NSViewRepresentable {
         return preview ?? QLPreviewView()
     }
 
-    func updateNSView(_ nsView: QLPreviewView, context: NSViewRepresentableContext<MyPreview>) {
-    }
+    func updateNSView(_ nsView: QLPreviewView, context: NSViewRepresentableContext<MyPreview>) {}
 }

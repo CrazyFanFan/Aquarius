@@ -1,5 +1,5 @@
 //
-//  PageControl.swift
+//  PageMenu.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2022/10/23.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct PageControl: View {
-    @StateObject var treeData: TreeData
+struct PageMenu: View {
+    @State var treeData: TreeData
     @State private var isShow: Bool = false
 
     var body: some View {
@@ -22,22 +22,6 @@ struct PageControl: View {
             copyProgress()
         }
 
-        /*
-        Button {
-            isShow.toggle()
-        } label: {
-            Image(systemName: "gearshape.2")
-        }
-        .popover(isPresented: $isShow) {
-            Form {
-                PageCommonSettings(
-                    orderRule: $treeData.orderRule,
-                    detailMode: $treeData.detailMode,
-                    isSubspeciesShow: $treeData.isSubspeciesShow
-                )
-            }
-            .padding(5)
-        }*/
         PageCommonSettings(
             orderRule: $treeData.orderRule,
             detailMode: $treeData.detailMode,
@@ -47,15 +31,15 @@ struct PageControl: View {
 
         Button("Copy all") {
             let content = self.treeData.showNodes
-                .map { (0..<$0.deep).map { _ in "\t" }.joined() + $0.pod.name }
+                .map { (0 ..< $0.deep).map { _ in "\t" }.joined() + $0.pod.name }
                 .joined(separator: "\n")
             Pasteboard.write(content)
         }
     }
 }
 
-private extension PageControl {
-    func copyProgress() -> some View {
+private extension PageMenu {
+    @MainActor func copyProgress() -> some View {
         HStack {
             Text("Copying...")
             Divider().frame(maxHeight: 20)
@@ -84,6 +68,6 @@ private extension PageControl {
 
 struct PageControl_Previews: PreviewProvider {
     static var previews: some View {
-        PageControl(treeData: .init(lockFile: .init(url: Bundle.main.url(forResource: "Podfile", withExtension: "lock")!)))
+        PageMenu(treeData: .init(lockFile: .init(url: Bundle.main.url(forResource: "Podfile", withExtension: "lock")!)))
     }
 }

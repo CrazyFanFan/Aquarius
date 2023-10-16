@@ -86,7 +86,7 @@ private extension Pod {
     static func format(podValue: String) -> (name: String, version: Info?) {
         if let index = podValue.firstIndex(of: " ") {
             let name = String(podValue[..<index])
-            let info: Info = Info(version: String(podValue[index...]).trimmingCharacters(in: .whitespaces))
+            let info = Info(version: String(podValue[index...]).trimmingCharacters(in: .whitespaces))
             return (name, info)
         } else {
             return (podValue, nil)

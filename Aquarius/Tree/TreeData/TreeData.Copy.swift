@@ -228,7 +228,7 @@ private extension TreeData {
     }
 }
 
-fileprivate extension FileHandle {
+private extension FileHandle {
     func write(_ content: String) {
         if let data = content.data(using: .utf8) {
             write(data)

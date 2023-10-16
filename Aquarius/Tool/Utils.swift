@@ -35,7 +35,7 @@ enum Utils {
             }
     }
 
-    static private(set) var cacheDir: URL = rootCacheDir()
+    private(set) static var cacheDir: URL = rootCacheDir()
 
     static func cacheFile() throws -> URL {
         if !fileManager.fileExists(atPath: cacheDir.path) {
@@ -67,9 +67,7 @@ enum Utils {
         }
     }
 
-    static var userHome: URL = {
-        URL(fileURLWithPath: userHomePath, isDirectory: true)
-    }()
+    static var userHome: URL = .init(fileURLWithPath: userHomePath, isDirectory: true)
 
     static var userHomePath: String {
         let pw = getpwuid(getuid())

@@ -5,8 +5,8 @@
 //  Created by Crazy凡 on 2021/6/27.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct ContentView: View {
     @StateObject private var global = GlobalState.shared

@@ -81,7 +81,7 @@ final class DataReader {
                     }
                 }
             } else {
-                assert(false, "Get unknown data: \(content)")
+                assertionFailure("Get unknown data: \(content)")
             }
         }
 

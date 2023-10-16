@@ -23,7 +23,7 @@ struct AquariusApp: App {
             SidebarCommands()
 
             // 禁用创建新的Window
-            CommandGroup(replacing: CommandGroupPlacement.newItem) { }
+            CommandGroup(replacing: CommandGroupPlacement.newItem) {}
         }
 
         Settings {

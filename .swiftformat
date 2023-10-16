@@ -25,7 +25,6 @@
 --octalgrouping 4,8
 --operatorfunc spaced
 --patternlet hoist
---ranges spaced
 --self remove
 --semicolons inline
 --stripunusedargs always
@@ -35,4 +34,4 @@
 
 # rules
 
---disable andOperator, anyObjectProtocol, blankLinesAroundMark, hoistPatternLet, indent, isEmpty, ranges, redundantParens, redundantReturn, redundantSelf, semicolons, spaceAroundParens, spaceInsideGenerics, spaceInsideParens, strongOutlets, strongifiedSelf, todos, trailingClosures, trailingCommas, trailingSpace, unusedArguments, wrapArguments, yodaConditions,  sortedImports
+--disable andOperator, anyObjectProtocol, blankLinesAroundMark, hoistPatternLet, indent, isEmpty, redundantParens, redundantReturn, redundantSelf, semicolons, spaceAroundParens, spaceInsideGenerics, spaceInsideParens, strongOutlets, strongifiedSelf, todos, trailingClosures, trailingCommas, trailingSpace, unusedArguments, wrapArguments, yodaConditions,  sortedImports

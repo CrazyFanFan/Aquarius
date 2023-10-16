@@ -6,8 +6,9 @@
 //  Copyright © 2020 Crazy凡. All rights reserved.
 //
 
-import SwiftUI
 import Combine
+import Observation
+import SwiftUI
 
 private extension String {
     func fuzzyMatch(_ filter: String) -> [String.Index]? {
@@ -52,7 +53,7 @@ private extension String {
     }
 }
 
-final class TreeData: ObservableObject {
+@Observable final class TreeData {
     private var global: GlobalState = .shared
 
     private var podToNodeCache: [Pod: TreeNode] = [:]
@@ -63,7 +64,7 @@ final class TreeData: ObservableObject {
     private var buildTreeTask: Task<Void, Never>?
 
     private var loadShowNodesTmp: [TreeNode] = []
-    @MainActor @Published private(set) var showNodes: [TreeNode] = []
+    @MainActor private(set) var showNodes: [TreeNode] = []
 
     private var isIgnoreLastModificationDate: Bool { global.isIgnoreLastModificationDate }
 
@@ -75,14 +76,15 @@ final class TreeData: ObservableObject {
             }
         }
     }
-    @MainActor @Published var displayCopyProgress: Double = 0
-    @MainActor @Published var isCopying: Bool = false
-    var copyTask: Task<Void, Error>?
 
-    @MainActor @Published var copyResult: (content: String, isWriteToFile: Bool)?
+    @MainActor var displayCopyProgress: Double = 0
+    @MainActor var isCopying: Bool = false
+    @ObservationIgnored var copyTask: Task<Void, Error>?
+
+    @MainActor var copyResult: (content: String, isWriteToFile: Bool)?
 
     // load file
-    var lockFile: LockFileInfo {
+    @ObservationIgnored var lockFile: LockFileInfo {
         didSet {
             if isIgnoreLastModificationDate {
                 self.loadFile()
@@ -98,12 +100,12 @@ final class TreeData: ObservableObject {
 
     private var lastReadDataTime: Date?
     var lock: PodfileLock? { isSubspeciesShow ? sourceLock : noSubspeciesLock }
-    @MainActor @Published var isLockLoadFailed: Bool = false
+    @MainActor var isLockLoadFailed: Bool = false
 
-    private(set) var sourceLock: PodfileLock?
-    private(set) var noSubspeciesLock: PodfileLock?
+    @ObservationIgnored private(set) var sourceLock: PodfileLock?
+    @ObservationIgnored private(set) var noSubspeciesLock: PodfileLock?
 
-    var searchKey = "" {
+    @ObservationIgnored var searchKey = "" {
         didSet {
             guard searchKey != oldValue else { return }
 
@@ -118,28 +120,29 @@ final class TreeData: ObservableObject {
         }
     }
 
-    @Published var detailMode: DetailMode = GlobalState.shared.detailMode {
+    var detailMode: DetailMode = GlobalState.shared.detailMode {
         didSet { if detailMode != oldValue { loadData(isImpact: isImpact, resetIsExpanded: true) } }
     }
 
-    @Published var orderRule: OrderBy = GlobalState.shared.orderRule {
+    var orderRule: OrderBy = GlobalState.shared.orderRule {
         didSet { if orderRule != oldValue { loadData(isImpact: isImpact, resetIsExpanded: false) } }
     }
 
     var isImpact: Bool { detailMode == .predecessors }
 
     // for show Podspec
-    var podspec: PodspecInfo?
-    @MainActor @Published var isPodspecShow: Bool = false
+    @ObservationIgnored var podspec: PodspecInfo?
+    @MainActor var isPodspecShow: Bool = false
 
-    var podspecCache: [Pod: PodspecInfo] = [:]
+    @ObservationIgnored var podspecCache: [Pod: PodspecInfo] = [:]
 
-    @Published var isSubspeciesShow: Bool {
+    var isSubspeciesShow: Bool {
         didSet { if isSubspeciesShow != oldValue { buildTree() }}
     }
 
     init(lockFile: LockFileInfo) {
         self.lockFile = lockFile
+        self.isSubspeciesShow = false
         self.isSubspeciesShow = global.isSubspeciesShow
 
         self.loadFile()
@@ -199,7 +202,6 @@ private extension TreeData {
         Task {
             self.lastReadDataTime = Date()
             if let (sourceLock, noSubspeciesLock) = DataReader(file: lockFile).readData() {
-
                 // update lock data
                 self.sourceLock = sourceLock
                 self.noSubspeciesLock = noSubspeciesLock
@@ -248,7 +250,7 @@ private extension TreeData {
                 return node
             }
 
-            assert(false, "find dependency without node")
+            assertionFailure("find dependency without node")
             return nil
         }
     }
@@ -339,7 +341,7 @@ private func < (lhs: Int?, rhs: Int?) -> Bool {
     }
 }
 
-fileprivate extension OrderBy {
+private extension OrderBy {
     typealias SortClosure = (_ lhs: TreeNode, _ rhs: TreeNode) -> Bool
 
     func sortClosure(isImpact: Bool) -> SortClosure {
