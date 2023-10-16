@@ -23,8 +23,8 @@
 
 ## 环境
 
-- Xcode: 版本 ≥ Xcode14.0 (Task.detached 在更低版本有运行时问题)
-- OSX: 版本 ≥ 11.0
+- Xcode: 版本 ≥ Xcode15.0 (Task.detached 在更低版本有运行时问题)
+- OSX: 版本 ≥ 14.0
 
 ## 预览
 
