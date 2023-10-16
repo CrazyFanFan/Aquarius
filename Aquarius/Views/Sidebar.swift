@@ -6,21 +6,27 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct Sidebar: View {
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.modelContext) private var swiftDataViewContext
 
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Lock.timestamp, ascending: true)],
         animation: .default)
     private var items: FetchedResults<Lock>
+    @Query(sort: \LockBookmark.timestamp, order: .forward)
+    private var newItems: [LockBookmark]
 
     @StateObject var global: GlobalState
 
     @State private var isPresented: Bool = false
 
     var body: some View {
-        List(items, id: \.self, selection: $global.selection) {
+        List(newItems, id: \.self, selection: $global.selection) {
             view(for: $0)
         }
         .listStyle(SidebarListStyle())
@@ -38,10 +44,12 @@ struct Sidebar: View {
         }
         .frame(minWidth: 250, alignment: .leading)
         .onAppear {
+            // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+            migrateFromCoreData()
             if global.isBookmarkEnable {
-                global.selection = items.first
+                global.selection = newItems.first
             } else {
-                delete(items: Array(items))
+                delete(items: Array(newItems))
             }
         }
     }
@@ -53,7 +61,7 @@ struct Sidebar: View {
 }
 
 private extension Sidebar {
-    func view(for item: Lock) -> some View {
+    func view(for item: LockBookmark) -> some View {
         NavigationLink {
             if let data = global.data(for: item) {
                 TreeContent(global: global, treeData: data)
@@ -88,34 +96,28 @@ private extension Sidebar {
 }
 
 private extension Sidebar {
-    private func deleteItems(offsets: IndexSet) {
+    private func delete(items: [LockBookmark]) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            items.forEach(swiftDataViewContext.delete)
         }
     }
 
-    private func delete(items: [Lock]) {
-        withAnimation {
-            items.forEach(viewContext.delete)
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+    private func migrateFromCoreData() {
+        items.forEach { lock in
+            guard let bookmark = lock.bookmark, let id = lock.id, let timestamp = lock.timestamp else { return }
+            swiftDataViewContext.insert(LockBookmark(
+                bookmark: bookmark,
+                id: id,
+                name: lock.name,
+                next: lock.next,
+                previous: lock.previous,
+                timestamp: timestamp
+            ))
 
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            viewContext.delete(lock)
         }
+        try? viewContext.save()
     }
 }
 

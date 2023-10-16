@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct AquariusApp: App {
@@ -14,7 +15,8 @@ struct AquariusApp: App {
     var body: some Scene {
         WindowGroup(id: "main") {
             ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environment(\.managedObjectContext, persistenceController.container.viewContext) // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+                .modelContainer(for: LockBookmark.self)
                  #if DEBUG
                  .preferredColorScheme(Bool.random() ? .dark : .light) // for debug
                  #endif

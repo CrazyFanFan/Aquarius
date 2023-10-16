@@ -23,6 +23,7 @@
 		5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3AED5E016CBD591C71066F0CB8E099F /* DataReader.swift */; };
 		630F29FB289FF50F007E5246 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 630F29FA289FF50F007E5246 /* Utils.swift */; };
 		63120CC927BE8C7B000A9458 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63120CC827BE8C7B000A9458 /* Yams */; };
+		63142D772ADD8BEF0026F245 /* LockBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63142D762ADD8BEF0026F245 /* LockBookmark.swift */; };
 		636182FD292938BB00819F31 /* MyPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636182FC292938BB00819F31 /* MyPreview.swift */; };
 		6380EEA22A619DAA0094209E /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6380EEA12A619DAA0094209E /* InfoPlist.xcstrings */; };
 		6380EEA42A619DAA0094209E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6380EEA32A619DAA0094209E /* Localizable.xcstrings */; };
@@ -58,6 +59,7 @@
 		59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Lock+.swift"; sourceTree = "<group>"; };
 		5D76A75D3FBDFB1082AAB2211D7C684F /* LockFileInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LockFileInfo.swift; sourceTree = "<group>"; };
 		630F29FA289FF50F007E5246 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		63142D762ADD8BEF0026F245 /* LockBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockBookmark.swift; sourceTree = "<group>"; };
 		636182FC292938BB00819F31 /* MyPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPreview.swift; sourceTree = "<group>"; };
 		6380EEA12A619DAA0094209E /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		6380EEA32A619DAA0094209E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -211,6 +213,7 @@
 			isa = PBXGroup;
 			children = (
 				02FA363A9E65F76535E065C4CCB348E6 /* Aquarius.xcdatamodeld */,
+				63142D762ADD8BEF0026F245 /* LockBookmark.swift */,
 				59DB8F7518BF9682BD13E755C29CA482 /* Lock+.swift */,
 				1951EF075364A96ECB20A7F6BB2D5994 /* Persistence.swift */,
 			);
@@ -374,6 +377,7 @@
 				1E3E1494E17845CECFB79617A326409F /* PodspecView.swift in Sources */,
 				F73DC28C70C53FF3C85849148C191EFB /* AquariusSettings.swift in Sources */,
 				18B2CD5C6ED2823429A420200D412D3E /* NodeView.swift in Sources */,
+				63142D772ADD8BEF0026F245 /* LockBookmark.swift in Sources */,
 				9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */,
 				7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */,
 				4E9656A539584CADE684815B8EC5CF9B /* TreeData.Copy.swift in Sources */,

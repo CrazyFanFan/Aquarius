@@ -40,7 +40,7 @@ extension Dictionary: RawRepresentable where Key: Codable, Value: Codable {
 final class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
-    @MainActor @Published var selection: Lock?
+    @MainActor @Published var selection: LockBookmark?
 
     @MainActor @Published var isLoading: Bool = false
 
@@ -69,12 +69,12 @@ final class GlobalState: ObservableObject {
 
     @AppStorage("repoBookMark") var repoBookMark: [URL: Data] = [:]
 
-    public var cache: NSCache<Lock, TreeData> = .init()
+    public var cache: NSCache<LockBookmark, TreeData> = .init()
     private init() {}
 }
 
 extension GlobalState {
-    func data(for lock: Lock) -> TreeData? {
+    func data(for lock: LockBookmark) -> TreeData? {
         if let data = self.cache.object(forKey: lock), data.lock != nil {
             return data
         }

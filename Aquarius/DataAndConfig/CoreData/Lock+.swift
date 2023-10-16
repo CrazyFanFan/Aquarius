@@ -7,7 +7,7 @@
 
 import Foundation
 
-extension Lock {
+extension LockBookmark {
     var url: URL? {
         guard let (url, _) = BookmarkTool.url(for: bookmark) else {
             return nil

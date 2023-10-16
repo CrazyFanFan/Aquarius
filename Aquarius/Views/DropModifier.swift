@@ -8,14 +8,13 @@
 import CoreData
 import SwiftUI
 import UniformTypeIdentifiers
+import SwiftData
 
 struct DropModifier: ViewModifier {
-    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.modelContext) private var swiftDataViewContext
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Lock.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Lock>
+    @Query(sort: \LockBookmark.timestamp, order: .forward)
+    private var items: [LockBookmark]
 
     @StateObject var global: GlobalState
     @State private var isTargeted: Bool = false
@@ -46,28 +45,20 @@ private extension DropModifier {
                 return
             }
 
-            let newItem = Lock(context: viewContext)
-            newItem.timestamp = Date()
-            newItem.id = UUID()
-            newItem.previous = items.last?.id
-            newItem.bookmark = bookmark
-            newItem.name = url
-                .absoluteString
-                .components(separatedBy: "/")
-                .suffix(2)
-                .joined(separator: "/")
+            let newItem = LockBookmark(
+                bookmark: bookmark,
+                id: UUID(),
+                name: url
+                    .absoluteString
+                    .components(separatedBy: "/")
+                    .suffix(2)
+                    .joined(separator: "/"),
+                previous: items.last?.id,
+                timestamp: Date())
 
             items.last?.next = newItem.id
 
-            do {
-                try viewContext.save()
-                global.selection = newItem
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            swiftDataViewContext.insert(newItem)
         }
     }
 }
