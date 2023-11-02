@@ -31,8 +31,6 @@ struct NodeView: View {
     }
 }
 
-struct SingleDataTreeView_Previews: PreviewProvider {
-    static var previews: some View {
-        NodeView(global: .shared, node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
-    }
+#Preview {
+    NodeView(global: .shared, node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
 }

@@ -151,9 +151,6 @@ private extension PodspecView {
     }
 }
 
-struct PodspecView_Previews: PreviewProvider {
-    static var previews: some View {
-        PodspecView(
-            podspec: .local(.init(url: URL(fileURLWithPath: "/tmp"), content: "Test content")))
-    }
+#Preview {
+    PodspecView(podspec: .local(.init(url: URL(fileURLWithPath: "/tmp"), content: "Test content")))
 }

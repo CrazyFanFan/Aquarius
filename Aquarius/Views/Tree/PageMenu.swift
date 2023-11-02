@@ -66,8 +66,6 @@ private extension PageMenu {
     }
 }
 
-struct PageControl_Previews: PreviewProvider {
-    static var previews: some View {
-        PageMenu(treeData: .init(lockFile: .init(url: Bundle.main.url(forResource: "Podfile", withExtension: "lock")!)))
-    }
+#Preview {
+    PageMenu(treeData: .init(lockFile: .init(url: Bundle.main.url(forResource: "Podfile", withExtension: "lock")!)))
 }

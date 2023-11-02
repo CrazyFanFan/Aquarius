@@ -41,8 +41,9 @@ struct PageCommonSettings: View {
     }
 }
 
-struct PageSettings_Previews: PreviewProvider {
-    static var previews: some View {
-        PageCommonSettings(orderRule: .constant(.alphabeticalAscending), detailMode: .constant(.predecessors), isSubspeciesShow: .constant(false))
-    }
+#Preview {
+    PageCommonSettings(
+        orderRule: .constant(.alphabeticalAscending),
+        detailMode: .constant(.predecessors),
+        isSubspeciesShow: .constant(false))
 }

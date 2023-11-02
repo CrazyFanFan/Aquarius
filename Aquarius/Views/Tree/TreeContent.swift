@@ -15,6 +15,15 @@ struct TreeContent: View {
     @State private var isFullVersionShow: Bool = false
 
     var body: some View {
+
+#if DEBUG
+        if #available(macOS 14.1, *) {
+            AnyView {
+                Self._logChanges()
+            }
+        }
+#endif
+
         if global.selection != nil {
             if treeData.isLockLoadFailed {
                 Text("""
@@ -102,8 +111,6 @@ private extension TreeContent {
     }
 }
 
-struct TreeContent_Previews: PreviewProvider {
-    static var previews: some View {
-        TreeContent(global: .shared, treeData: .init(lockFile: .preview))
-    }
+#Preview {
+    TreeContent(global: .shared, treeData: .init(lockFile: .preview))
 }

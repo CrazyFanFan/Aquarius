@@ -126,3 +126,7 @@ struct Sidebar_Previews: PreviewProvider {
         Sidebar(global: .shared)
     }
 }
+
+#Preview {
+    Sidebar(global: .shared)
+}

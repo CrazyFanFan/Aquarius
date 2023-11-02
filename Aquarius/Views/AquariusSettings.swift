@@ -97,8 +97,6 @@ private extension AquariusSettings {
     }
 }
 
-struct AquariusSettings_Previews: PreviewProvider {
-    static var previews: some View {
-        AquariusSettings(global: .shared)
-    }
+#Preview {
+    AquariusSettings(global: .shared)
 }

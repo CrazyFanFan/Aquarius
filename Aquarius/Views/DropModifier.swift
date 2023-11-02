@@ -93,3 +93,10 @@ struct DropModifier_Previews: PreviewProvider {
             .modifier(DropModifier(global: .shared))
     }
 }
+
+#Preview {
+    EmptyView()
+        .frame(width: 100, height: 100)
+        .background(Color.red.opacity(0.1))
+        .modifier(DropModifier(global: .shared))
+}

@@ -8,6 +8,7 @@
 
 import Foundation
 import Yams
+
 // 可以用系统组件，先只给一层数据
 final class DataReader {
     private var file: LockFileInfo
