@@ -52,7 +52,7 @@ private extension TreeContent {
             if global.useNewListStyle, #available(macOS 13, *) {
                 tableContent()
             } else {
-                SingleColumn()
+                singleColumn()
             }
         }
         .sheet(isPresented: $treeData.isPodspecShow) {
@@ -91,7 +91,7 @@ private extension TreeContent {
     }
 
     /// Single column
-    @MainActor func SingleColumn() -> some View {
+    @MainActor func singleColumn() -> some View {
         ScrollView {
             // List，用 LazyVGrid 是为了更好的性能
             LazyVGrid(

@@ -67,7 +67,7 @@ private extension DropModifier {
     private func loadPath(from items: [NSItemProvider]) -> Bool {
         guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
         item.loadItem(forTypeIdentifier: Self.supportType.identifier, options: nil) { (data, error) in
-            if let _ = error {
+            if error != nil {
                 // TODO error
                 return
             }

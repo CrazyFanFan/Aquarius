@@ -37,7 +37,8 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext) // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
         .modelContainer(for: LockBookmark.self)
 #if DEBUG
         .preferredColorScheme(Bool.random() ? .dark : .light) // for debug

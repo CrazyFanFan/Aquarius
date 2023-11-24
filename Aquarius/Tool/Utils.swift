@@ -11,7 +11,9 @@ enum Utils {
     static let fileManager = FileManager.default
 
     private static var systemCacheDirectory: URL { fileManager.temporaryDirectory }
-    private static var applicationCacheDirectory: URL? { fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first }
+    private static var applicationCacheDirectory: URL? {
+        fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
+    }
 
     private static func rootCacheDir() -> URL {
         switch GlobalState.shared.locationOfCacheFile {
@@ -70,9 +72,9 @@ enum Utils {
     static var userHome: URL = .init(fileURLWithPath: userHomePath, isDirectory: true)
 
     static var userHomePath: String {
-        let pw = getpwuid(getuid())
+        let pwd = getpwuid(getuid())
 
-        if let home = pw?.pointee.pw_dir {
+        if let home = pwd?.pointee.pw_dir {
             return FileManager.default.string(withFileSystemRepresentation: home, length: Int(strlen(home)))
         }
 

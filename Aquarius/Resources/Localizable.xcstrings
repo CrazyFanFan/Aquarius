@@ -399,6 +399,23 @@
     "Empty" : {
 
     },
+    "Faile to create tree of %@" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faile to create tree of %@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@的依赖树创建失败"
+          }
+        }
+      }
+    },
     "Failed to parse Podfile.lock.\nCheck the files for conflicts or other formatting exceptions." : {
       "localizations" : {
         "en" : {

@@ -16,10 +16,10 @@ enum NodeViewInfoHelper {
 
         for index in string.indices {
             let char = Text(String(string[index]))
-            if indices.contains(index) {
-                result = result + char.bold().foregroundColor(.main)
+            result = if indices.contains(index) {
+                result + char.bold().foregroundColor(.main)
             } else {
-                result = result + char
+                result + char
             }
         }
 
@@ -27,15 +27,15 @@ enum NodeViewInfoHelper {
     }
 
      static func more(_ node: TreeNode, isImpactMode: Bool) -> Text {
-        guard let count = node.nextCount(isImpactMode) else {
-            return Text("=·(0) ").foregroundColor(Color.gray.opacity(0.6))
-        }
-
-        if node.isExpanded {
-            return Text("⇇·(\(count)) ").foregroundColor(.close)
-        } else {
-            return Text("⇉·(\(count)) ").foregroundColor(.main)
-        }
+         if let count = node.nextCount(isImpactMode) {
+             if node.isExpanded {
+                 Text("⇇·(\(count)) ").foregroundColor(.close)
+             } else {
+                 Text("⇉·(\(count)) ").foregroundColor(.main)
+             }
+         } else {
+            Text("=·(0) ").foregroundColor(Color.gray.opacity(0.6))
+         }
     }
 
     @inline(__always)

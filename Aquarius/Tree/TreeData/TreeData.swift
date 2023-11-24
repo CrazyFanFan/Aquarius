@@ -337,7 +337,7 @@ private func < (lhs: Int?, rhs: Int?) -> Bool {
     switch (lhs, rhs) {
     case (.some, .none), (.none, .none): return false
     case (.none, .some): return true
-    case (.some(let a), .some(let b)): return a < b
+    case (.some(let lhsValue), .some(let rhsValue)): return lhsValue < rhsValue
     }
 }
 

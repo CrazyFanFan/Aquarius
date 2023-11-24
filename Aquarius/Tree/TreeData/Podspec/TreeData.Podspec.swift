@@ -130,7 +130,7 @@ private extension TreeData {
             return
         }
 
-        let revision: GitSpec.GitRevision
+        let revision: GitRevision
 
         if let commit = config[":commit"] {
             revision = .commit(commit)

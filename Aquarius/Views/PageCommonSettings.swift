@@ -23,7 +23,7 @@ struct PageCommonSettings: View {
             Picker("Model:", selection: $detailMode) {
                 ForEach(DetailMode.allCases) { mode in
                     (
-                        Text("\(Image(systemName: mode == .successors ? "arrow.triangle.merge" : "arrow.triangle.branch")) ") +
+                        Text("\(image(of: mode)) ") +
                         Text(LocalizedStringKey(mode.rawValue.capitalized))
                     ).tag(mode)
                 }
@@ -38,6 +38,10 @@ struct PageCommonSettings: View {
                 }
             }
         }
+    }
+
+    @inline(__always) private func image(of mode: DetailMode) -> Image {
+        Image(systemName: mode == .successors ? "arrow.triangle.merge" : "arrow.triangle.branch")
     }
 }
 
