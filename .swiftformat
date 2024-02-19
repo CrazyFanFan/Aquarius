@@ -31,7 +31,8 @@
 --trimwhitespace always
 --wraparguments preserve
 --wrapcollections preserve
+--guardelse same-line
 
 # rules
 
---disable andOperator, anyObjectProtocol, blankLinesAroundMark, hoistPatternLet, indent, isEmpty, redundantParens, redundantReturn, redundantSelf, semicolons, spaceAroundParens, spaceInsideGenerics, spaceInsideParens, strongOutlets, strongifiedSelf, todos, trailingClosures, trailingCommas, trailingSpace, unusedArguments, wrapArguments, yodaConditions,  sortedImports
+--disable indent, strongOutlets, todos, trailingCommas, unusedArguments, wrapMultilineStatementBraces

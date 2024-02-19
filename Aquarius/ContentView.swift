@@ -21,7 +21,8 @@ struct ContentView: View {
                 } else {
                     ContentUnavailableView(
                         "Select a Podfile.lock",
-                        image: "paperplane")
+                        image: "paperplane"
+                    )
                 }
             }
 

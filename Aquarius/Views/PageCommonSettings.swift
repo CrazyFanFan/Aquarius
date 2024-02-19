@@ -49,5 +49,6 @@ struct PageCommonSettings: View {
     PageCommonSettings(
         orderRule: .constant(.alphabeticalAscending),
         detailMode: .constant(.predecessors),
-        isSubspeciesShow: .constant(false))
+        isSubspeciesShow: .constant(false)
+    )
 }

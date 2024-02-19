@@ -15,10 +15,10 @@ struct NodeViewModifier: ViewModifier {
         content
             .contentShape(Rectangle())
             .onTapGesture {
-                self.treeData.onSelected(node: node)
+                treeData.onSelected(node: node)
             }
             .contextMenu {
-                self.menus(node.pod)
+                menus(node.pod)
             }
             .frame(maxWidth: .infinity)
     }

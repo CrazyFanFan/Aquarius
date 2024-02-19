@@ -15,7 +15,6 @@ struct TreeContent: View {
     @State private var isFullVersionShow: Bool = false
 
     var body: some View {
-
 #if DEBUG
         if #available(macOS 14.1, *) {
             AnyView {

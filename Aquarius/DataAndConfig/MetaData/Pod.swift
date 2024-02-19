@@ -45,7 +45,7 @@ final class Pod {
     init?(map: [String: [String]]) {
         if let podValue = map.keys.first {
             (name, info) = Self.format(podValue: podValue)
-            self.successors = map[podValue]?.map { Self.format(podValue: $0).name }
+            successors = map[podValue]?.map { Self.format(podValue: $0).name }
         } else {
             return nil
         }
@@ -53,11 +53,11 @@ final class Pod {
     }
 
     func copy() -> Pod {
-        let new = Pod(podValue: self.name)
+        let new = Pod(podValue: name)
 
-        new.info = self.info
-        new.successors = self.successors
-        new.predecessors = self.predecessors
+        new.info = info
+        new.successors = successors
+        new.predecessors = predecessors
 
         return new
     }

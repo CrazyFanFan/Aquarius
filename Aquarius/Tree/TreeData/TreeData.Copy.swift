@@ -16,6 +16,7 @@ private enum Constant {
 }
 
 // MARK: - Data Copy
+
 extension TreeData {
     enum NodeContentDeepMode: Hashable {
         case none
@@ -29,7 +30,7 @@ extension TreeData {
         resetCopyStatus()
         isCopying = true
 
-        self.copyTask = Task.detached(priority: .background) {
+        copyTask = Task.detached(priority: .background) {
             defer {
                 print(start.distance(to: Date()))
             }
@@ -77,7 +78,7 @@ private extension TreeData {
             context.fileHandle = try FileHandle(forWritingTo: treeURL)
             context.fileURL = treeURL
 
-            try self.recursiveContent(for: pod, weight: 1, context: context)
+            try recursiveContent(for: pod, weight: 1, context: context)
 
             func fileString(at url: URL = treeURL) -> String? {
                 defer {
@@ -117,10 +118,10 @@ private extension TreeData {
         if input.isEmpty { return "" }
 
         if input.count == 1 {
-            return ("\n└── " + input.joined())
+            return "\n└── " + input.joined()
         } else {
             let last = input.removeLast()
-            return ("\n├── " + input.joined(separator: "\n├── ") + "\n└── " + last)
+            return "\n├── " + input.joined(separator: "\n├── ") + "\n└── " + last
         }
     }
 
@@ -180,7 +181,8 @@ private extension TreeData {
                 weight: nextsWeight,
                 currentPrefix: nextPrefix + Constant.connector1,
                 nextPrefix: nextPrefix + Constant.prefix1,
-                context: context)
+                context: context
+            )
 
             default:
                 let partOfWeight = nextsWeight / Double(next.count)
@@ -192,7 +194,8 @@ private extension TreeData {
                         weight: partOfWeight,
                         currentPrefix: nextPrefix + Constant.connector2,
                         nextPrefix: nextPrefix + Constant.prefix2,
-                        context: context)
+                        context: context
+                    )
                 }
 
                 try recursiveContent(
@@ -200,7 +203,8 @@ private extension TreeData {
                     weight: partOfWeight,
                     currentPrefix: nextPrefix + Constant.connector1,
                     nextPrefix: nextPrefix + Constant.prefix1,
-                    context: context)
+                    context: context
+                )
             }
 
             if !realtimeProgressUpdate {
@@ -214,7 +218,7 @@ private extension TreeData {
             while index < subNames.count {
                 subNames += nameToPodCache[subNames[index]]?
                     .nextLevel(isImpact)?
-                    .filter({ !subNames.contains($0) }) ?? []
+                    .filter { !subNames.contains($0) } ?? []
                 index += 1
             }
             updateProgress(append: weight)

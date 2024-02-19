@@ -5,8 +5,8 @@
 //  Created by Crazy凡 on 2022/10/23.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct Sidebar: View {
     // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
@@ -16,7 +16,8 @@ struct Sidebar: View {
     // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Lock.timestamp, ascending: true)],
-        animation: .default)
+        animation: .default
+    )
     private var items: FetchedResults<Lock>
     @Query(sort: \LockBookmark.timestamp, order: .forward)
     private var newItems: [LockBookmark]

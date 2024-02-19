@@ -30,7 +30,7 @@ struct PageMenu: View {
         .fixedSize()
 
         Button("Copy all") {
-            let content = self.treeData.showNodes
+            let content = treeData.showNodes
                 .map { (0 ..< $0.deep).map { _ in "\t" }.joined() + $0.pod.name }
                 .joined(separator: "\n")
             Pasteboard.write(content)

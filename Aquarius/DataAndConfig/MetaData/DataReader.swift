@@ -75,7 +75,7 @@ final class DataReader {
             } else if let map = content as? [String: [String]] {
                 if let pod = Pod(map: map) {
                     lock.pods.append(pod)
-                    pod.successors?.forEach { (name) in
+                    pod.successors?.forEach { name in
                         var content = predecessors[name] ?? []
                         content.append(pod.name)
                         predecessors[name] = content
@@ -86,7 +86,7 @@ final class DataReader {
             }
         }
 
-        predecessors.forEach { arg in
+        for arg in predecessors {
             if let index = lock.pods.firstIndex(where: { $0.name == arg.key }) {
                 lock.pods[index].predecessors = arg.value
             }

@@ -30,7 +30,7 @@ private extension String {
         if filter.isEmpty { return nil }
 
         // perfect match first.
-        if let matchs = match(self[self.startIndex...], key: filter[filter.startIndex...]) {
+        if let matchs = match(self[startIndex...], key: filter[filter.startIndex...]) {
             return matchs
         }
 
@@ -87,7 +87,7 @@ private extension String {
     @ObservationIgnored var lockFile: LockFileInfo {
         didSet {
             if isIgnoreLastModificationDate {
-                self.loadFile()
+                loadFile()
             } else {
                 checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
                     if isNeedReloadData {
@@ -142,10 +142,10 @@ private extension String {
 
     init(lockFile: LockFileInfo) {
         self.lockFile = lockFile
-        self.isSubspeciesShow = false
-        self.isSubspeciesShow = global.isSubspeciesShow
+        isSubspeciesShow = false
+        isSubspeciesShow = global.isSubspeciesShow
 
-        self.loadFile()
+        loadFile()
     }
 
     func onSelected(node: TreeNode) {
@@ -165,12 +165,13 @@ private extension String {
 }
 
 // MARK: - Load File
+
 private extension TreeData {
     func checkShouldReloadData(oldLockFile: LockFileInfo?, _ completion: ((_ isNeedReloadData: Bool) -> Void)?) {
-        guard let completion = completion else { return }
+        guard let completion else { return }
 
         // If is form bookmark or the old and new path do not match, the data must be reloaded.
-        if self.lockFile != oldLockFile {
+        if lockFile != oldLockFile {
             completion(true)
             return
         }
@@ -186,7 +187,7 @@ private extension TreeData {
         // If read attributes fails, the data needs to be reloaded.
         guard let attributes = try? FileManager.default.attributesOfItem(atPath: file.url.path),
               let fileModificationDate = attributes[.modificationDate] as? Date,
-              let lastReadDataTime = self.lastReadDataTime else {
+              let lastReadDataTime else {
                   completion(true)
                   return
               }
@@ -219,6 +220,7 @@ private extension TreeData {
 }
 
 // MARK: - load show data
+
 private extension TreeData {
     func buildTree() {
         nodes.removeAll()
@@ -229,7 +231,7 @@ private extension TreeData {
         buildTreeTask?.cancel()
         buildTreeTask = Task.detached {
             // top level
-            self.lock?.pods.forEach { (pod) in
+            self.lock?.pods.forEach { pod in
                 self.nameToPodCache[pod.name] = pod
                 let node = TreeNode(deep: 0, pod: pod)
                 self.podToNodeCache[pod] = node
@@ -240,7 +242,7 @@ private extension TreeData {
     }
 
     func namesToNodes(deep: Int, names: [String]?) -> [TreeNode]? {
-        names?.compactMap { (dependence) -> TreeNode? in
+        names?.compactMap { dependence -> TreeNode? in
             if let node = nameToNodeCache[dependence]?.copy(with: deep, isImpact: isImpact) {
                 return node
             }
@@ -277,8 +279,8 @@ private extension TreeData {
 
         var tmpNodes = nodes
 
-        if !self.searchKey.isEmpty {
-            let lowerKey = self.searchKey.lowercased()
+        if !searchKey.isEmpty {
+            let lowerKey = searchKey.lowercased()
             tmpNodes = nodes.compactMap { node in
                 guard let indices = node.pod.lowercasedName.fuzzyMatch(lowerKey) else { return nil }
                 node.indices = indices
@@ -335,9 +337,9 @@ private extension TreeData {
 
 private func < (lhs: Int?, rhs: Int?) -> Bool {
     switch (lhs, rhs) {
-    case (.some, .none), (.none, .none): return false
-    case (.none, .some): return true
-    case (.some(let lhsValue), .some(let rhsValue)): return lhsValue < rhsValue
+    case (.some, .none), (.none, .none): false
+    case (.none, .some): true
+    case let (.some(lhsValue), .some(rhsValue)): lhsValue < rhsValue
     }
 }
 
@@ -346,14 +348,10 @@ private extension OrderBy {
 
     func sortClosure(isImpact: Bool) -> SortClosure {
         switch self {
-        case .alphabeticalAscending:
-            return { $0.pod.name < $1.pod.name }
-        case .alphabeticalDescending:
-            return { $0.pod.name > $1.pod.name }
-        case .numberAscending:
-            return { $0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count }
-        case .numberDescending:
-            return { !($0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count) }
+        case .alphabeticalAscending: { $0.pod.name < $1.pod.name }
+        case .alphabeticalDescending: { $0.pod.name > $1.pod.name }
+        case .numberAscending: { $0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count }
+        case .numberDescending: { !($0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count) }
         }
     }
 }

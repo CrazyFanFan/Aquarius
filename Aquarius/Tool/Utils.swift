@@ -17,8 +17,8 @@ enum Utils {
 
     private static func rootCacheDir() -> URL {
         switch GlobalState.shared.locationOfCacheFile {
-        case .system: return systemCacheDirectory
-        case .application: return applicationCacheDirectory ?? systemCacheDirectory
+        case .system: systemCacheDirectory
+        case .application: applicationCacheDirectory ?? systemCacheDirectory
         }
     }
 
@@ -28,7 +28,7 @@ enum Utils {
 
     static func clear() {
         [systemCacheDirectory, applicationCacheDirectory]
-            .compactMap({ $0 })
+            .compactMap { $0 }
             .forEach { url in
                 if fileManager.fileExists(atPath: url.path) {
                     try? fileManager.removeItem(at: url)

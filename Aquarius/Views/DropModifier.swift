@@ -6,9 +6,9 @@
 //
 
 import CoreData
+import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
-import SwiftData
 
 struct DropModifier: ViewModifier {
     @Environment(\.modelContext) private var swiftDataViewContext
@@ -28,7 +28,7 @@ struct DropModifier: ViewModifier {
             of: global.isLoading ? [] : [Self.supportType],
             isTargeted: $isTargeted
         ) {
-            self.loadPath(from: $0)
+            loadPath(from: $0)
         }
     }
 }
@@ -54,7 +54,8 @@ private extension DropModifier {
                     .suffix(2)
                     .joined(separator: "/"),
                 previous: items.last?.id,
-                timestamp: Date())
+                timestamp: Date()
+            )
 
             items.last?.next = newItem.id
 
@@ -66,7 +67,7 @@ private extension DropModifier {
 private extension DropModifier {
     private func loadPath(from items: [NSItemProvider]) -> Bool {
         guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
-        item.loadItem(forTypeIdentifier: Self.supportType.identifier, options: nil) { (data, error) in
+        item.loadItem(forTypeIdentifier: Self.supportType.identifier, options: nil) { data, error in
             if error != nil {
                 // TODO error
                 return

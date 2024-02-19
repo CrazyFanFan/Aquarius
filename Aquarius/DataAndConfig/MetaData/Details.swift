@@ -16,10 +16,10 @@ enum DetailContent {
 extension DetailContent {
     var name: String {
         switch self {
-        case .pod(let pod):
-            return pod.name
-        case .nextLevel(let name):
-            return name
+        case let .pod(pod):
+            pod.name
+        case let .nextLevel(name):
+            name
         }
     }
 }

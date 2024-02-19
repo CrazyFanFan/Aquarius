@@ -12,8 +12,9 @@ extension String {
         if let stringData = data(using: .utf8),
            let json = try? JSONSerialization.jsonObject(with: stringData, options: []),
            let data = try? JSONSerialization.data(
-            withJSONObject: json,
-            options: [.prettyPrinted, .withoutEscapingSlashes]),
+               withJSONObject: json,
+               options: [.prettyPrinted, .withoutEscapingSlashes]
+           ),
            let newString = String(data: data, encoding: .utf8) {
             return newString
         }
@@ -23,7 +24,6 @@ extension String {
 }
 
 extension TreeData {
-
     enum PodspecContent {
         case content(String)
         case error(String)

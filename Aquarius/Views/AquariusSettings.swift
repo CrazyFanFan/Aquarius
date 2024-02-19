@@ -87,11 +87,11 @@ private extension AquariusSettings {
         Text("\(Image(systemName: info.imageName)) ") + Text(LocalizedStringKey(info.message))
     }
 
-    func text<TAG: Hashable>(
+    func text(
         _ condition: Bool,
         _ trueInfo: ItmeInfo,
         _ falseInfo: ItmeInfo,
-        _ tag: TAG
+        _ tag: some Hashable
     ) -> some View {
         (condition ? text(trueInfo) : text(falseInfo)).tag(tag)
     }

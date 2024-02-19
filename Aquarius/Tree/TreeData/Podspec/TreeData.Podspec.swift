@@ -63,9 +63,10 @@ extension TreeData {
 }
 
 // MARK: - show Podspec
+
 private extension TreeData {
     func asyncShowPodspec(of pod: Pod) async {
-        guard let lock = lock else {
+        guard let lock else {
             assertionFailure("Should never here.")
             return
         }
@@ -101,7 +102,7 @@ private extension TreeData {
     ///   - podspec: podspec
     ///   - pod: pod use as cache key, pass nil to skip update cache.
     func show(with podspec: PodspecInfo, and pod: Pod?) {
-        if let pod = pod {
+        if let pod {
             podspecCache[pod] = podspec
         }
         self.podspec = podspec
@@ -159,7 +160,7 @@ private extension TreeData {
 
         task.arguments = ["-c", command]
         task.launchPath = "/bin/bash"
-        if let environment = environment {
+        if let environment {
             task.environment = environment
         }
         task.launch()
@@ -177,8 +178,7 @@ private extension TreeData {
 
         guard FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDirectory),
               isDirectory.boolValue,
-              FileManager.default.fileExists(atPath: repo.appendingPathComponent(".git").path)
-        else {
+              FileManager.default.fileExists(atPath: repo.appendingPathComponent(".git").path) else {
             return false
         }
 
@@ -243,7 +243,7 @@ private extension TreeData {
     func subDirectories(of url: URL) -> [URL]? {
         do {
             let contents = try FileManager.default.contentsOfDirectory(atPath: url.path)
-            return contents.compactMap { (element) in
+            return contents.compactMap { element in
                 var isDirectory: ObjCBool = false
                 let fullPath = url.appendingPathComponent(element)
                 FileManager.default.fileExists(atPath: fullPath.path, isDirectory: &isDirectory)
@@ -290,17 +290,17 @@ private extension TreeData {
         for url in repoRoots {
             let podspecFileURL: URL?
             // trunk is key for cdn
-            if repoGitURLString == "trunk" {
-                podspecFileURL = findPod(pod, in: url.appendingPathComponent("trunk"))
+            = if repoGitURLString == "trunk" {
+                findPod(pod, in: url.appendingPathComponent("trunk"))
             } else if let repoFileURL = findRepoURL(at: url, with: repoGitURLString) {
-                podspecFileURL = findPod(pod, in: repoFileURL)
+                findPod(pod, in: repoFileURL)
             } else {
                 // TODO: Add custom repo path support.
                 // assert(false, "Should never here.")
-                podspecFileURL = nil
+                nil
             }
 
-            guard let podspecFileURL = podspecFileURL else {
+            guard let podspecFileURL else {
                 continue
             }
 
@@ -311,7 +311,8 @@ private extension TreeData {
                         podspecFile: PodspecFile(url: podspecFileURL)
                     )
                 ),
-                and: pod)
+                and: pod
+            )
         }
     }
 }

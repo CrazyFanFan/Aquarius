@@ -25,13 +25,13 @@ struct PodspecView: View {
                         }
                     }
 
-            case .local(let spec):
+            case let .local(spec):
                 localView(for: spec)
 
-            case .repo(let spec):
+            case let .repo(spec):
                 repoView(for: spec)
 
-            case .git(let spec):
+            case let .git(spec):
                 gitView(for: spec)
             }
         }
@@ -58,12 +58,12 @@ private extension PodspecView {
             Divider()
 
             switch spec.content {
-            case .content(let contents):
+            case let .content(contents):
                 ScrollView {
                     Text(contents)
                         .textSelection(.enabled)
                 }
-            case .error(let error):
+            case let .error(error):
                 Group {
                     Text(error).foregroundColor(.close)
                     MyPreview(url: spec.url)
@@ -103,13 +103,13 @@ private extension PodspecView {
             }
 
             switch spec.revision {
-            case .commit(let commit):
+            case let .commit(commit):
                 Text("Commit: \(commit)")
-            case .branch(let branch, let commit):
+            case let .branch(branch, commit):
                 Text("Branch: \(branch), Commit: \(commit)")
-            case .tag(let tag):
+            case let .tag(tag):
                 Text("Tag: \(tag)")
-            case .autoCommit(let commit):
+            case let .autoCommit(commit):
                 Text("No branch tag or commit specified, automatic checkout commit: \(commit)")
             }
 
