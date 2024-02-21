@@ -11,7 +11,10 @@ extension String {
     func prettied() -> String {
         if let stringData = data(using: .utf8),
            let json = try? JSONSerialization.jsonObject(with: stringData, options: []),
-           let data = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted, .withoutEscapingSlashes]),
+           let data = try? JSONSerialization.data(
+               withJSONObject: json,
+               options: [.prettyPrinted, .withoutEscapingSlashes]
+           ),
            let newString = String(data: data, encoding: .utf8) {
             return newString
         }
@@ -21,17 +24,17 @@ extension String {
 }
 
 extension TreeData {
-    struct PodspecFile {
-        enum Content {
-            case content(String)
-            case error(String)
-        }
+    enum PodspecContent {
+        case content(String)
+        case error(String)
+    }
 
+    struct PodspecFile {
         var url: URL
-        var content: Content
+        var content: PodspecContent
 
         init(url: URL, content: String? = nil, requireAccessing: Bool = false) {
-            func urlContent(of url: URL) -> Content {
+            func urlContent(of url: URL) -> PodspecContent {
                 do {
                     let isAcccessing = requireAccessing && url.startAccessingSecurityScopedResource()
                     defer {
@@ -43,11 +46,12 @@ extension TreeData {
                     guard !requireAccessing || isAcccessing else {
                         return .error(NSLocalizedString("""
                         Load podspec content failed.
-                        Sorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself.
+                        Sorry, you do not have permission to access the podspec file. \
+                        Please use the 'Show in Finder' to view the file yourself.
                         """, comment: ""))
                     }
 
-                    return .content(try String(contentsOf: url).prettied())
+                    return try .content(String(contentsOf: url).prettied())
                 } catch {
                     print(error)
                     return .error(NSLocalizedString("Load podspec content failed.", comment: ""))
@@ -69,15 +73,15 @@ extension TreeData {
         var podspecFile: PodspecFile
     }
 
-    struct GitSpec {
-        enum GitRevision: Hashable {
-            /// branch and commit
-            case branch(branch: String, commit: String)
-            case tag(String)
-            case commit(String)
-            case autoCommit(String)
-        }
+    enum GitRevision: Hashable {
+        /// branch and commit
+        case branch(branch: String, commit: String)
+        case tag(String)
+        case commit(String)
+        case autoCommit(String)
+    }
 
+    struct GitSpec {
         var gitURLString: String
         var revision: GitRevision
     }

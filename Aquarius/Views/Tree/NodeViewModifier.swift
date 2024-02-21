@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct NodeViewModifier: ViewModifier {
-    @StateObject var treeData: TreeData
+    @State var treeData: TreeData
     var node: TreeNode
 
     func body(content: Self.Content) -> some View {
         content
             .contentShape(Rectangle())
             .onTapGesture {
-                self.treeData.onSelected(node: node)
+                treeData.onSelected(node: node)
             }
             .contextMenu {
-                self.menus(node.pod)
+                menus(node.pod)
             }
             .frame(maxWidth: .infinity)
     }
@@ -28,6 +28,7 @@ private extension NodeViewModifier {
     /// Cell 右键菜单
     /// - Parameter pod: 当前点击的 Pod
     /// - Returns: 菜单Items
+    @MainActor
     @inline(__always)
     func menus(_ pod: Pod) -> some View {
         typealias MenuItem = (name: String, type: TreeData.NodeContentDeepMode)
@@ -52,6 +53,7 @@ private extension NodeViewModifier {
         }
     }
 
+    @MainActor
     func copy(with pod: Pod, and type: TreeData.NodeContentDeepMode) {
         treeData.cancelCurrentCopyTask()
         treeData.startCopyStatus(with: pod, and: type)

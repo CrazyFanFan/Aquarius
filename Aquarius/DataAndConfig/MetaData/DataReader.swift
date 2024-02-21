@@ -8,6 +8,7 @@
 
 import Foundation
 import Yams
+
 // 可以用系统组件，先只给一层数据
 final class DataReader {
     private var file: LockFileInfo
@@ -74,18 +75,18 @@ final class DataReader {
             } else if let map = content as? [String: [String]] {
                 if let pod = Pod(map: map) {
                     lock.pods.append(pod)
-                    pod.successors?.forEach { (name) in
+                    pod.successors?.forEach { name in
                         var content = predecessors[name] ?? []
                         content.append(pod.name)
                         predecessors[name] = content
                     }
                 }
             } else {
-                assert(false, "Get unknown data: \(content)")
+                assertionFailure("Get unknown data: \(content)")
             }
         }
 
-        predecessors.forEach { arg in
+        for arg in predecessors {
             if let index = lock.pods.firstIndex(where: { $0.name == arg.key }) {
                 lock.pods[index].predecessors = arg.value
             }

@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class BookmarkTool {
+enum BookmarkTool {
     private static var cache: [Data: (URL, Bool)] = [:]
 
     static func bookmark(for url: URL) -> Data? {
@@ -25,7 +25,7 @@ final class BookmarkTool {
     }
 
     static func url(for bookmark: Data?) -> (URL, Bool)? {
-        guard let bookmark = bookmark else { return nil }
+        guard let bookmark else { return nil }
         if let result = cache[bookmark] { return result }
 
         do {

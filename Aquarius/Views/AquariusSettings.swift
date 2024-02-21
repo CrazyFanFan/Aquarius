@@ -79,7 +79,6 @@ struct AquariusSettings: View {
 }
 
 private extension AquariusSettings {
-
     typealias ItmeInfo = (imageName: String, message: String)
 
     @inline(__always)
@@ -88,18 +87,16 @@ private extension AquariusSettings {
         Text("\(Image(systemName: info.imageName)) ") + Text(LocalizedStringKey(info.message))
     }
 
-    func text<TAG: Hashable>(
+    func text(
         _ condition: Bool,
         _ trueInfo: ItmeInfo,
         _ falseInfo: ItmeInfo,
-        _ tag: TAG
+        _ tag: some Hashable
     ) -> some View {
         (condition ? text(trueInfo) : text(falseInfo)).tag(tag)
     }
 }
 
-struct AquariusSettings_Previews: PreviewProvider {
-    static var previews: some View {
-        AquariusSettings(global: .shared)
-    }
+#Preview {
+    AquariusSettings(global: .shared)
 }

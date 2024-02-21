@@ -9,14 +9,20 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @StateObject var global: GlobalState
-    @StateObject var treeData: TreeData
+    @State var global: GlobalState
+    @State var treeData: TreeData
 
     @State private var isFullVersionShow: Bool = false
 
-    @State private var tableAnimation: Animation?
-
     var body: some View {
+#if DEBUG
+        if #available(macOS 14.1, *) {
+            AnyView {
+                Self._logChanges()
+            }
+        }
+#endif
+
         if global.selection != nil {
             if treeData.isLockLoadFailed {
                 Text("""
@@ -33,10 +39,10 @@ struct TreeContent: View {
 }
 
 private extension TreeContent {
-    func mainContent() -> some View {
+    @MainActor func mainContent() -> some View {
         VStack {
             HStack {
-                PageControl(treeData: treeData) // Top operation bar
+                PageMenu(treeData: treeData) // Top operation bar
             }
             .padding(5)
 
@@ -45,7 +51,7 @@ private extension TreeContent {
             if global.useNewListStyle, #available(macOS 13, *) {
                 tableContent()
             } else {
-                SingleColumn()
+                singleColumn()
             }
         }
         .sheet(isPresented: $treeData.isPodspecShow) {
@@ -62,6 +68,7 @@ private extension TreeContent {
     }
 
     /// Columns style
+    @MainActor
     @available(macOS 13, *)
     func tableContent() -> some View {
         Table(treeData.showNodes) {
@@ -79,13 +86,11 @@ private extension TreeContent {
             }
             .width(ideal: 60, max: 220)
         }
-        .font(.system(size: 14))
-        .animation(tableAnimation, value: treeData.showNodes)
-        .onAppear { self.tableAnimation = .default }
+        .animation(.linear, value: treeData.showNodes)
     }
 
     /// Single column
-    func SingleColumn() -> some View {
+    @MainActor func singleColumn() -> some View {
         ScrollView {
             // List，用 LazyVGrid 是为了更好的性能
             LazyVGrid(
@@ -105,8 +110,6 @@ private extension TreeContent {
     }
 }
 
-struct TreeContent_Previews: PreviewProvider {
-    static var previews: some View {
-        TreeContent(global: .shared, treeData: .init(lockFile: .preview))
-    }
+#Preview {
+    TreeContent(global: .shared, treeData: .init(lockFile: .preview))
 }

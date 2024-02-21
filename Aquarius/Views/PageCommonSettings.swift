@@ -23,7 +23,7 @@ struct PageCommonSettings: View {
             Picker("Model:", selection: $detailMode) {
                 ForEach(DetailMode.allCases) { mode in
                     (
-                        Text("\(mode == .successors ? Image("arrow.triangle.branch.180") : Image(systemName: "arrow.triangle.branch"))") +
+                        Text("\(image(of: mode)) ") +
                         Text(LocalizedStringKey(mode.rawValue.capitalized))
                     ).tag(mode)
                 }
@@ -39,10 +39,16 @@ struct PageCommonSettings: View {
             }
         }
     }
+
+    @inline(__always) private func image(of mode: DetailMode) -> Image {
+        Image(systemName: mode == .successors ? "arrow.triangle.merge" : "arrow.triangle.branch")
+    }
 }
 
-struct PageSettings_Previews: PreviewProvider {
-    static var previews: some View {
-        PageCommonSettings(orderRule: .constant(.alphabeticalAscending), detailMode: .constant(.predecessors), isSubspeciesShow: .constant(false))
-    }
+#Preview {
+    PageCommonSettings(
+        orderRule: .constant(.alphabeticalAscending),
+        detailMode: .constant(.predecessors),
+        isSubspeciesShow: .constant(false)
+    )
 }

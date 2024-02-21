@@ -1,5 +1,5 @@
 //
-//  Config.swift
+//  GlobalState.swift
 //  Aquarius
 //
 //  Created by Crazy凡 on 2021/6/26.
@@ -17,8 +17,7 @@ enum LocationOfCacheFile: String, CaseIterable {
 extension Dictionary: RawRepresentable where Key: Codable, Value: Codable {
     public init?(rawValue: String) {
         guard let data = rawValue.data(using: .utf8),
-              let result = try? JSONDecoder().decode([Key: Value].self, from: data)
-        else {
+              let result = try? JSONDecoder().decode([Key: Value].self, from: data) else {
             return nil
         }
         self = result
@@ -26,20 +25,20 @@ extension Dictionary: RawRepresentable where Key: Codable, Value: Codable {
 
     public var rawValue: String {
         guard let data = try? JSONEncoder().encode(self),
-              let result = String(data: data, encoding: .utf8)
-        else {
+              let result = String(data: data, encoding: .utf8) else {
             return "[]"
         }
         return result
     }
 }
+
 // 接下来需要在 TreeData 内置页面内配置，并且优化逻辑；
 // 优先访问全局配置，全局配置失效则访问页面内配置
 
 final class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
-    @MainActor @Published var selection: Lock?
+    @MainActor @Published var selection: LockBookmark?
 
     @MainActor @Published var isLoading: Bool = false
 
@@ -68,19 +67,19 @@ final class GlobalState: ObservableObject {
 
     @AppStorage("repoBookMark") var repoBookMark: [URL: Data] = [:]
 
-    public var cache: NSCache<Lock, TreeData> = .init()
+    public var cache: NSCache<LockBookmark, TreeData> = .init()
     private init() {}
 }
 
 extension GlobalState {
-    func data(for lock: Lock) -> TreeData? {
-        if let data = self.cache.object(forKey: lock), data.lock != nil {
+    func data(for lock: LockBookmark) -> TreeData? {
+        if let data = cache.object(forKey: lock), data.lock != nil {
             return data
         }
 
         if let url = lock.url {
             let data = TreeData(lockFile: LockFileInfo(url: url))
-            self.cache.setObject(data, forKey: lock)
+            cache.setObject(data, forKey: lock)
 
             return data
         }

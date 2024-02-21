@@ -13,10 +13,10 @@ A tool to obtain dependencies by analyzing "Podfile.lock"
 
 **[ChangeLog](./ChangeLog/change_log.md)**
 
-## Environmentv
+## Environment
 
-- Xcode: version ≥ Xcode14 (Task.detached)
-- OSX: version ≥ 11.0
+- Xcode: version ≥ Xcode15 (Task.detached)
+- OSX: version ≥ 14.0
 
 ## Preview
 

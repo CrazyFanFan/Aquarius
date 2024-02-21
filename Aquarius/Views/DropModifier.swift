@@ -5,17 +5,16 @@
 //  Created by Crazy凡 on 2022/10/23.
 //
 
+import CoreData
+import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
-import CoreData
 
 struct DropModifier: ViewModifier {
-    @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.modelContext) private var swiftDataViewContext
 
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Lock.timestamp, ascending: true)],
-        animation: .default)
-    private var items: FetchedResults<Lock>
+    @Query(sort: \LockBookmark.timestamp, order: .forward)
+    private var items: [LockBookmark]
 
     @StateObject var global: GlobalState
     @State private var isTargeted: Bool = false
@@ -29,7 +28,7 @@ struct DropModifier: ViewModifier {
             of: global.isLoading ? [] : [Self.supportType],
             isTargeted: $isTargeted
         ) {
-            self.loadPath(from: $0)
+            loadPath(from: $0)
         }
     }
 }
@@ -46,28 +45,21 @@ private extension DropModifier {
                 return
             }
 
-            let newItem = Lock(context: viewContext)
-            newItem.timestamp = Date()
-            newItem.id = UUID()
-            newItem.previous = items.last?.id
-            newItem.bookmark = bookmark
-            newItem.name = url
-                .absoluteString
-                .components(separatedBy: "/")
-                .suffix(2)
-                .joined(separator: "/")
+            let newItem = LockBookmark(
+                bookmark: bookmark,
+                id: UUID(),
+                name: url
+                    .absoluteString
+                    .components(separatedBy: "/")
+                    .suffix(2)
+                    .joined(separator: "/"),
+                previous: items.last?.id,
+                timestamp: Date()
+            )
 
             items.last?.next = newItem.id
 
-            do {
-                try viewContext.save()
-                global.selection = newItem
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            swiftDataViewContext.insert(newItem)
         }
     }
 }
@@ -75,8 +67,8 @@ private extension DropModifier {
 private extension DropModifier {
     private func loadPath(from items: [NSItemProvider]) -> Bool {
         guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
-        item.loadItem(forTypeIdentifier: Self.supportType.identifier, options: nil) { (data, error) in
-            if let _ = error {
+        item.loadItem(forTypeIdentifier: Self.supportType.identifier, options: nil) { data, error in
+            if error != nil {
                 // TODO error
                 return
             }
@@ -101,4 +93,11 @@ struct DropModifier_Previews: PreviewProvider {
             .frame(width: 100, height: 100)
             .modifier(DropModifier(global: .shared))
     }
+}
+
+#Preview {
+    EmptyView()
+        .frame(width: 100, height: 100)
+        .background(Color.red.opacity(0.1))
+        .modifier(DropModifier(global: .shared))
 }

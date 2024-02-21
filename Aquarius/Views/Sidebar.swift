@@ -5,23 +5,30 @@
 //  Created by Crazy凡 on 2022/10/23.
 //
 
+import SwiftData
 import SwiftUI
 
 struct Sidebar: View {
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     @Environment(\.managedObjectContext) private var viewContext
+    @Environment(\.modelContext) private var swiftDataViewContext
 
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Lock.timestamp, ascending: true)],
-        animation: .default)
+        animation: .default
+    )
     private var items: FetchedResults<Lock>
+    @Query(sort: \LockBookmark.timestamp, order: .forward)
+    private var newItems: [LockBookmark]
 
     @StateObject var global: GlobalState
 
     @State private var isPresented: Bool = false
 
     var body: some View {
-        List(selection: $global.selection) {
-            showItems()
+        List(newItems, id: \.self, selection: $global.selection) {
+            view(for: $0)
         }
         .listStyle(SidebarListStyle())
         .toolbar {
@@ -38,10 +45,12 @@ struct Sidebar: View {
         }
         .frame(minWidth: 250, alignment: .leading)
         .onAppear {
+            // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+            migrateFromCoreData()
             if global.isBookmarkEnable {
-                global.selection = items.first
+                global.selection = newItems.first
             } else {
-                delete(items: Array(items))
+                delete(items: Array(newItems))
             }
         }
     }
@@ -53,37 +62,34 @@ struct Sidebar: View {
 }
 
 private extension Sidebar {
-    func showItems() -> some View {
-        ForEach(items) { item in
-            NavigationLink {
-                if let data = global.data(for: item) {
-                    TreeContent(global: global, treeData: data)
-                } else {
-                    Text("""
-                        Failed to parse Podfile.lock.
-                        Check the files for conflicts or other formatting exceptions.
-                        """)
-                }
-            } label: {
-                Text(item.name ?? "Unknow")
+    func view(for item: LockBookmark) -> some View {
+        NavigationLink {
+            if let data = global.data(for: item) {
+                TreeContent(global: global, treeData: data)
+            } else {
+                Text("""
+                    Failed to parse Podfile.lock.
+                    Check the files for conflicts or other formatting exceptions.
+                    """)
             }
-            .tag(item)
-            .contextMenu {
-                Button("Delete") {
-                    self.delete(items: [item])
-                    if item == global.selection {
-                        global.selection = nil
-                    }
+        } label: {
+            Text(item.name ?? "Unknow")
+        }
+        .contextMenu {
+            Button("Delete") {
+                self.delete(items: [item])
+                if item == global.selection {
+                    global.selection = nil
                 }
+            }
 
-                Button("Copy path") {
-                    Pasteboard.write(item.url?.path ?? "")
-                }
+            Button("Copy path") {
+                Pasteboard.write(item.url?.path ?? "")
+            }
 
-                if let url = item.url {
-                    Button("Show in finder") {
-                        NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
-                    }
+            if let url = item.url {
+                Button("Show in finder") {
+                    NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
                 }
             }
         }
@@ -91,34 +97,28 @@ private extension Sidebar {
 }
 
 private extension Sidebar {
-    private func deleteItems(offsets: IndexSet) {
+    private func delete(items: [LockBookmark]) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
-
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            items.forEach(swiftDataViewContext.delete)
         }
     }
 
-    private func delete(items: [Lock]) {
-        withAnimation {
-            items.forEach(viewContext.delete)
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+    private func migrateFromCoreData() {
+        items.forEach { lock in
+            guard let bookmark = lock.bookmark, let id = lock.id, let timestamp = lock.timestamp else { return }
+            swiftDataViewContext.insert(LockBookmark(
+                bookmark: bookmark,
+                id: id,
+                name: lock.name,
+                next: lock.next,
+                previous: lock.previous,
+                timestamp: timestamp
+            ))
 
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
-            }
+            viewContext.delete(lock)
         }
+        try? viewContext.save()
     }
 }
 
@@ -126,4 +126,8 @@ struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
         Sidebar(global: .shared)
     }
+}
+
+#Preview {
+    Sidebar(global: .shared)
 }

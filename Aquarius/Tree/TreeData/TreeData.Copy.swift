@@ -16,6 +16,7 @@ private enum Constant {
 }
 
 // MARK: - Data Copy
+
 extension TreeData {
     enum NodeContentDeepMode: Hashable {
         case none
@@ -29,7 +30,7 @@ extension TreeData {
         resetCopyStatus()
         isCopying = true
 
-        self.copyTask = Task.detached(priority: .background) {
+        copyTask = Task.detached(priority: .background) {
             defer {
                 print(start.distance(to: Date()))
             }
@@ -69,36 +70,40 @@ private extension TreeData {
 
     func copy(for pod: Pod, with deepMode: NodeContentDeepMode) -> String? {
         var context = CopyStaticContext(deepMode: deepMode, fileHandle: .nullDevice)
+        lazy var defaultErrorMessage = String(format: String(localized: "Faile to create tree of %@"), pod.name)
 
         do {
-            if deepMode == .recursive {
-                let treeURL = try Utils.cacheFile()
+            let treeURL = try Utils.cacheFile()
 
-                context.fileHandle = try FileHandle(forWritingTo: treeURL)
-                context.fileURL = treeURL
+            context.fileHandle = try FileHandle(forWritingTo: treeURL)
+            context.fileURL = treeURL
 
-                try self.recursiveContent(for: pod, weight: 1, context: context)
+            try recursiveContent(for: pod, weight: 1, context: context)
 
-                if let size = Utils.size(of: treeURL), size <= 4096 {
-                    if let data = try? Data(contentsOf: treeURL), let string = String(data: data, encoding: .utf8) {
-                        try? FileManager.default.removeItem(at: treeURL) // delete cache file
-                        return string
-                    }
+            func fileString(at url: URL = treeURL) -> String? {
+                defer {
+                    try? FileManager.default.removeItem(at: url)
                 }
 
-                return String(
-                    format: String(localized: "Tree content is too large, written to cache file: %@"),
-                    treeURL.path
-                )
-            } else {
-                return try self.recursiveContent(for: pod, weight: 1, context: context)
-            }
-        } catch {
-            if let url = context.fileURL {
-                try? FileManager.default.removeItem(at: url)
+                if let data = try? Data(contentsOf: treeURL), let string = String(data: data, encoding: .utf8) {
+                    return string
+                }
+                return nil
             }
 
-            return ""
+            return if deepMode == .recursive {
+                if let size = Utils.size(of: treeURL), size <= 4096 {
+                    fileString() ?? defaultErrorMessage
+                } else {
+                    String(format:
+                            String(localized: "Tree content is too large, written to cache file: %@"),
+                           treeURL.path)
+                }
+            } else {
+                fileString() ?? defaultErrorMessage
+            }
+        } catch {
+            return defaultErrorMessage
         }
     }
 
@@ -109,31 +114,30 @@ private extension TreeData {
         }
     }
 
-    @discardableResult
+    func formatNames(_ input: inout [String]) -> String {
+        if input.isEmpty { return "" }
+
+        if input.count == 1 {
+            return "\n└── " + input.joined()
+        } else {
+            let last = input.removeLast()
+            return "\n├── " + input.joined(separator: "\n├── ") + "\n└── " + last
+        }
+    }
+
     func recursiveContent(
         for pod: Pod,
         weight: Double,
         currentPrefix: Data = .init(),
         nextPrefix: Data = .init(),
         context: CopyStaticContext
-    ) throws -> String {
+    ) throws {
         guard !Task.isCancelled else { throw CopyError.cancelled }
-
-        func formatNames(_ input: inout [String]) -> String {
-            if input.isEmpty { return "" }
-
-            if input.count == 1 {
-                return ("\n└── " + input.joined())
-            } else {
-                let last = input.removeLast()
-                return ("\n├── " + input.joined(separator: "\n├── ") + "\n└── " + last)
-            }
-        }
 
         switch context.deepMode {
         case .none:
             updateProgress(append: weight)
-            return pod.name
+            context.fileHandle.write(pod.name)
         case .single:
             var result: String = pod.name
 
@@ -142,25 +146,20 @@ private extension TreeData {
             }
             updateProgress(append: weight)
 
-            return result
+            context.fileHandle.write(result)
 
         case .recursive:
-            let currentWeight: Double
-            let nextsWeight: Double
+            let realtimeProgressUpdate = weight > 1e-7
 
-            let realtimeProgressUpdate = weight > 1e-5
-
-            if realtimeProgressUpdate {
-                currentWeight = weight * 0.01
-                nextsWeight = weight * 0.99
+            let (currentWeight, nextsWeight) = if realtimeProgressUpdate {
+                (weight * 0.001, weight * 0.999)
             } else {
-                currentWeight = 0
-                nextsWeight = 0
+                (0, 0)
             }
 
             context.fileHandle.write(currentPrefix)
             context.fileHandle.write(pod.name)
-            context.fileHandle.write(Data([10]))
+            context.fileHandle.write(Constant.newline)
 
             if realtimeProgressUpdate {
                 updateProgress(append: currentWeight)
@@ -171,7 +170,7 @@ private extension TreeData {
                     updateProgress(append: nextsWeight)
                 }
 
-                return ""
+                return
             }
 
             switch next.count {
@@ -182,7 +181,8 @@ private extension TreeData {
                 weight: nextsWeight,
                 currentPrefix: nextPrefix + Constant.connector1,
                 nextPrefix: nextPrefix + Constant.prefix1,
-                context: context)
+                context: context
+            )
 
             default:
                 let partOfWeight = nextsWeight / Double(next.count)
@@ -194,7 +194,8 @@ private extension TreeData {
                         weight: partOfWeight,
                         currentPrefix: nextPrefix + Constant.connector2,
                         nextPrefix: nextPrefix + Constant.prefix2,
-                        context: context)
+                        context: context
+                    )
                 }
 
                 try recursiveContent(
@@ -202,14 +203,13 @@ private extension TreeData {
                     weight: partOfWeight,
                     currentPrefix: nextPrefix + Constant.connector1,
                     nextPrefix: nextPrefix + Constant.prefix1,
-                    context: context)
+                    context: context
+                )
             }
 
             if !realtimeProgressUpdate {
                 updateProgress(append: weight)
             }
-
-            return ""
 
         case .stripRecursive:
             var subNames = pod.nextLevel(isImpact) ?? []
@@ -218,17 +218,17 @@ private extension TreeData {
             while index < subNames.count {
                 subNames += nameToPodCache[subNames[index]]?
                     .nextLevel(isImpact)?
-                    .filter({ !subNames.contains($0) }) ?? []
+                    .filter { !subNames.contains($0) } ?? []
                 index += 1
             }
             updateProgress(append: weight)
 
-            return pod.name + formatNames(&subNames)
+            context.fileHandle.write(pod.name + formatNames(&subNames))
         }
     }
 }
 
-fileprivate extension FileHandle {
+private extension FileHandle {
     func write(_ content: String) {
         if let data = content.data(using: .utf8) {
             write(data)

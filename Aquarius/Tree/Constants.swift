@@ -9,7 +9,7 @@
 import Foundation
 
 enum DetailMode: String, CaseIterable, Identifiable {
-    var id: String { self.rawValue }
+    var id: String { rawValue }
 
     case successors
     case predecessors

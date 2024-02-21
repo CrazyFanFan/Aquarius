@@ -25,14 +25,14 @@
 --octalgrouping 4,8
 --operatorfunc spaced
 --patternlet hoist
---ranges spaced
 --self remove
 --semicolons inline
 --stripunusedargs always
 --trimwhitespace always
 --wraparguments preserve
 --wrapcollections preserve
+--guardelse same-line
 
 # rules
 
---disable andOperator, anyObjectProtocol, blankLinesAroundMark, hoistPatternLet, indent, isEmpty, ranges, redundantParens, redundantReturn, redundantSelf, semicolons, spaceAroundParens, spaceInsideGenerics, spaceInsideParens, strongOutlets, strongifiedSelf, todos, trailingClosures, trailingCommas, trailingSpace, unusedArguments, wrapArguments, yodaConditions,  sortedImports
+--disable indent, strongOutlets, todos, trailingCommas, unusedArguments, wrapMultilineStatementBraces

@@ -5,8 +5,8 @@
 //  Created by Crazy凡 on 2021/6/27.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct ContentView: View {
     @StateObject private var global = GlobalState.shared
@@ -19,7 +19,10 @@ struct ContentView: View {
                 if let selection = global.selection, let data = global.data(for: selection) {
                     TreeContent(global: global, treeData: data)
                 } else {
-                    Text("Select a Podfile.lock")
+                    ContentUnavailableView(
+                        "Select a Podfile.lock",
+                        image: "paperplane"
+                    )
                 }
             }
 
@@ -33,9 +36,12 @@ struct ContentView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
-    }
+#Preview {
+    ContentView()
+    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+        .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
+        .modelContainer(for: LockBookmark.self)
+#if DEBUG
+        .preferredColorScheme(Bool.random() ? .dark : .light) // for debug
+#endif
 }

@@ -11,12 +11,14 @@ enum Utils {
     static let fileManager = FileManager.default
 
     private static var systemCacheDirectory: URL { fileManager.temporaryDirectory }
-    private static var applicationCacheDirectory: URL? { fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first }
+    private static var applicationCacheDirectory: URL? {
+        fileManager.urls(for: .cachesDirectory, in: .userDomainMask).first
+    }
 
     private static func rootCacheDir() -> URL {
         switch GlobalState.shared.locationOfCacheFile {
-        case .system: return systemCacheDirectory
-        case .application: return applicationCacheDirectory ?? systemCacheDirectory
+        case .system: systemCacheDirectory
+        case .application: applicationCacheDirectory ?? systemCacheDirectory
         }
     }
 
@@ -26,7 +28,7 @@ enum Utils {
 
     static func clear() {
         [systemCacheDirectory, applicationCacheDirectory]
-            .compactMap({ $0 })
+            .compactMap { $0 }
             .forEach { url in
                 if fileManager.fileExists(atPath: url.path) {
                     try? fileManager.removeItem(at: url)
@@ -35,7 +37,7 @@ enum Utils {
             }
     }
 
-    static private(set) var cacheDir: URL = rootCacheDir()
+    private(set) static var cacheDir: URL = rootCacheDir()
 
     static func cacheFile() throws -> URL {
         if !fileManager.fileExists(atPath: cacheDir.path) {
@@ -67,14 +69,12 @@ enum Utils {
         }
     }
 
-    static var userHome: URL = {
-        URL(fileURLWithPath: userHomePath, isDirectory: true)
-    }()
+    static var userHome: URL = .init(fileURLWithPath: userHomePath, isDirectory: true)
 
     static var userHomePath: String {
-        let pw = getpwuid(getuid())
+        let pwd = getpwuid(getuid())
 
-        if let home = pw?.pointee.pw_dir {
+        if let home = pwd?.pointee.pw_dir {
             return FileManager.default.string(withFileSystemRepresentation: home, length: Int(strlen(home)))
         }
 
