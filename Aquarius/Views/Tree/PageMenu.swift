@@ -12,29 +12,33 @@ struct PageMenu: View {
     @State private var isShow: Bool = false
 
     var body: some View {
-        Text("Total: \(treeData.showNodes.filter { $0.deep == 0 }.count)")
-            .foregroundColor(.primary)
-            .font(.headline)
+        VStack {
+            HStack {
+                Text("Total: \(treeData.showNodes.filter { $0.deep == 0 }.count)")
+                    .foregroundColor(.primary)
+                    .font(.headline)
 
-        Spacer()
+                Spacer()
 
-        if treeData.isCopying {
-            copyProgress()
-        }
+                PageCommonSettings(
+                    orderRule: $treeData.orderRule,
+                    detailMode: $treeData.detailMode,
+                    isSubspeciesShow: $treeData.isSubspeciesShow
+                )
+                .fixedSize()
 
-        PageCommonSettings(
-            orderRule: $treeData.orderRule,
-            detailMode: $treeData.detailMode,
-            isSubspeciesShow: $treeData.isSubspeciesShow
-        )
-        .fixedSize()
+                Button("Copy all") {
+                    let content = treeData.showNodes
+                        .map { (0 ..< $0.deep).map { _ in "\t" }.joined() + $0.pod.name }
+                        .joined(separator: "\n")
+                    Pasteboard.write(content)
+                }
+            }
 
-        Button("Copy all") {
-            let content = treeData.showNodes
-                .map { (0 ..< $0.deep).map { _ in "\t" }.joined() + $0.pod.name }
-                .joined(separator: "\n")
-            Pasteboard.write(content)
-        }
+            if treeData.isCopying, treeData.copyMode == .recursive {
+                copyProgress()
+            }
+        }.padding(5)
     }
 }
 
@@ -56,12 +60,9 @@ private extension PageMenu {
             .buttonStyle(.borderless)
         }
         .padding([.leading, .trailing], 3.5)
-        .clipShape(RoundedRectangle(cornerRadius: 5))
-        .contentShape(RoundedRectangle(cornerRadius: 5))
         .overlay {
             RoundedRectangle(cornerRadius: 5)
-                .stroke(lineWidth: 1)
-                .opacity(0.5)
+                .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
         }
     }
 }

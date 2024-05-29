@@ -79,6 +79,7 @@ private extension String {
 
     @MainActor var displayCopyProgress: Double = 0
     @MainActor var isCopying: Bool = false
+    @MainActor var copyMode: CopyingStrategy?
     @ObservationIgnored var copyTask: Task<Void, Error>?
 
     @MainActor var copyResult: (content: String, isWriteToFile: Bool)?
@@ -259,7 +260,9 @@ private extension TreeData {
 
     @inline(__always)
     func updateNext(for nodes: [TreeNode], isImpact: Bool) {
-        nodes.forEach { updateNext(for: $0, isImpact: isImpact) }
+        for node in nodes {
+            updateNext(for: node, isImpact: isImpact)
+        }
     }
 
     func updateNext(for node: TreeNode, isImpact: Bool) {
@@ -274,7 +277,9 @@ private extension TreeData {
         loadShowNodesTmp.removeAll()
 
         if resetIsExpanded {
-            nodes.forEach { $0.isExpanded = false }
+            for node in nodes {
+                node.isExpanded = false
+            }
         }
 
         var tmpNodes = nodes
@@ -287,7 +292,9 @@ private extension TreeData {
                 return node
             }
         } else {
-            nodes.forEach { $0.indices = nil }
+            for node in nodes {
+                node.indices = nil
+            }
         }
 
         let sortClosure = orderRule.sortClosure(isImpact: isImpact)

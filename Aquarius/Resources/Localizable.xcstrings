@@ -236,18 +236,18 @@
         }
       }
     },
-    "Copy child nodes (Recursive, Strip)" : {
+    "Copy child nodes (Recursive, Prune)" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy child nodes (Recursive, Strip)"
+            "value" : "Copy child nodes (Recursive, Prune)"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "translated",
+            "state" : "needs_review",
             "value" : "复制子节点(递归、裁剪)"
           }
         }

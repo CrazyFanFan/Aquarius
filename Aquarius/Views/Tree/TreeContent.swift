@@ -41,10 +41,7 @@ struct TreeContent: View {
 private extension TreeContent {
     @MainActor func mainContent() -> some View {
         VStack {
-            HStack {
-                PageMenu(treeData: treeData) // Top operation bar
-            }
-            .padding(5)
+            PageMenu(treeData: treeData) // Top operation bar
 
             Divider()
 

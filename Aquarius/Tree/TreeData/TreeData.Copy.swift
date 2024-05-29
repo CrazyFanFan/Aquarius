@@ -18,17 +18,18 @@ private enum Constant {
 // MARK: - Data Copy
 
 extension TreeData {
-    enum NodeContentDeepMode: Hashable {
-        case none
-        case single
+    enum CopyingStrategy: Hashable {
+        case nameOnly
+        case children
         case recursive
-        case stripRecursive
+        case pruneRecursive
     }
 
-    @MainActor func startCopyStatus(with pod: Pod, and deepMode: NodeContentDeepMode) {
+    @MainActor func startCopyStatus(with pod: Pod, and deepMode: CopyingStrategy) {
         let start = Date()
         resetCopyStatus()
         isCopying = true
+        copyMode = deepMode
 
         copyTask = Task.detached(priority: .background) {
             defer {
@@ -48,6 +49,7 @@ extension TreeData {
     @MainActor func resetCopyStatus() {
         isCopying = false
         copyProgress = 0
+        copyMode = nil
     }
 
     @MainActor func cancelCurrentCopyTask() {
@@ -59,7 +61,7 @@ extension TreeData {
 
 private extension TreeData {
     struct CopyStaticContext {
-        let deepMode: NodeContentDeepMode
+        let deepMode: CopyingStrategy
         var fileHandle: FileHandle
         var fileURL: URL?
     }
@@ -68,7 +70,7 @@ private extension TreeData {
         case cancelled
     }
 
-    func copy(for pod: Pod, with deepMode: NodeContentDeepMode) -> String? {
+    func copy(for pod: Pod, with deepMode: CopyingStrategy) -> String? {
         var context = CopyStaticContext(deepMode: deepMode, fileHandle: .nullDevice)
         lazy var defaultErrorMessage = String(format: String(localized: "Faile to create tree of %@"), pod.name)
 
@@ -135,10 +137,10 @@ private extension TreeData {
         guard !Task.isCancelled else { throw CopyError.cancelled }
 
         switch context.deepMode {
-        case .none:
+        case .nameOnly:
             updateProgress(append: weight)
             context.fileHandle.write(pod.name)
-        case .single:
+        case .children:
             var result: String = pod.name
 
             if var next = pod.nextLevel(isImpact) {
@@ -211,7 +213,7 @@ private extension TreeData {
                 updateProgress(append: weight)
             }
 
-        case .stripRecursive:
+        case .pruneRecursive:
             var subNames = pod.nextLevel(isImpact) ?? []
             var index = 0
 

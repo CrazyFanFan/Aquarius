@@ -31,13 +31,13 @@ private extension NodeViewModifier {
     @MainActor
     @inline(__always)
     func menus(_ pod: Pod) -> some View {
-        typealias MenuItem = (name: String, type: TreeData.NodeContentDeepMode)
+        typealias MenuItem = (name: String, type: TreeData.CopyingStrategy)
 
         let menus: [MenuItem] = [
-            ("Copy", .none),
-            ("Copy child nodes", .single),
+            ("Copy", .nameOnly),
+            ("Copy child nodes", .children),
             ("Copy child nodes (Recursive)", .recursive),
-            ("Copy child nodes (Recursive, Strip)", .stripRecursive)
+            ("Copy child nodes (Recursive, Prune)", .pruneRecursive)
         ]
 
         return Group {
@@ -54,7 +54,7 @@ private extension NodeViewModifier {
     }
 
     @MainActor
-    func copy(with pod: Pod, and type: TreeData.NodeContentDeepMode) {
+    func copy(with pod: Pod, and type: TreeData.CopyingStrategy) {
         treeData.cancelCurrentCopyTask()
         treeData.startCopyStatus(with: pod, and: type)
     }
