@@ -44,6 +44,11 @@ enum NodeViewInfoHelper {
         highlight(string: node.pod.name, indices: node.indices)
     }
 
+    @inline(__always)
+    static func name(_ node: (pod: Pod, indices: [String.Index]?)) -> some View {
+        highlight(string: node.pod.name, indices: node.indices)
+    }
+
     static func nameAndCount(_ node: TreeNode, isImpactMode: Bool, isIgnoreNodeDeep: Bool) -> some View {
         HStack {
             more(node, isImpactMode: isImpactMode).bold()

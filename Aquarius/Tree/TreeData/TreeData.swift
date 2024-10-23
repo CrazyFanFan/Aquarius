@@ -10,7 +10,7 @@ import Combine
 import Observation
 import SwiftUI
 
-private extension String {
+extension String {
     func fuzzyMatch(_ filter: String) -> [String.Index]? {
         func match(_ source: Substring, key: Substring) -> [String.Index]? {
             if let range = source.range(of: key) {
@@ -128,9 +128,7 @@ private extension String {
     var isImpact: Bool { detailMode == .predecessors }
 
     // for show Podspec
-    @ObservationIgnored var podspec: PodspecInfo?
-    @MainActor var isPodspecShow: Bool = false
-
+    @MainActor var podspec: (Bool, PodspecInfo?) = (false, nil)
     @ObservationIgnored var podspecCache: [Pod: PodspecInfo] = [:]
 
     var isSubspeciesShow: Bool {

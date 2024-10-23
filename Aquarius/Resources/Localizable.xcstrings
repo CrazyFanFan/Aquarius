@@ -27,6 +27,16 @@
         }
       }
     },
+    "↓" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "↓"
+          }
+        }
+      }
+    },
     "⇇·(%lld) " : {
       "localizations" : {
         "zh-Hans" : {
@@ -623,6 +633,9 @@
         }
       }
     },
+    "Loading" : {
+
+    },
     "Location of cache file" : {
       "localizations" : {
         "en" : {
@@ -667,6 +680,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "未指定分支、标签或提交，自动检出提交: %@"
+          }
+        }
+      }
+    },
+    "No connection" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有关联"
           }
         }
       }
@@ -950,6 +973,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "标签: %@"
+          }
+        }
+      }
+    },
+    "The connection between **%@** and **%@** is as follows" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The connection between **%1$@** and **%2$@** is as follows"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "**%1$@** 和 **%2$@** 之间关联如下"
           }
         }
       }

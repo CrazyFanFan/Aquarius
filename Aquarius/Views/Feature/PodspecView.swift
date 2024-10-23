@@ -36,8 +36,6 @@ struct PodspecView: View {
             }
         }
         .padding()
-        .background(Color(NSColor.windowBackgroundColor))
-        .contentShape(RoundedRectangle(cornerRadius: 5))
         .frame(
             minWidth: 700,
             maxWidth: 700,

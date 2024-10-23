@@ -47,6 +47,7 @@ private var asyncShowPodspecTask: Task<Void, Never>?
 
 extension TreeData {
     @MainActor func showPodspec(of pod: Pod) {
+        podspec = (false, nil)
         GlobalState.shared.isLoading = true
 
         if let cache = podspecCache[pod] {
@@ -55,7 +56,7 @@ extension TreeData {
 
         asyncShowPodspecTask = Task.detached(priority: .userInitiated) {
             await self.asyncShowPodspec(of: pod)
-            self.runWithMainActor {
+            await MainActor.run {
                 GlobalState.shared.isLoading = false
             }
         }
@@ -105,11 +106,8 @@ private extension TreeData {
         if let pod {
             podspecCache[pod] = podspec
         }
-        self.podspec = podspec
-
-        runWithMainActor {
-            self.isPodspecShow = true
-            GlobalState.shared.isLoading = false
+        DispatchQueue.main.async {
+            self.podspec = (true, podspec)
         }
     }
 
@@ -288,9 +286,7 @@ private extension TreeData {
         }
 
         for url in repoRoots {
-            let podspecFileURL: URL?
-            // trunk is key for cdn
-            = if repoGitURLString == "trunk" {
+            let podspecFileURL: URL? = if repoGitURLString == "trunk" { // trunk is key for cdn
                 findPod(pod, in: url.appendingPathComponent("trunk"))
             } else if let repoFileURL = findRepoURL(at: url, with: repoGitURLString) {
                 findPod(pod, in: repoFileURL)

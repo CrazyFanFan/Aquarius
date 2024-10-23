@@ -51,8 +51,8 @@ private extension TreeContent {
                 singleColumn()
             }
         }
-        .sheet(isPresented: $treeData.isPodspecShow) {
-            PodspecView(podspec: treeData.podspec)
+        .sheet(isPresented: $treeData.podspec.0) {
+            PodspecView(podspec: treeData.podspec.1)
         }
         .searchable(text: $treeData.searchKey) {
             if !treeData.searchSuggestions.isEmpty {

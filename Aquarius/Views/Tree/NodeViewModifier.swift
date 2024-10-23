@@ -11,6 +11,8 @@ struct NodeViewModifier: ViewModifier {
     @State var treeData: TreeData
     var node: TreeNode
 
+    @State private var isReleationShow: Bool = false
+
     func body(content: Self.Content) -> some View {
         content
             .contentShape(Rectangle())
@@ -21,6 +23,16 @@ struct NodeViewModifier: ViewModifier {
                 menus(node.pod)
             }
             .frame(maxWidth: .infinity)
+            .sheet(isPresented: $isReleationShow) {
+                RelationView(
+                    pod: node.pod,
+                    data: .init(
+                        start: node.pod,
+                        pods: treeData.lock?.pods ?? [],
+                        nameToPodCache: treeData.nameToPodCache
+                    )
+                )
+            }
     }
 }
 
@@ -34,7 +46,7 @@ private extension NodeViewModifier {
         typealias MenuItem = (name: String, type: TreeData.CopyingStrategy)
 
         let menus: [MenuItem] = [
-            ("Copy", .nameOnly),
+            ("Copy", TreeData.CopyingStrategy.nameOnly),
             ("Copy child nodes", .children),
             ("Copy child nodes (Recursive)", .recursive),
             ("Copy child nodes (Recursive, Prune)", .pruneRecursive)
@@ -53,6 +65,12 @@ private extension NodeViewModifier {
             Text("View Information").font(.headline)
             Button("Show Podspec") {
                 self.treeData.showPodspec(of: pod)
+            }
+
+            Divider()
+            Text("Relation Management").font(.headline)
+            Button("Relation") {
+                isReleationShow.toggle()
             }
         }
     }

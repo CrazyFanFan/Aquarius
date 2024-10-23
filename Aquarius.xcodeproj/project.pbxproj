@@ -27,6 +27,8 @@
 		636182FD292938BB00819F31 /* MyPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636182FC292938BB00819F31 /* MyPreview.swift */; };
 		6380EEA22A619DAA0094209E /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6380EEA12A619DAA0094209E /* InfoPlist.xcstrings */; };
 		6380EEA42A619DAA0094209E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6380EEA32A619DAA0094209E /* Localizable.xcstrings */; };
+		63965B8D2CCE6A190058BE01 /* RelationTreeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63965B8C2CCE6A190058BE01 /* RelationTreeData.swift */; };
+		639694E02CC9426A00DA3AF6 /* RelationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639694DF2CC9426A00DA3AF6 /* RelationView.swift */; };
 		63969CF92906CF58002C76C9 /* NodeViewInfoHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63969CF82906CF58002C76C9 /* NodeViewInfoHelper.swift */; };
 		63969CFC2906D1B3002C76C9 /* NodeViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63969CFB2906D1B3002C76C9 /* NodeViewModifier.swift */; };
 		63CF6CBC2A0775290082CFE7 /* DiskAccessHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF6CBB2A0775290082CFE7 /* DiskAccessHelper.swift */; };
@@ -63,6 +65,8 @@
 		636182FC292938BB00819F31 /* MyPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPreview.swift; sourceTree = "<group>"; };
 		6380EEA12A619DAA0094209E /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		6380EEA32A619DAA0094209E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		63965B8C2CCE6A190058BE01 /* RelationTreeData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationTreeData.swift; sourceTree = "<group>"; };
+		639694DF2CC9426A00DA3AF6 /* RelationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationView.swift; sourceTree = "<group>"; };
 		63969CF82906CF58002C76C9 /* NodeViewInfoHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeViewInfoHelper.swift; sourceTree = "<group>"; };
 		63969CFB2906D1B3002C76C9 /* NodeViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeViewModifier.swift; sourceTree = "<group>"; };
 		63C1C1732AF25BC400E18BAA /* libz.1.1.3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.1.1.3.tbd; path = usr/lib/libz.1.1.3.tbd; sourceTree = SDKROOT; };
@@ -137,6 +141,15 @@
 				CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */,
 			);
 			path = MetaData;
+			sourceTree = "<group>";
+		};
+		639694DD2CC9424E00DA3AF6 /* Feature */ = {
+			isa = PBXGroup;
+			children = (
+				9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */,
+				639694DF2CC9426A00DA3AF6 /* RelationView.swift */,
+			);
+			path = Feature;
 			sourceTree = "<group>";
 		};
 		63969CFA2906D196002C76C9 /* Tree */ = {
@@ -215,6 +228,7 @@
 				63CF6CBD2A077EDF0082CFE7 /* Podspec */,
 				928C5AF52977689BD85F0C9DCC365371 /* TreeData.Copy.swift */,
 				A4E02AF0F4DC35FD35B9AC8664F3C14E /* TreeData.swift */,
+				63965B8C2CCE6A190058BE01 /* RelationTreeData.swift */,
 			);
 			path = TreeData;
 			sourceTree = "<group>";
@@ -244,12 +258,12 @@
 			isa = PBXGroup;
 			children = (
 				63969CFA2906D196002C76C9 /* Tree */,
-				9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */,
 				A47B9A4EB6F7F088D8190DA9BDAD1CAA /* AquariusSettings.swift */,
 				63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */,
 				63E44B6C2905326F00F0ED6A /* Sidebar.swift */,
 				63E44B6E2905383D00F0ED6A /* DropModifier.swift */,
 				636182FC292938BB00819F31 /* MyPreview.swift */,
+				639694DD2CC9424E00DA3AF6 /* Feature */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -375,10 +389,12 @@
 				0DF83352560332CFE6F11993A311C9C3 /* GlobalState.swift in Sources */,
 				5C0BE06929DE5B8141979A03C965B5B3 /* LockBookmark+.swift in Sources */,
 				DB252DFFDE947E64DD6A17C0908D761E /* Pasteboard.swift in Sources */,
+				63965B8D2CCE6A190058BE01 /* RelationTreeData.swift in Sources */,
 				320306E38D46E9057798768D8AA5A891 /* Persistence.swift in Sources */,
 				63969CF92906CF58002C76C9 /* NodeViewInfoHelper.swift in Sources */,
 				504F3B0CAEE38CE5FCE068E780833F3A /* Pod.swift in Sources */,
 				46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */,
+				639694E02CC9426A00DA3AF6 /* RelationView.swift in Sources */,
 				63CF6CBF2A0782ED0082CFE7 /* TreeData.Podspec.Model.swift in Sources */,
 				A0A4801B4905C485302DFE8CB9CCD9E3 /* LockFileInfo.swift in Sources */,
 				63969CFC2906D1B3002C76C9 /* NodeViewModifier.swift in Sources */,
@@ -616,7 +632,7 @@
 			repositoryURL = "https://github.com/jpsim/Yams.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.0;
+				minimumVersion = 5.1.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
