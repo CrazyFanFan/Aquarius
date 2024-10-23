@@ -41,12 +41,16 @@ private extension NodeViewModifier {
         ]
 
         return Group {
+            Text("Copy Operations").font(.headline)
+
             ForEach(menus, id: \.name) { item in
                 Button(LocalizedStringKey(item.name)) {
                     copy(with: pod, and: item.type)
                 }
             }
 
+            Divider()
+            Text("View Information").font(.headline)
             Button("Show Podspec") {
                 self.treeData.showPodspec(of: pod)
             }

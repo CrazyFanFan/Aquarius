@@ -5,6 +5,7 @@
 //  Created by Crazy凡 on 2022/8/7.
 //
 
+import Cocoa
 import Foundation
 
 enum Utils {
@@ -35,6 +36,10 @@ enum Utils {
                     try? fileManager.createDirectory(at: url, withIntermediateDirectories: true)
                 }
             }
+    }
+
+    static func openTheCacheDirectory() {
+        NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: rootCacheDir().path)
     }
 
     private(set) static var cacheDir: URL = rootCacheDir()

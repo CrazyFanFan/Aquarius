@@ -12,7 +12,8 @@ enum NodeViewInfoHelper {
     private static func highlight(string: String, indices: [String.Index]?) -> some View {
         guard let indices, !indices.isEmpty else { return Text(string) }
 
-        var result = Text("")
+        let empty = ""
+        var result = Text(empty)
 
         for index in string.indices {
             let char = Text(String(string[index]))

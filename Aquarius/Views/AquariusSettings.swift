@@ -71,6 +71,10 @@ struct AquariusSettings: View {
             Button("Clean the cache") {
                 Utils.clear()
             }
+
+            Button("Open the cache directory") {
+                Utils.openTheCacheDirectory()
+            }
         }
         .padding()
         .navigationTitle("Preferences")

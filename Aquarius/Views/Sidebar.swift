@@ -105,8 +105,8 @@ private extension Sidebar {
 
     // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     private func migrateFromCoreData() {
-        items.forEach { lock in
-            guard let bookmark = lock.bookmark, let id = lock.id, let timestamp = lock.timestamp else { return }
+        for lock in items {
+            guard let bookmark = lock.bookmark, let id = lock.id, let timestamp = lock.timestamp else { continue }
             swiftDataViewContext.insert(LockBookmark(
                 bookmark: bookmark,
                 id: id,

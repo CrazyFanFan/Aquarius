@@ -1,11 +1,15 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
     "%@ " : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ "
+          }
+        }
+      }
     },
     "%@ %@" : {
       "localizations" : {
@@ -14,17 +18,44 @@
             "state" : "new",
             "value" : "%1$@ %2$@"
           }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ %2$@"
+          }
         }
       }
     },
     "⇇·(%lld) " : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⇇·(%lld) "
+          }
+        }
+      }
     },
     "⇉·(%lld) " : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⇉·(%lld) "
+          }
+        }
+      }
     },
     "=·(0) " : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "=·(0) "
+          }
+        }
+      }
     },
     "Application" : {
       "extractionState" : "manual",
@@ -99,6 +130,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Branch: %1$@, Commit: %2$@"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分支: %1$@, 提交: %2$@"
           }
         }
       }
@@ -186,7 +223,6 @@
       }
     },
     "Copy" : {
-      "comment" : "--- NodeViewModifier start ---",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -247,7 +283,7 @@
         },
         "zh-Hans" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "复制子节点(递归、裁剪)"
           }
         }
@@ -280,8 +316,17 @@
         }
       }
     },
+    "Copy Operations" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制操作"
+          }
+        }
+      }
+    },
     "Copy path" : {
-      "comment" : "Podspec view use again",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -379,7 +424,6 @@
       }
     },
     "Drag the Podfile.lock here!" : {
-      "comment" : "Localizable.strings\n  Aquarius\n\n  Created by Crazy凡 on 2019/11/30.\n  Copyright © 2019 Crazy凡. All rights reserved.",
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -397,7 +441,14 @@
       }
     },
     "Empty" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "空空如也"
+          }
+        }
+      }
     },
     "Faile to create tree of %@" : {
       "extractionState" : "manual",
@@ -433,10 +484,16 @@
       }
     },
     "Git: %@" : {
-
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Git: %@"
+          }
+        }
+      }
     },
     "Global Settings" : {
-      "comment" : "section one",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -535,7 +592,6 @@
       }
     },
     "Load podspec content failed." : {
-      "comment" : "--- Podspec view start ---",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -616,7 +672,6 @@
       }
     },
     "Nodes" : {
-      "comment" : "--- TreeContent start ---",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -645,6 +700,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "什么也没有~~"
+          }
+        }
+      }
+    },
+    "Open the cache directory" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开缓存目录"
           }
         }
       }
@@ -699,6 +764,32 @@
         }
       }
     },
+    "Relation" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关联"
+          }
+        }
+      }
+    },
+    "Relation Management" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Relation Management"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "关联查询"
+          }
+        }
+      }
+    },
     "Select a Podfile.lock" : {
       "localizations" : {
         "en" : {
@@ -733,7 +824,6 @@
       }
     },
     "Show in finder" : {
-      "comment" : "--- NodeViewModifier end ---",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -783,7 +873,6 @@
       }
     },
     "Sort by:" : {
-      "comment" : "section two",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -898,7 +987,6 @@
       }
     },
     "Tree content is too large, written to cache file: %@" : {
-      "comment" : "--- Podspec view end ---",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -926,6 +1014,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "版本"
+          }
+        }
+      }
+    },
+    "View Information" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "属性"
           }
         }
       }

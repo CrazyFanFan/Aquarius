@@ -140,6 +140,7 @@ private extension TreeData {
         case .nameOnly:
             updateProgress(append: weight)
             context.fileHandle.write(pod.name)
+
         case .children:
             var result: String = pod.name
 
@@ -154,7 +155,7 @@ private extension TreeData {
             let realtimeProgressUpdate = weight > 1e-7
 
             let (currentWeight, nextsWeight) = if realtimeProgressUpdate {
-                (weight * 0.001, weight * 0.999)
+                (weight * 0.00001, weight * 0.99999)
             } else {
                 (0, 0)
             }

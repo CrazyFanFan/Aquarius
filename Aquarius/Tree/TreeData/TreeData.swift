@@ -54,22 +54,22 @@ private extension String {
 }
 
 @Observable final class TreeData {
-    private var global: GlobalState = .shared
+    @ObservationIgnored private var global: GlobalState = .shared
 
-    private var podToNodeCache: [Pod: TreeNode] = [:]
-    private var nameToNodeCache: [String: TreeNode] = [:]
-    private var nodes: [TreeNode] = []
+    @ObservationIgnored private var podToNodeCache: [Pod: TreeNode] = [:]
+    @ObservationIgnored private var nameToNodeCache: [String: TreeNode] = [:]
+    private(set) var nodes: [TreeNode] = []
     private(set) var searchSuggestions: [TreeNode] = []
-    private(set) var nameToPodCache: [String: Pod] = [:]
-    private var buildTreeTask: Task<Void, Never>?
+    @ObservationIgnored private(set) var nameToPodCache: [String: Pod] = [:]
+    @ObservationIgnored private var buildTreeTask: Task<Void, Never>?
 
-    private var loadShowNodesTmp: [TreeNode] = []
+    @ObservationIgnored private var loadShowNodesTmp: [TreeNode] = []
     @MainActor private(set) var showNodes: [TreeNode] = []
 
     private var isIgnoreLastModificationDate: Bool { global.isIgnoreLastModificationDate }
 
     /// for copy
-    @MainActor var copyProgress: Double = 0 {
+    @ObservationIgnored @MainActor var copyProgress: Double = 0 {
         didSet {
             if copyProgress == 0 || copyProgress == 1 || copyProgress - displayCopyProgress > 0.01 {
                 displayCopyProgress = copyProgress
@@ -82,7 +82,7 @@ private extension String {
     @MainActor var copyMode: CopyingStrategy?
     @ObservationIgnored var copyTask: Task<Void, Error>?
 
-    @MainActor var copyResult: (content: String, isWriteToFile: Bool)?
+    @ObservationIgnored @MainActor var copyResult: (content: String, isWriteToFile: Bool)?
 
     // load file
     @ObservationIgnored var lockFile: LockFileInfo {
@@ -90,17 +90,13 @@ private extension String {
             if isIgnoreLastModificationDate {
                 loadFile()
             } else {
-                checkShouldReloadData(oldLockFile: oldValue) { isNeedReloadData in
-                    if isNeedReloadData {
-                        self.loadFile()
-                    }
-                }
+                checkShouldReloadData(oldLockFile: oldValue) { if $0 { self.loadFile() } }
             }
         }
     }
 
-    private var lastReadDataTime: Date?
-    var lock: PodfileLock? { isSubspeciesShow ? sourceLock : noSubspeciesLock }
+    @ObservationIgnored private var lastReadDataTime: Date?
+    @ObservationIgnored var lock: PodfileLock? { isSubspeciesShow ? sourceLock : noSubspeciesLock }
     @MainActor var isLockLoadFailed: Bool = false
 
     @ObservationIgnored private(set) var sourceLock: PodfileLock?
