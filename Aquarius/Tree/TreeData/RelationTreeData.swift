@@ -16,6 +16,7 @@ import SwiftUI
     private(set) var path: [Pod] = []
 
     @ObservationIgnored private(set) var pods: [Pod]
+    @ObservationIgnored private(set) var associatedPods: [Pod]?
     @ObservationIgnored private(set) var nameToPodCache: [String: Pod]
     @ObservationIgnored var searchKey = "" {
         didSet {
@@ -62,7 +63,7 @@ import SwiftUI
         task = Task.detached(priority: .userInitiated) { [weak self] in
             guard let self else { return }
 
-            self.selected = pod
+            selected = pod
             var path: [Pod] = []
 
             func dfs(_ current: Pod, path: inout [Pod], keyPath: KeyPath<Pod, [String]?>) -> Bool {
@@ -101,19 +102,24 @@ private extension RelationTreeData {
     func loadData() {
         var tmpShowNodes: [Pod]
         if associatedOnly {
-            var result = Set(arrayLiteral: start)
-            var news = [start]
-            while !news.isEmpty {
-                result.formUnion(news)
-                let nextLevelNames = Set((news.compactMap(\.predecessors) + news.compactMap(\.successors)).flatMap { $0 })
-                    .subtracting(result.map(\.name))
-                if nextLevelNames.isEmpty {
-                    break
-                } else {
-                    news = nextLevelNames.compactMap { nameToPodCache[$0] }
+            if let associatedPods {
+                tmpShowNodes = associatedPods
+            } else {
+                var result = Set(arrayLiteral: start)
+                var news = [start]
+                while !news.isEmpty {
+                    result.formUnion(news)
+                    let nextLevelNames = Set((news.compactMap(\.predecessors) + news.compactMap(\.successors)).flatMap { $0 })
+                        .subtracting(result.map(\.name))
+                    if nextLevelNames.isEmpty {
+                        break
+                    } else {
+                        news = nextLevelNames.compactMap { nameToPodCache[$0] }
+                    }
                 }
+                tmpShowNodes = result.sorted(by: { $0.name < $1.name })
+                associatedPods = tmpShowNodes
             }
-            tmpShowNodes = result.sorted(by: { $0.name < $1.name })
         } else {
             tmpShowNodes = pods
         }
@@ -131,9 +137,9 @@ private extension RelationTreeData {
             }
         }
 
-        if let node = showNames.first(where: { $0.pod.lowercasedName == searchKey }) {
-            select(node.pod)
-        }
+//        if let node = showNames.first(where: { $0.pod.lowercasedName == searchKey }) {
+//            select(node.pod)
+//        }
     }
 
     func loadSearchSuggestions() {

@@ -128,7 +128,8 @@ extension String {
     var isImpact: Bool { detailMode == .predecessors }
 
     // for show Podspec
-    @MainActor var podspec: (Bool, PodspecInfo?) = (false, nil)
+    @MainActor var isPodspecViewShow: Bool = false
+    @ObservationIgnored var podspec: PodspecInfo?
     @ObservationIgnored var podspecCache: [Pod: PodspecInfo] = [:]
 
     var isSubspeciesShow: Bool {

@@ -47,8 +47,9 @@ private var asyncShowPodspecTask: Task<Void, Never>?
 
 extension TreeData {
     @MainActor func showPodspec(of pod: Pod) {
-        podspec = (false, nil)
-        GlobalState.shared.isLoading = true
+        if isPodspecViewShow {
+            isPodspecViewShow = false
+        }
 
         if let cache = podspecCache[pod] {
             show(with: cache, and: nil)
@@ -56,9 +57,6 @@ extension TreeData {
 
         asyncShowPodspecTask = Task.detached(priority: .userInitiated) {
             await self.asyncShowPodspec(of: pod)
-            await MainActor.run {
-                GlobalState.shared.isLoading = false
-            }
         }
     }
 }
@@ -107,7 +105,8 @@ private extension TreeData {
             podspecCache[pod] = podspec
         }
         DispatchQueue.main.async {
-            self.podspec = (true, podspec)
+            self.podspec = podspec
+            self.isPodspecViewShow = true
         }
     }
 

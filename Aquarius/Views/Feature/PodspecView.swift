@@ -64,7 +64,7 @@ private extension PodspecView {
             case let .error(error):
                 Group {
                     Text(error).foregroundColor(.close)
-                    MyPreview(url: spec.url)
+                    QLPreview(url: spec.url)
                 }
             }
         }

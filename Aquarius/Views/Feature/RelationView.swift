@@ -15,7 +15,23 @@ struct RelationView: View {
     @State var data: RelationTreeData
 
     var body: some View {
-        HStack {
+        HSplitView {
+            List(data.showNames, id: \.pod.name) { node in
+                NodeViewInfoHelper.name(node)
+                    .onTapGesture {
+                        data.select(node.pod)
+                    }
+            }
+            .searchable(text: $data.searchKey, placement: .sidebar) {
+                if !data.searchSuggestions.isEmpty {
+                    ForEach(data.searchSuggestions, id: \.pod.name) { node in
+                        NodeViewInfoHelper.name(node)
+                            .searchCompletion(node.0.name)
+                    }
+                }
+            }
+            .listStyle(.sidebar)
+
             VStack {
                 HStack {
                     Text("The connection between **\(pod.name)** and **\(data.selected?.name ?? "Unkonwn")** is as follows")
@@ -44,24 +60,10 @@ struct RelationView: View {
                     }
                 }
             }
-
-            List(data.showNames, id: \.pod.name) { node in
-                NodeViewInfoHelper.name(node)
-                    .onTapGesture {
-                        data.select(node.pod)
-                    }
-            }
-            .searchable(text: $data.searchKey) {
-                if !data.searchSuggestions.isEmpty {
-                    ForEach(data.searchSuggestions, id: \.pod.name) { node in
-                        NodeViewInfoHelper.name(node)
-                            .searchCompletion(node.0.name)
-                    }
-                }
-            }
+            .padding(.leading)
         }
         .toolbar {
-            ToolbarItem(placement: .automatic) {
+            ToolbarItem(placement: .confirmationAction) {
                 Button("Copy") {
                     Pasteboard.write(data.path.map(\.name).joined(separator: "\n"))
                 }
