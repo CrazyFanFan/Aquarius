@@ -22,6 +22,7 @@ struct RelationView: View {
                         data.select(node.pod)
                     }
             }
+            .frame(minWidth: 150, idealWidth: 150, maxWidth: 250)
             .searchable(text: $data.searchKey, placement: .sidebar) {
                 if !data.searchSuggestions.isEmpty {
                     ForEach(data.searchSuggestions, id: \.pod.name) { node in
@@ -35,6 +36,7 @@ struct RelationView: View {
             VStack {
                 HStack {
                     Text("The connection between **\(pod.name)** and **\(data.selected?.name ?? "Unkonwn")** is as follows")
+                        .lineLimit(nil)
                         .font(.system(size: 16))
                         .padding(.zero)
                     Spacer()
@@ -43,18 +45,28 @@ struct RelationView: View {
                 if data.isReleationLoading {
                     Text("Loading")
                         .frame(maxHeight: .infinity)
-                } else if data.path.isEmpty {
+                } else if data.paths.isEmpty {
                     Text("No connection")
                         .frame(maxHeight: .infinity)
                 } else {
-                    List {
-                        ForEach(data.path, id: \.self) { pod in
+                    List(data.paths.indices, id: \.self) { index in
+                        Section {
+                            ForEach(data.paths[index], id: \.self) { name in
+                                Text(name).selectionDisabled(false)
+                                    .contextMenu {
+                                        Button("Copy") {
+                                            Pasteboard.write(name)
+                                        }
+                                    }
+                            }
+                        } header: {
                             HStack {
-                                Text(pod.name)
+                                Text("Path \(index + 1): (↓)")
                                 Spacer()
-                                if pod.name != data.path.last?.name {
-                                    Text("↓")
+                                Button("Copy") {
+                                    Pasteboard.write(data.paths[index].joined(separator: "\n"))
                                 }
+                                .buttonStyle(.borderless)
                             }
                         }
                     }
@@ -63,9 +75,18 @@ struct RelationView: View {
             .padding(.leading)
         }
         .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                Button("Copy") {
-                    Pasteboard.write(data.path.map(\.name).joined(separator: "\n"))
+            ToolbarItemGroup {
+                Button("Copy All") {
+                    Pasteboard.write(data.paths.map { $0.joined(separator: "\n") }.joined(separator: "\n- - - - - -\n"))
+                }
+
+                Button("Copy (Prune)") {
+                    Pasteboard.write(
+                        data.paths
+                            .reduce(into: Set<String>()) { $0.formUnion($1) }
+                            .sorted()
+                            .joined(separator: "\n")
+                    )
                 }
             }
             ToolbarItem(placement: .cancellationAction) {

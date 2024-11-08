@@ -13,7 +13,7 @@ import SwiftUI
     @ObservationIgnored private(set) var start: Pod
     private(set) var selected: Pod?
     private(set) var isReleationLoading: Bool = false
-    private(set) var path: [Pod] = []
+    private(set) var paths: [[String]] = []
 
     @ObservationIgnored private(set) var pods: [Pod]
     @ObservationIgnored private(set) var associatedPods: [Pod]?
@@ -55,6 +55,61 @@ import SwiftUI
         loadData()
     }
 
+    func findPaths(
+        from start: Pod,
+        to endName: String,
+        nexts keyPath: KeyPath<Pod, [String]?>,
+        pods: [Pod],
+        nameToPodCache: [String: Pod]
+    ) -> [[String]] {
+        var result: [[String]] = []
+        var visited: Set<String> = Set()
+        var currentPath: [String] = []
+
+        // 缓存计算得到的路径
+        var pathCache: [String: [[String]]] = [:]
+
+        func dfs(currentPod: Pod) {
+            if Task.isCancelled { return }
+
+            visited.insert(currentPod.name)
+            currentPath.append(currentPod.name)
+
+            if currentPod.name == endName {
+                result.append(currentPath)
+            } else {
+                if let nexts = currentPod[keyPath: keyPath] {
+                    for nextPodName in nexts {
+                        guard let nextPod = nameToPodCache[nextPodName] else { continue }
+                        if !visited.contains(nextPod.name) {
+                            // 如果没有缓存，则进行深度搜索
+                            dfs(currentPod: nextPod)
+                        }
+                    }
+                }
+            }
+
+            // 在当前路径搜索完后缓存结果
+            if currentPod.name == start.name {
+                pathCache[currentPod.name] = result
+            }
+
+            // 回溯
+            currentPath.removeLast()
+            visited.remove(currentPod.name)
+        }
+
+        // 在进行深度优先搜索之前查看缓存
+        if let cachedPaths = pathCache[start.name] {
+            return cachedPaths
+        } else {
+            dfs(currentPod: start)
+        }
+
+        // 返回计算结果
+        return result
+    }
+
     func select(_ pod: Pod) {
         guard pod != selected else { return }
         isReleationLoading = true
@@ -64,33 +119,26 @@ import SwiftUI
             guard let self else { return }
 
             selected = pod
-            var path: [Pod] = []
 
-            func dfs(_ current: Pod, path: inout [Pod], keyPath: KeyPath<Pod, [String]?>) -> Bool {
-                if Task.isCancelled { return false }
-
-                path.append(current)
-
-                if current == selected {
-                    return true
-                }
-
-                if let nexts = current[keyPath: keyPath] {
-                    for next in nexts {
-                        if let nextPod = nameToPodCache[next] {
-                            if dfs(nextPod, path: &path, keyPath: keyPath) {
-                                return true
-                            }
-                        }
-                    }
-                }
-                path.removeLast()
-                return false
+            var paths = findPaths(
+                from: start,
+                to: pod.name,
+                nexts: \.successors,
+                pods: associatedOnly ? associatedPods ?? pods : pods,
+                nameToPodCache: nameToPodCache
+            )
+            if paths.isEmpty {
+                paths = findPaths(
+                    from: start,
+                    to: pod.name,
+                    nexts: \.predecessors,
+                    pods: associatedOnly ? associatedPods ?? pods : pods,
+                    nameToPodCache: nameToPodCache
+                ).map { $0.reversed() }
             }
 
-            _ = dfs(start, path: &path, keyPath: \.successors) || dfs(start, path: &path, keyPath: \.predecessors)
             DispatchQueue.main.async {
-                self.path = path
+                self.paths = paths
                 self.isReleationLoading = false
             }
         }
@@ -137,9 +185,9 @@ private extension RelationTreeData {
             }
         }
 
-//        if let node = showNames.first(where: { $0.pod.lowercasedName == searchKey }) {
-//            select(node.pod)
-//        }
+        if let node = showNames.first(where: { $0.pod.lowercasedName == searchKey }) {
+            select(node.pod)
+        }
     }
 
     func loadSearchSuggestions() {

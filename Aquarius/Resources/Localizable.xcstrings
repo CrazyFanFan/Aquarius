@@ -28,6 +28,7 @@
       }
     },
     "↓" : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -249,12 +250,22 @@
         }
       }
     },
-    "Copy all" : {
+    "Copy (Prune)" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制(裁剪)"
+          }
+        }
+      }
+    },
+    "Copy All" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy all"
+            "value" : "Copy All"
           }
         },
         "zh-Hans" : {
@@ -736,6 +747,9 @@
           }
         }
       }
+    },
+    "Path %lld: (↓)" : {
+
     },
     "Predecessors" : {
       "extractionState" : "manual",
