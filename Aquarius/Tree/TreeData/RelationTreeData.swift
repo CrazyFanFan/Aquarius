@@ -9,6 +9,12 @@ import Combine
 import Observation
 import SwiftUI
 
+enum DisplaySectionGroupType: String, Hashable {
+    case all = "All Modules"
+    case successors = "Dependent Modules"
+    case predecessors = "Requiring Modules"
+}
+
 @Observable final class RelationTreeData {
     @ObservationIgnored private(set) var start: Pod
     private(set) var selected: Pod?
@@ -16,8 +22,12 @@ import SwiftUI
     private(set) var paths: [[String]] = []
 
     @ObservationIgnored private(set) var pods: [Pod]
-    @ObservationIgnored private(set) var associatedPods: [Pod]?
+    @ObservationIgnored private(set) var associatedPods: [(DisplaySectionGroupType, [Pod])]?
     @ObservationIgnored private(set) var nameToPodCache: [String: Pod]
+
+    private(set) var showNames: [(group: DisplaySectionGroupType, [(pod: Pod, indices: [String.Index]?)])] = []
+    private(set) var searchSuggestions: [(pod: Pod, indices: [String.Index]?)] = []
+
     @ObservationIgnored var searchKey = "" {
         didSet {
             guard searchKey != oldValue else { return }
@@ -33,7 +43,7 @@ import SwiftUI
         }
     }
 
-    @ObservationIgnored var associatedOnly = false {
+    @ObservationIgnored var associatedOnly = true {
         didSet {
             guard associatedOnly != oldValue else { return }
 
@@ -42,10 +52,8 @@ import SwiftUI
         }
     }
 
-    private(set) var showNames: [(pod: Pod, indices: [String.Index]?)] = []
-    private(set) var searchSuggestions: [(pod: Pod, indices: [String.Index]?)] = []
-
-    private var task: Task<Void, Never>?
+    @ObservationIgnored private var task: Task<Void, Never>?
+    @ObservationIgnored var pathCache = LRUMemoryCache<String, [[String]]>(maxCost: 1024, maxCount: 2 * 1024 * 1024 * 1024)
 
     init(start: Pod, pods: [Pod], nameToPodCache: [String: Pod]) {
         self.start = start
@@ -55,19 +63,17 @@ import SwiftUI
         loadData()
     }
 
-    func findPaths(
-        from start: Pod,
+    func findPaths1(
+        from startName: String,
         to endName: String,
         nexts keyPath: KeyPath<Pod, [String]?>,
         pods: [Pod],
         nameToPodCache: [String: Pod]
     ) -> [[String]] {
+        guard let start = nameToPodCache[startName] else { return [] }
         var result: [[String]] = []
         var visited: Set<String> = Set()
         var currentPath: [String] = []
-
-        // 缓存计算得到的路径
-        var pathCache: [String: [[String]]] = [:]
 
         func dfs(currentPod: Pod) {
             if Task.isCancelled { return }
@@ -82,35 +88,78 @@ import SwiftUI
                     for nextPodName in nexts {
                         guard let nextPod = nameToPodCache[nextPodName] else { continue }
                         if !visited.contains(nextPod.name) {
-                            // 如果没有缓存，则进行深度搜索
                             dfs(currentPod: nextPod)
                         }
                     }
                 }
             }
 
-            // 在当前路径搜索完后缓存结果
             if currentPod.name == start.name {
                 pathCache[currentPod.name] = result
             }
 
-            // 回溯
             currentPath.removeLast()
             visited.remove(currentPod.name)
         }
 
-        // 在进行深度优先搜索之前查看缓存
         if let cachedPaths = pathCache[start.name] {
             return cachedPaths
         } else {
             dfs(currentPod: start)
         }
 
-        // 返回计算结果
         return result
     }
 
-    func select(_ pod: Pod) {
+    func findPaths(
+        from startName: String,
+        to endName: String,
+        nexts keyPath: KeyPath<Pod, [String]?>,
+        pods: [Pod],
+        nameToPodCache: [String: Pod]
+    ) -> [[String]] {
+        guard let start = nameToPodCache[startName] else { return [] }
+
+        var result: [[String]] = []
+
+        // 使用栈来模拟递归调用过程
+        var stack: [(pod: Pod, path: [String])] = [(start, [start.name])]
+        var visited: [String: Int] = [:] // 跟踪每个节点当前路径中访问的次数
+
+        while !stack.isEmpty {
+            if Task.isCancelled {
+                return []
+            }
+
+            let (currentPod, currentPath) = stack.removeLast()
+
+            // 跟踪访问次数
+            visited[currentPod.name, default: 0] += 1
+
+            if currentPod.name == endName {
+                result.append(currentPath)
+            } else {
+                if let nextPods = currentPod[keyPath: keyPath] {
+                    // 逆序遍历子节点，以保证顺序处理时栈顶的元素是第一个子节点
+                    for nextPodName in nextPods.reversed() {
+                        if let nextPod = nameToPodCache[nextPodName], !currentPath.contains(nextPodName) {
+                            stack.append((nextPod, currentPath + [nextPodName]))
+                        }
+                    }
+                }
+            }
+
+            // 回溯操作，如果当前节点访问完成，减少访问计数
+            visited[currentPod.name, default: 0] -= 1
+            if visited[currentPod.name] == 0 {
+                visited.removeValue(forKey: currentPod.name)
+            }
+        }
+
+        return result
+    }
+
+    func select(_ group: DisplaySectionGroupType, _ pod: Pod, pods: [Pod]) async {
         guard pod != selected else { return }
         isReleationLoading = true
 
@@ -120,73 +169,103 @@ import SwiftUI
 
             selected = pod
 
-            var paths = findPaths(
-                from: start,
-                to: pod.name,
-                nexts: \.successors,
-                pods: associatedOnly ? associatedPods ?? pods : pods,
-                nameToPodCache: nameToPodCache
-            )
-            if paths.isEmpty {
-                paths = findPaths(
-                    from: start,
-                    to: pod.name,
-                    nexts: \.predecessors,
-                    pods: associatedOnly ? associatedPods ?? pods : pods,
+            @Sendable func nexts(_ start: Pod, _ end: Pod, keyPath: KeyPath<Pod, [String]?>) -> [[String]] {
+                findPaths(
+                    from: start.name,
+                    to: end.name,
+                    nexts: keyPath,
+                    pods: pods,
                     nameToPodCache: nameToPodCache
-                ).map { $0.reversed() }
+                )
             }
 
+            var paths: [[String]] = []
+            switch group {
+            case .all:
+                paths = nexts(start, pod, keyPath: \.successors)
+                if paths.isEmpty {
+                    paths = nexts(pod, start, keyPath: \.successors)
+                }
+            case .successors:
+                paths = nexts(start, pod, keyPath: \.successors)
+            case .predecessors:
+                paths = nexts(pod, start, keyPath: \.successors)
+            }
+
+            let tmp = paths
+            if Task.isCancelled { return }
             DispatchQueue.main.async {
-                self.paths = paths
+                self.paths = tmp
                 self.isReleationLoading = false
             }
         }
+    }
+
+    func cancel() {
+        task?.cancel()
     }
 }
 
 private extension RelationTreeData {
     // filter pod with searchKey
     func loadData() {
-        var tmpShowNodes: [Pod]
+        var tmpShowNodes: [(DisplaySectionGroupType, [Pod])]
         if associatedOnly {
             if let associatedPods {
                 tmpShowNodes = associatedPods
             } else {
-                var result = Set(arrayLiteral: start)
-                var news = [start]
-                while !news.isEmpty {
-                    result.formUnion(news)
-                    let nextLevelNames = Set((news.compactMap(\.predecessors) + news.compactMap(\.successors)).flatMap { $0 })
-                        .subtracting(result.map(\.name))
-                    if nextLevelNames.isEmpty {
-                        break
-                    } else {
-                        news = nextLevelNames.compactMap { nameToPodCache[$0] }
+                func associatedPods(start: Pod, keyPath: KeyPath<Pod, [String]?>) -> [Pod] {
+                    var result = Set(arrayLiteral: start)
+                    var nexts = [start]
+
+                    while !nexts.isEmpty {
+                        let nextNames = Set(nexts.compactMap { $0[keyPath: keyPath] }.flatMap { $0 })
+                            .subtracting(result.map(\.name))
+
+                        if nextNames.isEmpty {
+                            break
+                        } else {
+                            nexts = nextNames.compactMap { nameToPodCache[$0] }
+                            result.formUnion(nexts)
+                        }
                     }
+
+                    return result.sorted(by: { $0.name < $1.name })
                 }
-                tmpShowNodes = result.sorted(by: { $0.name < $1.name })
-                associatedPods = tmpShowNodes
+
+                tmpShowNodes = [
+                    (.successors, associatedPods(start: start, keyPath: \.successors)),
+                    (.predecessors, associatedPods(start: start, keyPath: \.predecessors))
+                ]
             }
         } else {
-            tmpShowNodes = pods
+            tmpShowNodes = [(.all, pods)]
         }
 
         if searchKey.isEmpty {
-            showNames = tmpShowNodes.map { ($0, nil) }
+            showNames = tmpShowNodes.map { ($0.0, $0.1.map { ($0, [String.Index]?.none) }) }
         } else {
             let lowercasedSearchKey = searchKey.lowercased()
-            showNames = tmpShowNodes.compactMap { pod in
-                if let indies = pod.lowercasedName.fuzzyMatch(lowercasedSearchKey) {
-                    (pod, indies)
-                } else {
-                    nil
-                }
+            showNames = tmpShowNodes.compactMap { group, pods in
+                (group, pods.compactMap { pod in
+                    if let indies = pod.lowercasedName.fuzzyMatch(lowercasedSearchKey) {
+                        (pod, indies)
+                    } else {
+                        nil
+                    }
+                })
             }
         }
 
-        if let node = showNames.first(where: { $0.pod.lowercasedName == searchKey }) {
-            select(node.pod)
+        for group in showNames {
+            for pair in group.1 {
+                if pair.0.lowercasedName == searchKey {
+                    Task.detached {
+                        await self.select(group.group, pair.pod, pods: group.1.map(\.pod))
+                    }
+                    return
+                }
+            }
         }
     }
 
@@ -197,7 +276,16 @@ private extension RelationTreeData {
         }
 
         let lowercasedSearchKey = searchKey.lowercased()
-        let searchSuggestions = showNames.filter { $0.0.lowercasedName.fuzzyMatch(lowercasedSearchKey) != nil }
+        let searchSuggestions = showNames.map(\.1)
+            .flatMap { $0 }
+            .compactMap {
+                if let indices = $0.0.lowercasedName.fuzzyMatch(lowercasedSearchKey) {
+                    ($0.0, indices)
+                } else {
+                    nil
+                }
+            }
+
         if searchSuggestions.count <= 10 {
             self.searchSuggestions = searchSuggestions
         } else {

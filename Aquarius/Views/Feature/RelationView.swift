@@ -16,11 +16,20 @@ struct RelationView: View {
 
     var body: some View {
         HSplitView {
-            List(data.showNames, id: \.pod.name) { node in
-                NodeViewInfoHelper.name(node)
-                    .onTapGesture {
-                        data.select(node.pod)
+            List(data.showNames, id: \.group) { group in
+                Section {
+                    ForEach(group.1, id: \.pod) { node in
+                        NodeViewInfoHelper.name(node)
+                            .onTapGesture {
+                                Task.detached {
+                                    await data.select(group.0, node.0, pods: group.1.map(\.pod))
+                                }
+                            }
                     }
+                } header: {
+                    Text(LocalizedStringKey(group.0.rawValue))
+                     + Text(": \(group.1.count)")
+                }
             }
             .frame(minWidth: 150, idealWidth: 150, maxWidth: 250)
             .searchable(text: $data.searchKey, placement: .sidebar) {
@@ -39,7 +48,15 @@ struct RelationView: View {
                         .lineLimit(nil)
                         .font(.system(size: 16))
                         .padding(.zero)
+
                     Spacer()
+                }
+
+                if !data.paths.isEmpty, !data.isReleationLoading {
+                    HStack {
+                        Text("Total: \(data.paths.count) path(s)")
+                        Spacer()
+                    }
                 }
 
                 if data.isReleationLoading {
@@ -74,7 +91,12 @@ struct RelationView: View {
             }
             .padding(.leading)
         }
+        .onDisappear { data.cancel() }
         .toolbar {
+            ToolbarItem {
+                Toggle("Show Related Nodes Only", isOn: $data.associatedOnly)
+            }
+
             ToolbarItemGroup {
                 Button("Copy All") {
                     Pasteboard.write(data.paths.map { $0.joined(separator: "\n") }.joined(separator: "\n- - - - - -\n"))
@@ -98,9 +120,7 @@ struct RelationView: View {
         .padding()
         .frame(
             minWidth: 700,
-            maxWidth: 700,
             minHeight: 350,
-            maxHeight: 700,
             alignment: .center
         )
     }
