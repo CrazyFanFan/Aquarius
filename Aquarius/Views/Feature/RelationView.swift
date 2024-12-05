@@ -78,7 +78,7 @@ struct RelationView: View {
                             }
                         } header: {
                             HStack {
-                                Text("Path \(index + 1): (↓)")
+                                Text("Path: \(index + 1), Count: \(data.paths[index].count) (↓)")
                                 Spacer()
                                 Button("Copy") {
                                     Pasteboard.write(data.paths[index].joined(separator: "\n"))
@@ -119,8 +119,8 @@ struct RelationView: View {
         }
         .padding()
         .frame(
-            minWidth: 700,
-            minHeight: 350,
+            minWidth: 750,
+            minHeight: 400,
             alignment: .center
         )
     }

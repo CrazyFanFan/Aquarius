@@ -5,6 +5,7 @@
 //  Created by Crazy凡 on 2024/11/9.
 //
 
+/*
 import Foundation
 
 class LRUMemoryCache<Key: Hashable, Value> {
@@ -85,3 +86,4 @@ class LRUMemoryCache<Key: Hashable, Value> {
         return MemoryLayout.size(ofValue: value)
     }
 }
+*/

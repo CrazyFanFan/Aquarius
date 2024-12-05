@@ -14,7 +14,7 @@ enum LocationOfCacheFile: String, CaseIterable {
     case application
 }
 
-extension Dictionary: RawRepresentable where Key: Codable, Value: Codable {
+extension Dictionary: @retroactive RawRepresentable where Key: Codable, Value: Codable {
     public init?(rawValue: String) {
         guard let data = rawValue.data(using: .utf8),
               let result = try? JSONDecoder().decode([Key: Value].self, from: data) else {

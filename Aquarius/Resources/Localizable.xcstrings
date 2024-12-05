@@ -774,12 +774,18 @@
         }
       }
     },
-    "Path %lld: (↓)" : {
+    "Path: %lld, Count: %lld (↓)" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Path: %1$lld, Count: %2$lld (↓)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "路径 %lld: (↓)"
+            "value" : "路径: %1$lld, 节点数: %2$lld  (↓)"
           }
         }
       }
