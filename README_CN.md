@@ -67,3 +67,7 @@ Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 ## License
 
 [LICENSE](https://github.com/CrazyFanFan/Aquarius/blob/master/LICENSE)
+
+附加条款:
+- **本软件不得用于商业用途。** 商业目的包括但不限于销售本软件的副本，使用本软件提供有偿服务，或将本软件包含在拟出售的产品或服务中。
+- **本软件不得通过任何应用程序商店或其他商业分发渠道分发。**

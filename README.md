@@ -58,3 +58,7 @@ Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 ## License
 
 Aquarius is released under the MIT license. See [LICENSE](https://github.com/CrazyFanFan/Aquarius/blob/master/LICENSE) for details.
+
+**Additional Terms**:
+- **The software may not be used for commercial purposes**. Commercial purposes include, but are not limited to, selling copies of the software, using the software to deliver services for a fee, or including the software in products or services intended for sale.
+- **The software may not be distributed through any app stores or other commercial distribution channels**.
