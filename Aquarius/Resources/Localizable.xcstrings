@@ -32,6 +32,9 @@
       },
       "shouldTranslate" : false
     },
+    "%lld" : {
+      "shouldTranslate" : false
+    },
     "⇇·(%lld) " : {
       "localizations" : {
         "zh-Hans" : {
@@ -345,6 +348,17 @@
         }
       }
     },
+    "Copy failed! 😢 " : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制失败！ 😢 "
+          }
+        }
+      }
+    },
     "Copy Operations" : {
       "localizations" : {
         "zh-Hans" : {
@@ -383,6 +397,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拷贝Repo地址"
+          }
+        }
+      }
+    },
+    "Copy success! 🎉 " : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制成功！ 🎉 "
           }
         }
       }
@@ -764,6 +789,16 @@
         }
       }
     },
+    "Open" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开"
+          }
+        }
+      }
+    },
     "Open the cache directory" : {
       "localizations" : {
         "zh-Hans" : {
@@ -873,6 +908,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "被依赖"
+          }
+        }
+      }
+    },
+    "Result has been copied to clipboard." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制结果已经写到剪贴板"
           }
         }
       }
@@ -1109,18 +1155,23 @@
         }
       }
     },
-    "Tree content is too large, written to cache file: %@" : {
+    "Tree content is too large, written to cache file, path has been copied to clipboard.\nCache file path: %@" : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tree content is too large, written to cache file: %@"
-          }
-        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "子树过大，写到了缓存文件: %@"
+            "value" : "子树过大，写到了缓存文件中，文件路径已经复制到剪贴板。\n文件路径: %@"
+          }
+        }
+      }
+    },
+    "User cancel copy!" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "用户取消了复制！"
           }
         }
       }

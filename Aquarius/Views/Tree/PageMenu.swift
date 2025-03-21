@@ -13,6 +13,10 @@ struct PageMenu: View {
 
     var body: some View {
         VStack {
+            if treeData.isCopying, treeData.copyMode == .recursive {
+                copyProgress()
+            }
+
             HStack {
                 Text("Total: \(treeData.showNodes.filter { $0.deep == 0 }.count)")
                     .foregroundColor(.primary)
@@ -33,12 +37,9 @@ struct PageMenu: View {
                         .joined(separator: "\n")
                     Pasteboard.write(content)
                 }
-            }
 
-            if treeData.isCopying, treeData.copyMode == .recursive {
-                copyProgress()
-            }
-        }.padding(5)
+            }.padding(5)
+        }
     }
 }
 
@@ -46,24 +47,27 @@ private extension PageMenu {
     @MainActor func copyProgress() -> some View {
         HStack {
             Text("Copying...")
-            Divider().frame(maxHeight: 20)
-            ProgressView(value: treeData.displayCopyProgress).progressViewStyle(.linear)
-            Text(String(format: "%0.2f%%", treeData.displayCopyProgress * 100))
+
+            Spacer()
+
+            Text("\(treeData.currentCopyingCount)")
+                .frame(width: CGFloat("\(treeData.currentCopyingCount)".count * 12))
+
+            ProgressView().controlSize(.mini)
 
             Divider().frame(maxHeight: 20)
 
             Button {
-                treeData.cancelCurrentCopyTask()
+                withAnimation {
+                    treeData.cancelCurrentCopyTask()
+                }
             } label: {
                 Image(systemName: "xmark.circle.fill")
             }
             .buttonStyle(.borderless)
         }
-        .padding([.leading, .trailing], 3.5)
-        .overlay {
-            RoundedRectangle(cornerRadius: 5)
-                .stroke(Color.secondary.opacity(0.5), lineWidth: 1)
-        }
+        .padding(5)
+        .background(Color.secondary.opacity(0.2))
     }
 }
 

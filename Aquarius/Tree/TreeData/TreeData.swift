@@ -68,21 +68,20 @@ extension String {
 
     private var isIgnoreLastModificationDate: Bool { global.isIgnoreLastModificationDate }
 
-    /// for copy
-    @ObservationIgnored @MainActor var copyProgress: Double = 0 {
-        didSet {
-            if copyProgress == 0 || copyProgress == 1 || copyProgress - displayCopyProgress > 0.01 {
-                displayCopyProgress = copyProgress
-            }
-        }
-    }
-
-    @MainActor var displayCopyProgress: Double = 0
+    @MainActor var currentCopyingCount: Int = 0
     @MainActor var isCopying: Bool = false
     @MainActor var copyMode: CopyingStrategy?
     @ObservationIgnored var copyTask: Task<Void, Error>?
-
-    @ObservationIgnored @MainActor var copyResult: (content: String, isWriteToFile: Bool)?
+    @MainActor var copyResult: CopyResult? {
+        didSet {
+            guard let copyResult else { return }
+            switch copyResult {
+            case let .file(url): Pasteboard.write(url.path)
+            case let .string(string): Pasteboard.write(string)
+            default: break
+            }
+        }
+    }
 
     // load file
     @ObservationIgnored var lockFile: LockFileInfo {
