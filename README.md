@@ -15,8 +15,8 @@ A tool to obtain dependencies by analyzing "Podfile.lock"
 
 ## Environment
 
-- Xcode: version ≥ Xcode15 (Task.detached)
-- OSX: version ≥ 14.0
+- Xcode: version ≥ Xcode16 (Task.detached)
+- OSX: version ≥ 15.0
 
 ## Preview
 
@@ -25,7 +25,7 @@ A tool to obtain dependencies by analyzing "Podfile.lock"
 ## Usage
 
 - clone this repo
-- open **Aquarius.xcodeproj** by Xcode(Version >= 11.0)
+- open **Aquarius.xcodeproj** by Xcode
 - `Command` + `R`, after resolve  Swift Packages
 
 ```shell
@@ -39,6 +39,14 @@ open Aquarius.xcodeproj
 Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 
 ## ChangeLog
+
+### [2025-03-26]
+
+- **Feature**
+  - Support multi-column list layout.
+  - Support to find the dependency path between two Pods
+- **Optimize**
+  - Optimize the copy operation of the complete dependency tree.
 
 ### [2022-11-18]
 
