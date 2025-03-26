@@ -53,7 +53,6 @@ enum DisplaySectionGroupType: String, Hashable {
     }
 
     @ObservationIgnored private var task: Task<Void, Never>?
-    // @ObservationIgnored var pathCache = LRUMemoryCache<String, [[String]]>(maxCost: 1024, maxCount: 2 * 1024 * 1024 * 1024)
 
     init(start: Pod, pods: [Pod], nameToPodCache: [String: Pod]) {
         self.start = start
@@ -62,103 +61,6 @@ enum DisplaySectionGroupType: String, Hashable {
 
         loadData()
     }
-
-    /**
-    func findPaths1(
-        from startName: String,
-        to endName: String,
-        nexts keyPath: KeyPath<Pod, [String]?>,
-        pods: [Pod],
-        nameToPodCache: [String: Pod]
-    ) -> [[String]] {
-        guard let start = nameToPodCache[startName] else { return [] }
-        var result: [[String]] = []
-        var visited: Set<String> = Set()
-        var currentPath: [String] = []
-
-        func dfs(currentPod: Pod) {
-            if Task.isCancelled { return }
-
-            visited.insert(currentPod.name)
-            currentPath.append(currentPod.name)
-
-            if currentPod.name == endName {
-                result.append(currentPath)
-            } else {
-                if let nexts = currentPod[keyPath: keyPath] {
-                    for nextPodName in nexts {
-                        guard let nextPod = nameToPodCache[nextPodName] else { continue }
-                        if !visited.contains(nextPod.name) {
-                            dfs(currentPod: nextPod)
-                        }
-                    }
-                }
-            }
-
-            if currentPod.name == start.name {
-                pathCache[currentPod.name] = result
-            }
-
-            currentPath.removeLast()
-            visited.remove(currentPod.name)
-        }
-
-        if let cachedPaths = pathCache[start.name] {
-            return cachedPaths
-        } else {
-            dfs(currentPod: start)
-        }
-
-        return result
-    }
-
-    func findPaths2(
-        from startName: String,
-        to endName: String,
-        nexts keyPath: KeyPath<Pod, [String]?>,
-        pods: [Pod],
-        nameToPodCache: [String: Pod]
-    ) -> [[String]] {
-        guard let start = nameToPodCache[startName] else { return [] }
-
-        var result: [[String]] = []
-
-        // 使用栈来模拟递归调用过程
-        var stack: [(pod: Pod, path: [String])] = [(start, [start.name])]
-        var visited: [String: Int] = [:] // 跟踪每个节点当前路径中访问的次数
-
-        while !stack.isEmpty {
-            if Task.isCancelled {
-                return []
-            }
-
-            let (currentPod, currentPath) = stack.removeLast()
-
-            // 跟踪访问次数
-            visited[currentPod.name, default: 0] += 1
-
-            if currentPod.name == endName {
-                result.append(currentPath)
-            } else {
-                if let nextPods = currentPod[keyPath: keyPath] {
-                    // 逆序遍历子节点，以保证顺序处理时栈顶的元素是第一个子节点
-                    for nextPodName in nextPods.reversed() {
-                        if let nextPod = nameToPodCache[nextPodName], !currentPath.contains(nextPodName) {
-                            stack.append((nextPod, currentPath + [nextPodName]))
-                        }
-                    }
-                }
-            }
-
-            // 回溯操作，如果当前节点访问完成，减少访问计数
-            visited[currentPod.name, default: 0] -= 1
-            if visited[currentPod.name] == 0 {
-                visited.removeValue(forKey: currentPod.name)
-            }
-        }
-
-        return result
-    } */
 
     // 用于缓存计算过的路径
     actor PathCache {
@@ -202,17 +104,15 @@ enum DisplaySectionGroupType: String, Hashable {
     func findPaths(
         from startName: String,
         to endName: String,
-        next keyPath: KeyPath<Pod, [String]?>,
         pods: [Pod],
         nameToPodCache: [String: Pod]
     ) async -> [[String]] {
-        await findPaths(from: startName, to: endName, keyPath: keyPath, nameToPodCache: nameToPodCache, pathCache: PathCache())
+        await findPaths(from: startName, to: endName, nameToPodCache: nameToPodCache, pathCache: PathCache())
     }
 
     func findPaths(
         from start: String,
         to end: String,
-        keyPath: KeyPath<Pod, [String]?>,
         nameToPodCache: [String: Pod],
         pathCache: PathCache
     ) async -> [[String]] {
@@ -239,8 +139,8 @@ enum DisplaySectionGroupType: String, Hashable {
             }
 
             guard let currentPod = nameToPodCache[currentNode],
-                    let nextNodes = currentPod[keyPath: keyPath],
-                    !nextNodes.isEmpty else {
+                  let nextNodes = currentPod.successors,
+                  !nextNodes.isEmpty else {
                 await pathCache.cache([], for: currentNode)
                 continue
             }
@@ -254,7 +154,6 @@ enum DisplaySectionGroupType: String, Hashable {
                             await (index, self.findPaths(
                                 from: nextNode,
                                 to: end,
-                                keyPath: keyPath,
                                 nameToPodCache: nameToPodCache,
                                 pathCache: pathCache
                             ))
@@ -288,11 +187,10 @@ enum DisplaySectionGroupType: String, Hashable {
 
             selected = pod
 
-            @Sendable func nexts(_ start: Pod, _ end: Pod, keyPath: KeyPath<Pod, [String]?>) async -> [[String]] {
+            @Sendable func nexts(_ start: Pod, _ end: Pod) async -> [[String]] {
                 await findPaths(
                     from: start.name,
                     to: end.name,
-                    next: keyPath,
                     pods: pods,
                     nameToPodCache: nameToPodCache
                 )
@@ -301,14 +199,14 @@ enum DisplaySectionGroupType: String, Hashable {
             var paths: [[String]] = []
             switch group {
             case .all:
-                paths = await nexts(start, pod, keyPath: \.successors)
+                paths = await nexts(start, pod)
                 if paths.isEmpty {
-                    paths = await nexts(pod, start, keyPath: \.successors)
+                    paths = await nexts(pod, start)
                 }
             case .successors:
-                paths = await nexts(start, pod, keyPath: \.successors)
+                paths = await nexts(start, pod)
             case .predecessors:
-                paths = await nexts(pod, start, keyPath: \.successors)
+                paths = await nexts(pod, start)
             }
 
             let tmp = paths
