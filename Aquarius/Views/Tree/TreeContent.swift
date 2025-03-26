@@ -41,6 +41,8 @@ struct TreeContent: View {
 private extension TreeContent {
     @MainActor func mainContent() -> some View {
         VStack {
+            tips().animation(.easeInOut, value: treeData.copyResult)
+
             PageMenu(treeData: treeData) // Top operation bar
 
             Divider()

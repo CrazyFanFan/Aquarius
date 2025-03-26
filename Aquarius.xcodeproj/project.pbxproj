@@ -25,6 +25,8 @@
 		63120CC927BE8C7B000A9458 /* Yams in Frameworks */ = {isa = PBXBuildFile; productRef = 63120CC827BE8C7B000A9458 /* Yams */; };
 		63142D772ADD8BEF0026F245 /* LockBookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63142D762ADD8BEF0026F245 /* LockBookmark.swift */; };
 		631D6C8B2CDF7BD700A00C51 /* LRUMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631D6C8A2CDF7BD700A00C51 /* LRUMemoryCache.swift */; };
+		6328D5272D93E2FA001F6CDC /* TreeContent.Copy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328D5262D93E2F8001F6CDC /* TreeContent.Copy.swift */; };
+		6328D52A2D93E59B001F6CDC /* TreeData.Copy.Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6328D5292D93E597001F6CDC /* TreeData.Copy.Model.swift */; };
 		636182FD292938BB00819F31 /* QLPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636182FC292938BB00819F31 /* QLPreview.swift */; };
 		6380EEA22A619DAA0094209E /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6380EEA12A619DAA0094209E /* InfoPlist.xcstrings */; };
 		6380EEA42A619DAA0094209E /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 6380EEA32A619DAA0094209E /* Localizable.xcstrings */; };
@@ -64,6 +66,8 @@
 		630F29FA289FF50F007E5246 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		63142D762ADD8BEF0026F245 /* LockBookmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockBookmark.swift; sourceTree = "<group>"; };
 		631D6C8A2CDF7BD700A00C51 /* LRUMemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LRUMemoryCache.swift; sourceTree = "<group>"; };
+		6328D5262D93E2F8001F6CDC /* TreeContent.Copy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeContent.Copy.swift; sourceTree = "<group>"; };
+		6328D5292D93E597001F6CDC /* TreeData.Copy.Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeData.Copy.Model.swift; sourceTree = "<group>"; };
 		636182FC292938BB00819F31 /* QLPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QLPreview.swift; sourceTree = "<group>"; };
 		6380EEA12A619DAA0094209E /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		6380EEA32A619DAA0094209E /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -145,9 +149,19 @@
 			path = MetaData;
 			sourceTree = "<group>";
 		};
+		6328D5282D93E588001F6CDC /* Copy */ = {
+			isa = PBXGroup;
+			children = (
+				928C5AF52977689BD85F0C9DCC365371 /* TreeData.Copy.swift */,
+				6328D5292D93E597001F6CDC /* TreeData.Copy.Model.swift */,
+			);
+			path = Copy;
+			sourceTree = "<group>";
+		};
 		639694DD2CC9424E00DA3AF6 /* Feature */ = {
 			isa = PBXGroup;
 			children = (
+				6328D5262D93E2F8001F6CDC /* TreeContent.Copy.swift */,
 				9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */,
 				639694DF2CC9426A00DA3AF6 /* RelationView.swift */,
 			);
@@ -228,8 +242,8 @@
 		B14640AE888A3DEBD808D9726E7A9F33 /* TreeData */ = {
 			isa = PBXGroup;
 			children = (
+				6328D5282D93E588001F6CDC /* Copy */,
 				63CF6CBD2A077EDF0082CFE7 /* Podspec */,
-				928C5AF52977689BD85F0C9DCC365371 /* TreeData.Copy.swift */,
 				A4E02AF0F4DC35FD35B9AC8664F3C14E /* TreeData.swift */,
 				63965B8C2CCE6A190058BE01 /* RelationTreeData.swift */,
 			);
@@ -329,7 +343,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1630;
 				TargetAttributes = {
 					164AB9769D8B58F1CABB8AEF460795A4 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -386,6 +400,7 @@
 				FB789A5733C629F01F04500ABCCAF139 /* BookmarkTool.swift in Sources */,
 				D2872FB1EC6599222D831357442A8669 /* Constants.swift in Sources */,
 				487B7FFEEA1FFE8ED27DBEFB3DD0770E /* ContentView.swift in Sources */,
+				6328D52A2D93E59B001F6CDC /* TreeData.Copy.Model.swift in Sources */,
 				630F29FB289FF50F007E5246 /* Utils.swift in Sources */,
 				5DEC76215533E29B44EBC36094BF030C /* DataReader.swift in Sources */,
 				F23B1952203382974FD321CEB8223D5D /* Details.swift in Sources */,
@@ -405,6 +420,7 @@
 				636182FD292938BB00819F31 /* QLPreview.swift in Sources */,
 				63E44B6D2905326F00F0ED6A /* Sidebar.swift in Sources */,
 				63E44B6F2905383D00F0ED6A /* DropModifier.swift in Sources */,
+				6328D5272D93E2FA001F6CDC /* TreeContent.Copy.swift in Sources */,
 				1E3E1494E17845CECFB79617A326409F /* PodspecView.swift in Sources */,
 				F73DC28C70C53FF3C85849148C191EFB /* AquariusSettings.swift in Sources */,
 				18B2CD5C6ED2823429A420200D412D3E /* NodeView.swift in Sources */,
@@ -460,6 +476,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = HV88ACAAR6;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -526,6 +543,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = HV88ACAAR6;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
@@ -561,7 +579,6 @@
 				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Aquarius/Preview Content\"";
-				DEVELOPMENT_TEAM = HV88ACAAR6;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Aquarius/Info.plist;
@@ -591,7 +608,6 @@
 				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Aquarius/Preview Content\"";
-				DEVELOPMENT_TEAM = HV88ACAAR6;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = Aquarius/Info.plist;

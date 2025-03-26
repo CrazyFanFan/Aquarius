@@ -32,6 +32,7 @@ extension Pod {
 
 final class Pod {
     var name: String
+    lazy var nameData: Data = .init(name.utf8)
     var lowercasedName: String
     var info: Info?
     var successors: [String]?
