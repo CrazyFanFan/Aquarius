@@ -93,6 +93,12 @@ private extension TreeData {
             if let url = context?.fileURL {
                 try? FileManager.default.removeItem(at: url)
             }
+            if let error = error as? CopyError {
+                switch error {
+                case .cancelled:
+                    return .cancelled
+                }
+            }
             return .failure(defaultErrorMessage)
         }
     }
