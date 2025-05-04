@@ -11,23 +11,25 @@ import Observation
 import SwiftUI
 
 extension String {
-    func fuzzyMatch(_ filter: String) -> [String.Index]? {
-        func match(_ source: Substring, key: Substring) -> [String.Index]? {
+    func fuzzyMatch(_ filter: String) -> Set<String.Index>? {
+        if filter.isEmpty { return nil }
+
+        func match(_ source: Substring, key: Substring) -> Set<String.Index>? {
+            var indices: Set<Index> = []
+
             if let range = source.range(of: key) {
-                var result: [String.Index] = []
                 var index = range.lowerBound
                 while index < range.upperBound {
-                    result.append(index)
+                    indices.insert(index)
                     index = source.index(after: index)
                 }
-                return result
+                return indices
             }
 
             return nil
         }
 
-        var indexs: [Index] = []
-        if filter.isEmpty { return nil }
+        var indices: Set<Index> = []
 
         // perfect match first.
         if let matchs = match(self[startIndex...], key: filter[filter.startIndex...]) {
@@ -38,15 +40,15 @@ extension String {
         for index in utf8.indices {
             let char = utf8[index]
             if char == remainder[remainder.startIndex] {
-                indexs.append(index)
+                indices.insert(index)
                 remainder.removeFirst()
 
                 // try perfect match.
                 if let matchs = match(self[index...], key: filter[remainder.startIndex...]) {
-                    return indexs + matchs
+                    return indices.union(matchs)
                 }
 
-                if remainder.isEmpty { return indexs }
+                if remainder.isEmpty { return indices }
             }
         }
         return nil

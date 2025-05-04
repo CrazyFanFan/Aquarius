@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 enum NodeViewInfoHelper {
-    private static func highlight(string: String, indices: [String.Index]?) -> some View {
+    private static func highlight(string: String, indices: Set<String.Index>?) -> some View {
         guard let indices, !indices.isEmpty else { return Text(string) }
 
         let empty = ""
@@ -45,7 +45,7 @@ enum NodeViewInfoHelper {
     }
 
     @inline(__always)
-    static func name(_ node: (pod: Pod, indices: [String.Index]?)) -> some View {
+    static func name(_ node: (pod: Pod, indices: Set<String.Index>?)) -> some View {
         highlight(string: node.pod.name, indices: node.indices)
     }
 

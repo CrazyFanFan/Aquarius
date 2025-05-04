@@ -25,8 +25,8 @@ enum DisplaySectionGroupType: String, Hashable {
     @ObservationIgnored private(set) var associatedPods: [(DisplaySectionGroupType, [Pod])]?
     @ObservationIgnored private(set) var nameToPodCache: [String: Pod]
 
-    private(set) var showNames: [(group: DisplaySectionGroupType, [(pod: Pod, indices: [String.Index]?)])] = []
-    private(set) var searchSuggestions: [(pod: Pod, indices: [String.Index]?)] = []
+    private(set) var showNames: [(group: DisplaySectionGroupType, [(pod: Pod, indices: Set<String.Index>?)])] = []
+    private(set) var searchSuggestions: [(pod: Pod, indices: Set<String.Index>?)] = []
 
     @ObservationIgnored var searchKey = "" {
         didSet {
@@ -260,7 +260,7 @@ private extension RelationTreeData {
         }
 
         if searchKey.isEmpty {
-            showNames = tmpShowNodes.map { ($0.0, $0.1.map { ($0, [String.Index]?.none) }) }
+            showNames = tmpShowNodes.map { ($0.0, $0.1.map { ($0, Set<String.Index>?.none) }) }
         } else {
             let lowercasedSearchKey = searchKey.lowercased()
             showNames = tmpShowNodes.compactMap { group, pods in
