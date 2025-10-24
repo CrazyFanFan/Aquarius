@@ -19,7 +19,7 @@ enum DisplaySectionGroupType: String, Hashable {
     @ObservationIgnored private(set) var start: Pod
     private(set) var selected: Pod?
     private(set) var isReleationLoading: Bool = false
-    private(set) var paths: [[String]] = []
+    @MainActor private(set) var paths: [[String]] = []
 
     @ObservationIgnored private(set) var pods: [Pod]
     @ObservationIgnored private(set) var associatedPods: [(DisplaySectionGroupType, [Pod])]?
@@ -120,6 +120,7 @@ enum DisplaySectionGroupType: String, Hashable {
 
         var result: [[String]] = []
         var stack: [StackFrame] = [StackFrame(currentNode: start, path: [start])]
+        var lastUpdate = Date(timeIntervalSince1970: 0)
 
         while !stack.isEmpty {
             let frame = stack.removeLast()
@@ -172,6 +173,13 @@ enum DisplaySectionGroupType: String, Hashable {
 
             result += currentResult.map { path + $0 }
             await pathCache.cache(currentResult, for: currentNode)
+            let tmp = result
+            if Date().timeIntervalSince(lastUpdate) > 0.3 {
+                lastUpdate = Date()
+                await MainActor.run {
+                    paths = tmp
+                }
+            }
         }
 
         return result

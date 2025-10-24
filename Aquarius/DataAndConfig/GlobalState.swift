@@ -67,7 +67,7 @@ final class GlobalState: ObservableObject {
 
     @AppStorage("repoBookMark") var repoBookMark: [URL: Data] = [:]
 
-    public var cache: NSCache<LockBookmark, TreeData> = .init()
+    var cache: NSCache<LockBookmark, TreeData> = .init()
     private init() {}
 }
 
