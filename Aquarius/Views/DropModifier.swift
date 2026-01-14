@@ -16,7 +16,7 @@ struct DropModifier: ViewModifier {
     @Query(sort: \LockBookmark.timestamp, order: .forward)
     private var items: [LockBookmark]
 
-    @StateObject var global: GlobalState
+    @StateObject var session: AppSession
     @State private var isTargeted: Bool = false
 
     private static let supportType = UTType.fileURL
@@ -25,7 +25,7 @@ struct DropModifier: ViewModifier {
         content
         .onOpenURL { addItem(with: $0) }
         .onDrop(
-            of: global.isLoading ? [] : [Self.supportType],
+            of: session.isLoading ? [] : [Self.supportType],
             isTargeted: $isTargeted
         ) {
             loadPath(from: $0)
@@ -91,7 +91,7 @@ struct DropModifier_Previews: PreviewProvider {
     static var previews: some View {
         EmptyView()
             .frame(width: 100, height: 100)
-            .modifier(DropModifier(global: .shared))
+            .modifier(DropModifier(session: .shared))
     }
 }
 
@@ -99,5 +99,5 @@ struct DropModifier_Previews: PreviewProvider {
     EmptyView()
         .frame(width: 100, height: 100)
         .background(Color.red.opacity(0.1))
-        .modifier(DropModifier(global: .shared))
+        .modifier(DropModifier(session: .shared))
 }

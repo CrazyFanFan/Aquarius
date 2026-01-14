@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct NodeView: View {
-    @StateObject var global: GlobalState
+    @StateObject var settings: AppSettings
 
     var node: TreeNode
     var isImpactMode: Bool
@@ -20,7 +20,7 @@ struct NodeView: View {
                 NodeViewInfoHelper.nameAndCount(
                     node,
                     isImpactMode: isImpactMode,
-                    isIgnoreNodeDeep: global.isIgnoreNodeDeep
+                    isIgnoreNodeDeep: settings.isIgnoreNodeDeep
                 )
                 NodeViewInfoHelper.version(node)
             }
@@ -32,5 +32,5 @@ struct NodeView: View {
 }
 
 #Preview {
-    NodeView(global: .shared, node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
+    NodeView(settings: .shared, node: TreeNode(deep: 0, pod: Pod(podValue: "test")), isImpactMode: .random())
 }

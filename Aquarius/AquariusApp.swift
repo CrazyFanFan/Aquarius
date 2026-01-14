@@ -30,7 +30,7 @@ struct AquariusApp: App {
         }
 
         Settings {
-            AquariusSettings(global: .shared)
+            AquariusSettings(settings: .shared)
         }
     }
 }

@@ -9,15 +9,17 @@ import CoreData
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var global = GlobalState.shared
+    @StateObject private var session = AppSession.shared
+    @StateObject private var settings = AppSettings.shared
+    @StateObject private var store = TreeDataStore.shared
 
     var body: some View {
         ZStack {
             NavigationView {
-                Sidebar(global: global)
+                Sidebar(settings: settings, session: session, store: store)
 
-                if let selection = global.selection, let data = global.data(for: selection) {
-                    TreeContent(global: global, treeData: data)
+                if let selection = session.selection, let data = store.data(for: selection) {
+                    TreeContent(settings: settings, treeData: data)
                 } else {
                     ContentUnavailableView(
                         "Select a Podfile.lock",
@@ -26,13 +28,13 @@ struct ContentView: View {
                 }
             }
 
-            if global.isLoading {
+            if session.isLoading {
                 ProgressView()
                     .progressViewStyle(.circular)
                     .scaleEffect(x: 1.5, y: 1.5, anchor: .center)
             }
         }
-        .modifier(DropModifier(global: global))
+        .modifier(DropModifier(session: session))
     }
 }
 

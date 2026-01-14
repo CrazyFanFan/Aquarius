@@ -256,12 +256,12 @@ private extension TreeData {
     func loadRepoPodspec(_ repoGitURLString: String, for pod: Pod) async {
         func requireCocoapodsRepoReadPermission() async -> URL? {
             let cocoapodsRepoRoot = Utils.userHome.appendingPathComponent(".cocoapods")
-            if let data = GlobalState.shared.repoBookMark[cocoapodsRepoRoot], let url = BookmarkTool.url(for: data) {
+            if let data = AppSettings.shared.repoBookMark[cocoapodsRepoRoot], let url = BookmarkTool.url(for: data) {
                 return url.0
             }
 
             if let url = await DiskAccessHelper.requireReadAccess(of: cocoapodsRepoRoot) {
-                GlobalState.shared.repoBookMark[cocoapodsRepoRoot] = BookmarkTool.bookmark(for: url)
+                AppSettings.shared.repoBookMark[cocoapodsRepoRoot] = BookmarkTool.bookmark(for: url)
                 return url
             }
 

@@ -17,7 +17,7 @@ enum Utils {
     }
 
     private static func rootCacheDir() -> URL {
-        switch GlobalState.shared.locationOfCacheFile {
+        switch AppSettings.shared.locationOfCacheFile {
         case .system: systemCacheDirectory
         case .application: applicationCacheDirectory ?? systemCacheDirectory
         }

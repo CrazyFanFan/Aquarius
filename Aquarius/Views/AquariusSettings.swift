@@ -8,28 +8,28 @@
 import SwiftUI
 
 struct AquariusSettings: View {
-    @StateObject var global: GlobalState
+    @StateObject var settings: AppSettings
 
     var body: some View {
         Form {
             Section {
-                Toggle("Bookmark", isOn: $global.isBookmarkEnable) // 书签
-                Toggle("Ignore Last Modified time", isOn: $global.isIgnoreLastModificationDate) // 忽略最后修改时间
+                Toggle("Bookmark", isOn: $settings.isBookmarkEnable) // 书签
+                Toggle("Ignore Last Modified time", isOn: $settings.isIgnoreLastModificationDate) // 忽略最后修改时间
 
-                Picker("Indentation", selection: $global.isIgnoreNodeDeep) { // 缩进
+                Picker("Indentation", selection: $settings.isIgnoreNodeDeep) { // 缩进
                     ForEach([true, false], id: \.self) {
                         text($0, ("list.bullet", "Ignore"), ("list.bullet.indent", "Automatic"), $0)
                     }
                 }
 
-                Picker("Location of cache file", selection: $global.locationOfCacheFile) { // 缓存路径
+                Picker("Location of cache file", selection: $settings.locationOfCacheFile) { // 缓存路径
                     ForEach(LocationOfCacheFile.allCases, id: \.rawValue) {
                         text($0 == .system, ("gear", $0.rawValue.capitalized), ("app", $0.rawValue.capitalized), $0)
                     }
                 }
 
                 if #available(macOS 13, *) {
-                    Picker("List view style", selection: $global.useNewListStyle) {
+                    Picker("List view style", selection: $settings.useNewListStyle) {
                         ForEach([true, false], id: \.self) {
                             text($0, ("tablecells", "Columns"), ("list.triangle", "Single Column"), $0)
                         }
@@ -46,9 +46,9 @@ struct AquariusSettings: View {
 
             Section {
                 PageCommonSettings(
-                    orderRule: $global.orderRule,
-                    detailMode: $global.detailMode,
-                    isSubspeciesShow: $global.isSubspeciesShow
+                    orderRule: $settings.orderRule,
+                    detailMode: $settings.detailMode,
+                    isSubspeciesShow: $settings.isSubspeciesShow
                 )
             } header: {
                 Text("Default Settings")
@@ -102,5 +102,5 @@ private extension AquariusSettings {
 }
 
 #Preview {
-    AquariusSettings(global: .shared)
+    AquariusSettings(settings: .shared)
 }

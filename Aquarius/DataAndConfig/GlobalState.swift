@@ -6,84 +6,73 @@
 //  Copyright © 2021 Crazy凡. All rights reserved.
 //
 
-import Combine
 import SwiftUI
-
-enum LocationOfCacheFile: String, CaseIterable {
-    case system
-    case application
-}
-
-extension Dictionary: @retroactive RawRepresentable where Key: Codable, Value: Codable {
-    public init?(rawValue: String) {
-        guard let data = rawValue.data(using: .utf8),
-              let result = try? JSONDecoder().decode([Key: Value].self, from: data) else {
-            return nil
-        }
-        self = result
-    }
-
-    public var rawValue: String {
-        guard let data = try? JSONEncoder().encode(self),
-              let result = String(data: data, encoding: .utf8) else {
-            return "[]"
-        }
-        return result
-    }
-}
-
-// 接下来需要在 TreeData 内置页面内配置，并且优化逻辑；
-// 优先访问全局配置，全局配置失效则访问页面内配置
 
 final class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
-    @MainActor @Published var selection: LockBookmark?
+    let settings = AppSettings.shared
+    let session = AppSession.shared
+    let store = TreeDataStore.shared
 
-    @MainActor @Published var isLoading: Bool = false
-
-    /// Mark is impact mode
-    ///
-    ///
-    /// When a module depends on another module and the dependent module
-    /// changes, the module that depends on that module will be affected.
-    /// I call it the impact mode.
-    ///
-    /// 标记”影响树“
-    ///
-    /// 如果一个模块A依赖另一模块B，被依赖的模块B发生变化时候，则模块A可能会受到影响，
-    /// 递归的找下去，会形成一棵树，我称之为”影响树“
-    ///
-    @AppStorage("detailMode") var detailMode: DetailMode = .predecessors
-    @AppStorage("orderRule") var orderRule: OrderBy = .alphabeticalAscending
-
-    @AppStorage("isBookmarkEnable") var isBookmarkEnable: Bool = false
-    @AppStorage("isIgnoreLastModificationDate") var isIgnoreLastModificationDate: Bool = false
-    @AppStorage("isIgnoreNodeDeep") var isIgnoreNodeDeep = false
-    @AppStorage("locationOfCacheFile") var locationOfCacheFile: LocationOfCacheFile = .application
-    @AppStorage("isSubspeciesShow") var isSubspeciesShow: Bool = false
-
-    @AppStorage("newListStyle") var useNewListStyle: Bool = false
-
-    @AppStorage("repoBookMark") var repoBookMark: [URL: Data] = [:]
-
-    public var cache: NSCache<LockBookmark, TreeData> = .init()
     private init() {}
 }
 
 extension GlobalState {
-    func data(for lock: LockBookmark) -> TreeData? {
-        if let data = cache.object(forKey: lock), data.lock != nil {
-            return data
-        }
-
-        if let url = lock.url {
-            let data = TreeData(lockFile: LockFileInfo(url: url))
-            cache.setObject(data, forKey: lock)
-
-            return data
-        }
-
-        return nil
+    @MainActor var selection: LockBookmark? {
+        get { session.selection }
+        set { session.selection = newValue }
     }
+
+    @MainActor var isLoading: Bool {
+        get { session.isLoading }
+        set { session.isLoading = newValue }
+    }
+
+    var detailMode: DetailMode {
+        get { settings.detailMode }
+        set { settings.detailMode = newValue }
+    }
+
+    var orderRule: OrderBy {
+        get { settings.orderRule }
+        set { settings.orderRule = newValue }
+    }
+
+    var isBookmarkEnable: Bool {
+        get { settings.isBookmarkEnable }
+        set { settings.isBookmarkEnable = newValue }
+    }
+
+    var isIgnoreLastModificationDate: Bool {
+        get { settings.isIgnoreLastModificationDate }
+        set { settings.isIgnoreLastModificationDate = newValue }
+    }
+
+    var isIgnoreNodeDeep: Bool {
+        get { settings.isIgnoreNodeDeep }
+        set { settings.isIgnoreNodeDeep = newValue }
+    }
+
+    var locationOfCacheFile: LocationOfCacheFile {
+        get { settings.locationOfCacheFile }
+        set { settings.locationOfCacheFile = newValue }
+    }
+
+    var isSubspeciesShow: Bool {
+        get { settings.isSubspeciesShow }
+        set { settings.isSubspeciesShow = newValue }
+    }
+
+    var useNewListStyle: Bool {
+        get { settings.useNewListStyle }
+        set { settings.useNewListStyle = newValue }
+    }
+
+    var repoBookMark: [URL: Data] {
+        get { settings.repoBookMark }
+        set { settings.repoBookMark = newValue }
+    }
+
+    @MainActor func data(for lock: LockBookmark) -> TreeData? { store.data(for: lock) }
 }

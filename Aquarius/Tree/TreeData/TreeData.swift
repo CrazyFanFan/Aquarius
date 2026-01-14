@@ -56,7 +56,7 @@ extension String {
 }
 
 @Observable final class TreeData {
-    @ObservationIgnored private var global: GlobalState = .shared
+    @ObservationIgnored private var settings: AppSettings = .shared
 
     private(set) var nodes: [TreeNode] = []
     private(set) var searchSuggestions: [TreeNode] = []
@@ -67,7 +67,7 @@ extension String {
 
     @MainActor private(set) var showNodes: [TreeNode] = []
 
-    private var isIgnoreLastModificationDate: Bool { global.isIgnoreLastModificationDate }
+    private var isIgnoreLastModificationDate: Bool { settings.isIgnoreLastModificationDate }
 
     @MainActor var currentCopyingCount: Int = 0
     @MainActor var isCopying: Bool = false
@@ -130,7 +130,7 @@ extension String {
         }
     }
 
-    var detailMode: DetailMode = GlobalState.shared.detailMode {
+    var detailMode: DetailMode = AppSettings.shared.detailMode {
         didSet {
             guard detailMode != oldValue else { return }
             runWithMainActor {
@@ -143,7 +143,7 @@ extension String {
         }
     }
 
-    var orderRule: OrderBy = GlobalState.shared.orderRule {
+    var orderRule: OrderBy = AppSettings.shared.orderRule {
         didSet {
             guard orderRule != oldValue else { return }
             runWithMainActor {
@@ -173,7 +173,7 @@ extension String {
     init(lockFile: LockFileInfo) {
         self.lockFile = lockFile
         isSubspeciesShow = false
-        isSubspeciesShow = global.isSubspeciesShow
+        isSubspeciesShow = settings.isSubspeciesShow
 
         loadFile()
     }

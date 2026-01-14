@@ -22,12 +22,14 @@ struct Sidebar: View {
     @Query(sort: \LockBookmark.timestamp, order: .forward)
     private var newItems: [LockBookmark]
 
-    @StateObject var global: GlobalState
+    @StateObject var settings: AppSettings
+    @StateObject var session: AppSession
+    @StateObject var store: TreeDataStore
 
     @State private var isPresented: Bool = false
 
     var body: some View {
-        List(newItems, id: \.self, selection: $global.selection) {
+        List(newItems, id: \.self, selection: $session.selection) {
             view(for: $0)
         }
         .listStyle(SidebarListStyle())
@@ -40,15 +42,15 @@ struct Sidebar: View {
                 Image(systemName: "gearshape")
             }
             .popover(isPresented: $isPresented) {
-                AquariusSettings(global: .shared)
+                AquariusSettings(settings: settings)
             }
         }
         .frame(minWidth: 250, alignment: .leading)
         .onAppear {
             // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
             migrateFromCoreData()
-            if global.isBookmarkEnable {
-                global.selection = newItems.first
+            if settings.isBookmarkEnable {
+                session.selection = newItems.first
             } else {
                 delete(items: Array(newItems))
             }
@@ -64,8 +66,8 @@ struct Sidebar: View {
 private extension Sidebar {
     func view(for item: LockBookmark) -> some View {
         NavigationLink {
-            if let data = global.data(for: item) {
-                TreeContent(global: global, treeData: data)
+            if let data = store.data(for: item) {
+                TreeContent(settings: settings, treeData: data)
             } else {
                 Text("""
                     Failed to parse Podfile.lock.
@@ -78,8 +80,8 @@ private extension Sidebar {
         .contextMenu {
             Button("Delete") {
                 self.delete(items: [item])
-                if item == global.selection {
-                    global.selection = nil
+                if item == session.selection {
+                    session.selection = nil
                 }
             }
 
@@ -100,6 +102,7 @@ private extension Sidebar {
     private func delete(items: [LockBookmark]) {
         withAnimation {
             items.forEach(swiftDataViewContext.delete)
+            try? swiftDataViewContext.save()
         }
     }
 
@@ -124,10 +127,10 @@ private extension Sidebar {
 
 struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
-        Sidebar(global: .shared)
+        Sidebar(settings: .shared, session: .shared, store: .shared)
     }
 }
 
 #Preview {
-    Sidebar(global: .shared)
+    Sidebar(settings: .shared, session: .shared, store: .shared)
 }

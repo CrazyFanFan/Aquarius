@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @State var global: GlobalState
+    @State var settings: AppSettings
     @State var treeData: TreeData
 
     @State private var isFullVersionShow: Bool = false
@@ -23,17 +23,13 @@ struct TreeContent: View {
         }
 #endif
 
-        if global.selection != nil {
-            if treeData.isLockLoadFailed {
-                Text("""
-                Failed to parse Podfile.lock.
-                Check the files for conflicts or other formatting exceptions.
-                """)
-            } else {
-                mainContent() // main content
-            }
+        if treeData.isLockLoadFailed {
+            Text("""
+            Failed to parse Podfile.lock.
+            Check the files for conflicts or other formatting exceptions.
+            """)
         } else {
-            Text("Select a Podfile.lock") // Default info when selection is nil
+            mainContent() // main content
         }
     }
 }
@@ -47,7 +43,7 @@ private extension TreeContent {
 
             Divider()
 
-            if global.useNewListStyle, #available(macOS 13, *) {
+            if settings.useNewListStyle, #available(macOS 13, *) {
                 tableContent()
             } else {
                 singleColumn()
@@ -75,7 +71,7 @@ private extension TreeContent {
                 NodeViewInfoHelper.nameAndCount(
                     node,
                     isImpactMode: treeData.isImpact,
-                    isIgnoreNodeDeep: global.isIgnoreNodeDeep
+                    isIgnoreNodeDeep: settings.isIgnoreNodeDeep
                 )
                 .modifier(NodeViewModifier(treeData: treeData, node: node))
             }
@@ -99,7 +95,7 @@ private extension TreeContent {
                 pinnedViews: []
             ) {
                 ForEach(treeData.showNodes) { node in
-                    NodeView(global: global, node: node, isImpactMode: self.treeData.isImpact)
+                    NodeView(settings: settings, node: node, isImpactMode: self.treeData.isImpact)
                         .modifier(NodeViewModifier(treeData: treeData, node: node))
                 }
             }
@@ -110,5 +106,5 @@ private extension TreeContent {
 }
 
 #Preview {
-    TreeContent(global: .shared, treeData: .init(lockFile: .preview))
+    TreeContent(settings: .shared, treeData: .init(lockFile: .preview))
 }

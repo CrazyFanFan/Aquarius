@@ -39,6 +39,9 @@
 		63E44B6F2905383D00F0ED6A /* DropModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E44B6E2905383D00F0ED6A /* DropModifier.swift */; };
 		63E5924C2904FE8F008CD4C9 /* PageCommonSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */; };
 		63E5924E2904FFAD008CD4C9 /* PageMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E5924D2904FFAD008CD4C9 /* PageMenu.swift */; };
+		64A1C0A12E1B4C2D0000B001 /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A1C0A12E1B4C2D0000A001 /* AppSettings.swift */; };
+		64A1C0A12E1B4C2D0000B002 /* AppSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A1C0A12E1B4C2D0000A002 /* AppSession.swift */; };
+		64A1C0A12E1B4C2D0000B003 /* TreeDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A1C0A12E1B4C2D0000A003 /* TreeDataStore.swift */; };
 		7BE5BDE8F0081678CA584DCD5494EACE /* TreeContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFE3FC11CB33C12DDDBB4EF22D30AEF5 /* TreeContent.swift */; };
 		9240FA031878B34789D7F3D60C6B29D4 /* SpecRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC3F9808853E1A10A3ECA758DD0EEEE2 /* SpecRepo.swift */; };
 		A0A4801B4905C485302DFE8CB9CCD9E3 /* LockFileInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D76A75D3FBDFB1082AAB2211D7C684F /* LockFileInfo.swift */; };
@@ -80,6 +83,9 @@
 		63E44B6E2905383D00F0ED6A /* DropModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropModifier.swift; sourceTree = "<group>"; };
 		63E5924B2904FE8F008CD4C9 /* PageCommonSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageCommonSettings.swift; sourceTree = "<group>"; };
 		63E5924D2904FFAD008CD4C9 /* PageMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageMenu.swift; sourceTree = "<group>"; };
+		64A1C0A12E1B4C2D0000A001 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		64A1C0A12E1B4C2D0000A002 /* AppSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSession.swift; sourceTree = "<group>"; };
+		64A1C0A12E1B4C2D0000A003 /* TreeDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeDataStore.swift; sourceTree = "<group>"; };
 		6B8F5A52192C95321FB019A5F85A046A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76B5BFD9BFDE193F60E5F0F787A55CB5 /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		76EB096455D84CCC0B81786C92F611C8 /* NodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeView.swift; sourceTree = "<group>"; };
@@ -304,6 +310,9 @@
 			children = (
 				1B2B512663567F7EF67B3E9316DD76DF /* MetaData */,
 				BD6360C600918A90779721494C9DB67E /* CoreData */,
+				64A1C0A12E1B4C2D0000A001 /* AppSettings.swift */,
+				64A1C0A12E1B4C2D0000A002 /* AppSession.swift */,
+				64A1C0A12E1B4C2D0000A003 /* TreeDataStore.swift */,
 				31C0D31171741D4D80905B5C97528737 /* GlobalState.swift */,
 			);
 			path = DataAndConfig;
@@ -340,7 +349,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1630;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					164AB9769D8B58F1CABB8AEF460795A4 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -392,6 +401,9 @@
 			files = (
 				33CDFC27ACD4BC44840A03E3BCCC65F0 /* Aquarius.xcdatamodeld in Sources */,
 				DAA5B90916B09DE920A0A86F4D7A2038 /* AquariusApp.swift in Sources */,
+				64A1C0A12E1B4C2D0000B001 /* AppSettings.swift in Sources */,
+				64A1C0A12E1B4C2D0000B002 /* AppSession.swift in Sources */,
+				64A1C0A12E1B4C2D0000B003 /* TreeDataStore.swift in Sources */,
 				63CF6CBC2A0775290082CFE7 /* DiskAccessHelper.swift in Sources */,
 				63E5924E2904FFAD008CD4C9 /* PageMenu.swift in Sources */,
 				FB789A5733C629F01F04500ABCCAF139 /* BookmarkTool.swift in Sources */,
@@ -496,6 +508,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -556,6 +569,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 			};
@@ -575,8 +589,10 @@
 				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Aquarius/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = Aquarius/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -604,8 +620,10 @@
 				CURRENT_PROJECT_VERSION = 14;
 				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"Aquarius/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
 				INFOPLIST_FILE = Aquarius/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
