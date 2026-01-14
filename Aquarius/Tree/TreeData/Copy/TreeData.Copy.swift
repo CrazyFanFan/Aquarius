@@ -145,44 +145,45 @@ private extension TreeData {
         case .recursive:
             var nodes: [(pod: Pod, current: Data, next: Data)] = [(pod, currentPrefix, nextPrefix)]
             var processed = 0
-            let start = CACurrentMediaTime()
 
             while let (pod, currentPrefix, nextPrefix) = nodes.popLast() {
                 guard !Task.isCancelled else { throw CopyError.cancelled }
 
                 processed += 1
-                let step = 100_000
-                if processed % step == 0 {
-                    let duration = CACurrentMediaTime() - start
-                    let tmp = processed
-                    DispatchQueue.global().async {
-                        print(String(format: "Processed \(tmp) pods in %.2lf seconds, average %.2lf seconds per \(step) pods.", duration, duration / Double(tmp / step)))
-                    }
-                }
+                context.write(currentPrefix)
+                context.write(pod.nameData)
+                context.write(Constant.newline)
 
-                context.write(currentPrefix + pod.nameData + Constant.newline)
-
-                guard var nextPods = pod.nextLevel(isImpact)?.compactMap({ nameToPodCache[$0] }), !nextPods.isEmpty else {
+                guard let nextNames = pod.nextLevel(isImpact), !nextNames.isEmpty else {
+                    if processed & 0x3FF == 0 { updateProgress(processed) }
                     continue
                 }
 
-                let last = nextPods.removeLast()
-                let nextNodes = nextPods.enumerated()
-                    .map { ($0.element, nextPrefix + Constant.tConnector, nextPrefix + Constant.middlePrefix) }
-                nodes.append((last, nextPrefix + Constant.lConnector, nextPrefix + Constant.lastPrefix))
-                nodes.append(contentsOf: nextNodes.reversed())
+                var pushedLast = false
+                for name in nextNames.reversed() {
+                    guard let child = nameToPodCache[name] else { continue }
+                    if !pushedLast {
+                        nodes.append((child, nextPrefix + Constant.lConnector, nextPrefix + Constant.lastPrefix))
+                        pushedLast = true
+                    } else {
+                        nodes.append((child, nextPrefix + Constant.tConnector, nextPrefix + Constant.middlePrefix))
+                    }
+                }
 
-                updateProgress(processed)
+                if processed & 0x3FF == 0 { updateProgress(processed) }
             }
 
         case .pruneRecursive:
             var names = pod.nextLevel(isImpact) ?? []
+            var visited = Set(names)
             var index = 0
 
             while index < names.count {
-                names += nameToPodCache[names[index]]?
-                    .nextLevel(isImpact)?
-                    .filter { !names.contains($0) } ?? []
+                if let nexts = nameToPodCache[names[index]]?.nextLevel(isImpact) {
+                    for name in nexts where visited.insert(name).inserted {
+                        names.append(name)
+                    }
+                }
                 index += 1
             }
 

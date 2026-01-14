@@ -25,11 +25,10 @@ extension TreeData {
     class CopyContext {
         let deepMode: CopyingStrategy
 
-        private let cacheSize = 16 * 1024
+        private let cacheSize = 128 * 1024
 
         private var fileHandle: FileHandle
         private var cache: Data = .init()
-        private var queue: DispatchQueue = .init(label: "copy.result.queue")
 
         var fileURL: URL?
 
@@ -45,24 +44,17 @@ extension TreeData {
 
         @inline(__always) private func flushCache(_ append: Data? = nil) {
             if !cache.isEmpty {
-                let _cache = cache
-                queue.async {
-                    if let append {
-                        self.fileHandle.write(_cache + append)
-                    } else {
-                        self.fileHandle.write(_cache)
-                    }
-                }
+                let flushed = cache
                 cache.removeAll(keepingCapacity: true)
+                fileHandle.write(flushed)
+                if let append { fileHandle.write(append) }
             }
         }
 
         func write(_ data: Data) {
             if data.count >= cacheSize {
                 if cache.isEmpty {
-                    queue.async {
-                        self.fileHandle.write(data)
-                    }
+                    fileHandle.write(data)
                 } else {
                     flushCache(data)
                 }
@@ -83,7 +75,6 @@ extension TreeData {
             if !cache.isEmpty {
                 flushCache()
             }
-            queue.sync(flags: .barrier) {}
             try fileHandle.synchronize()
             try fileHandle.close()
         }
