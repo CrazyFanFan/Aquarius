@@ -12,15 +12,34 @@ enum NodeViewInfoHelper {
     private static func highlight(string: String, indices: Set<String.Index>?) -> some View {
         guard let indices, !indices.isEmpty else { return Text(string) }
 
-        let empty = ""
-        var result = Text(empty)
+        var result = Text("")
+        var buffer = ""
+        buffer.reserveCapacity(string.count)
+
+        var isHighlighted: Bool? = nil
+        var appendedAny = false
 
         for index in string.indices {
-            let char = Text(String(string[index]))
-            result = if indices.contains(index) {
-                result + char.bold().foregroundColor(.main)
+            let current = indices.contains(index)
+            if let prev = isHighlighted, prev != current {
+                if appendedAny {
+                    result = result + (prev ? Text(buffer).bold().foregroundColor(.main) : Text(buffer))
+                } else {
+                    result = prev ? Text(buffer).bold().foregroundColor(.main) : Text(buffer)
+                    appendedAny = true
+                }
+                buffer.removeAll(keepingCapacity: true)
+            }
+
+            buffer.append(string[index])
+            isHighlighted = current
+        }
+
+        if let last = isHighlighted, !buffer.isEmpty {
+            if appendedAny {
+                result = result + (last ? Text(buffer).bold().foregroundColor(.main) : Text(buffer))
             } else {
-                result + char
+                result = last ? Text(buffer).bold().foregroundColor(.main) : Text(buffer)
             }
         }
 

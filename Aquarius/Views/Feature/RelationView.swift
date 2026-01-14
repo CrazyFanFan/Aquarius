@@ -21,7 +21,7 @@ struct RelationView: View {
                     ForEach(group.1, id: \.pod) { node in
                         NodeViewInfoHelper.name(node)
                             .onTapGesture {
-                                Task.detached {
+                                Task { @MainActor in
                                     await data.select(group.0, node.0, pods: group.1.map(\.pod))
                                 }
                             }

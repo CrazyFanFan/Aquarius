@@ -49,5 +49,5 @@ final class TreeNode: NSObject {
 }
 
 extension TreeNode: Identifiable {
-    var id: Int { (hashValue << 1) + (isExpanded ? 0 : 1) }
+    var id: Int { ObjectIdentifier(self).hashValue }
 }

@@ -30,6 +30,7 @@ extension TreeData {
 
             await self.resetCopyStatus()
             await MainActor.run {
+                self.copyTask = nil
                 self.copyResult = result
             }
         }
