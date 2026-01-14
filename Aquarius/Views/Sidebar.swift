@@ -73,7 +73,7 @@ private extension Sidebar {
                     """)
             }
         } label: {
-            Text(item.name ?? "Unknow")
+            Text(item.name ?? "Unknown")
         }
         .contextMenu {
             Button("Delete") {

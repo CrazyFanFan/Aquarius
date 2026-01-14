@@ -44,7 +44,7 @@ struct RelationView: View {
 
             VStack {
                 HStack {
-                    Text("The connection between **\(pod.name)** and **\(data.selected?.name ?? "Unkonwn")** is as follows")
+                    Text("The connection between **\(pod.name)** and **\(data.selected?.name ?? "Unknown")** is as follows")
                         .lineLimit(nil)
                         .font(.system(size: 16))
                         .padding(.zero)

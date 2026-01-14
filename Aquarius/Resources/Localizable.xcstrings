@@ -184,7 +184,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clean the cache"
+            "value" : "Clear cache"
           }
         },
         "zh-Hans" : {
@@ -293,7 +293,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制子节点"
+            "value" : "Copy child nodes"
           }
         },
         "zh-Hans" : {
@@ -327,7 +327,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制子节点(递归)"
+            "value" : "Copy child nodes (recursive)"
           }
         },
         "zh-Hans" : {
@@ -351,10 +351,16 @@
     "Copy failed! 😢 " : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy failed."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制失败！ 😢 "
+            "value" : "复制失败！ 😢"
           }
         }
       }
@@ -404,10 +410,16 @@
     "Copy success! 🎉 " : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制成功！ 🎉 "
+            "value" : "复制成功！ 🎉"
           }
         }
       }
@@ -521,7 +533,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Faile to create tree of %@"
+            "value" : "Failed to generate a dependency tree for %@."
           }
         },
         "zh-Hans" : {
@@ -613,7 +625,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ignore Last Modified time"
+            "value" : "Ignore modification date"
           }
         },
         "zh-Hans" : {
@@ -661,7 +673,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Load podspec content failed."
+            "value" : "Failed to load podspec content."
           }
         },
         "zh-Hans" : {
@@ -677,7 +689,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Load podspec content failed.\nSorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself.\n"
+            "value" : "Failed to load podspec content.\nYou don’t have permission to access the podspec file. Use Show in Finder to open it."
           }
         },
         "zh-Hans" : {
@@ -690,6 +702,12 @@
     },
     "Loading" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading…"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -719,7 +737,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Model: "
+            "value" : "Mode:"
           }
         },
         "zh-Hans" : {
@@ -748,6 +766,12 @@
     },
     "No connection" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No connection found."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -801,6 +825,12 @@
     },
     "Open the cache directory" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open cache folder"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -814,7 +844,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Path: %1$lld, Count: %2$lld (↓)"
+            "value" : "Path %1$lld · Nodes: %2$lld (↓)"
           }
         },
         "zh-Hans" : {
@@ -915,6 +945,12 @@
     "Result has been copied to clipboard." : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied to the clipboard."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -961,7 +997,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Show in finder"
+            "value" : "Show in Finder"
           }
         },
         "zh-Hans" : {
@@ -1020,7 +1056,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Sort by"
+            "value" : "Sort by:"
           }
         },
         "zh-Hans" : {
@@ -1036,7 +1072,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Subspecies:"
+            "value" : "Subspecs:"
           }
         },
         "zh-Hans" : {
@@ -1118,7 +1154,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "This is the default setting that will be followed\nwhen a new file is opened.\nThe Settings on the details page will not change the global Settings,\nand killing the app will lose the Settings on the details page."
+            "value" : "These are the defaults used when you open a new file.\nChanges made on the details page won’t modify the global settings.\nDetail-page changes reset when you quit the app."
           }
         },
         "zh-Hans" : {
@@ -1147,6 +1183,12 @@
     },
     "Total: %lld path(s)" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: %lld paths"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1157,6 +1199,12 @@
     },
     "Tree content is too large, written to cache file, path has been copied to clipboard.\nCache file path: %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tree content is too large. It was saved to a cache file, and the file path was copied to the clipboard.\nCache file: %@"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1168,6 +1216,12 @@
     "User cancel copy!" : {
       "extractionState" : "manual",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy cancelled."
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1207,7 +1261,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Viewing PodSpecs in Git sources is not supported currently."
+            "value" : "Viewing podspecs from Git sources is not currently supported."
           }
         },
         "zh-Hans" : {
