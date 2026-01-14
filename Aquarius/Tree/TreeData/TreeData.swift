@@ -36,19 +36,19 @@ extension String {
             return matchs
         }
 
-        var remainder = filter[...].utf8
-        for index in utf8.indices {
-            let char = utf8[index]
-            if char == remainder[remainder.startIndex] {
+        var filterIndex = filter.startIndex
+        for index in self.indices {
+            if self[index] == filter[filterIndex] {
                 indices.insert(index)
-                remainder.removeFirst()
+                filterIndex = filter.index(after: filterIndex)
 
-                // try perfect match.
-                if let matchs = match(self[index...], key: filter[remainder.startIndex...]) {
+                if filterIndex == filter.endIndex { return indices }
+
+                let remainder = filter[filterIndex...]
+                let sourceStart = self.index(after: index)
+                if let matchs = match(self[sourceStart...], key: remainder) {
                     return indices.union(matchs)
                 }
-
-                if remainder.isEmpty { return indices }
             }
         }
         return nil
