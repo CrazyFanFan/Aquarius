@@ -43,8 +43,6 @@ import Foundation
  :tag: 5.4.4
  */
 
-private var asyncShowPodspecTask: Task<Void, Never>?
-
 extension TreeData {
     @MainActor func showPodspec(of pod: Pod) {
         if isPodspecViewShow {
@@ -55,6 +53,7 @@ extension TreeData {
             show(with: cache, and: nil)
         }
 
+        asyncShowPodspecTask?.cancel()
         asyncShowPodspecTask = Task.detached(priority: .userInitiated) {
             await self.asyncShowPodspec(of: pod)
         }
@@ -260,7 +259,7 @@ private extension TreeData {
                 return url.0
             }
 
-            if let url = await DiskAccessHelper.requireReadAccess(of: cocoapodsRepoRoot) {
+            if let url = DiskAccessHelper.requireReadAccess(of: cocoapodsRepoRoot) {
                 AppSettings.shared.repoBookMark[cocoapodsRepoRoot] = BookmarkTool.bookmark(for: url)
                 return url
             }

@@ -24,15 +24,46 @@ extension TreeData {
         isCopying = true
         copyMode = deepMode
         copyResult = nil
+        currentCopyingCount = 0
 
-        copyTask = Task.detached(priority: .background) {
-            let result = self.copy(for: pod, with: deepMode)
+        copyTask?.cancel()
+        copyProgressTask?.cancel()
 
-            await self.resetCopyStatus()
-            await MainActor.run {
-                self.copyTask = nil
-                self.copyResult = result
+        let isImpact = isImpact
+        let nameToPodCache = nameToPodCache
+        var progressContinuation: AsyncStream<Int>.Continuation!
+        let progressStream = AsyncStream<Int> { continuation in
+            progressContinuation = continuation
+        }
+
+        copyProgressTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            for await processedCount in progressStream {
+                self.currentCopyingCount = processedCount
             }
+        }
+
+        let continuation = progressContinuation
+        let task = Task.detached(priority: .background) { () -> CopyResult in
+            defer { continuation?.finish() }
+            return Self.copyTree(
+                for: pod,
+                with: deepMode,
+                isImpact: isImpact,
+                nameToPodCache: nameToPodCache,
+                progress: { continuation?.yield($0) }
+            )
+        }
+        copyTask = task
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            let result = await task.value
+            if Task.isCancelled { return }
+            self.resetCopyStatus()
+            self.copyTask = nil
+            self.copyProgressTask?.cancel()
+            self.copyProgressTask = nil
+            self.copyResult = result
         }
     }
 
@@ -44,12 +75,20 @@ extension TreeData {
     @MainActor func cancelCurrentCopyTask() {
         copyTask?.cancel()
         copyTask = nil
+        copyProgressTask?.cancel()
+        copyProgressTask = nil
         resetCopyStatus()
     }
 }
 
 private extension TreeData {
-    func copy(for pod: Pod, with deepMode: CopyingStrategy) -> CopyResult {
+    nonisolated static func copyTree(
+        for pod: Pod,
+        with deepMode: CopyingStrategy,
+        isImpact: Bool,
+        nameToPodCache: [String: Pod],
+        progress: (@Sendable (Int) -> Void)?
+    ) -> CopyResult {
         var context: CopyContext?
         lazy var defaultErrorMessage = String(format: String(localized: "Faile to create tree of %@"), pod.name)
 
@@ -62,7 +101,13 @@ private extension TreeData {
             )
             context = _context
 
-            try iterativeContent(for: pod, context: _context)
+            try Self.iterativeContent(
+                for: pod,
+                isImpact: isImpact,
+                nameToPodCache: nameToPodCache,
+                context: _context,
+                progress: progress
+            )
 
             if Task.isCancelled {
                 return .cancelled
@@ -104,14 +149,7 @@ private extension TreeData {
         }
     }
 
-    @inline(__always)
-    func updateProgress(_ processedCount: Int) {
-        runWithMainActor {
-            self.currentCopyingCount = processedCount
-        }
-    }
-
-    func format(names: inout [String]) -> String {
+    nonisolated static func format(names: inout [String]) -> String {
         if names.isEmpty { return "" }
 
         if names.count == 1 {
@@ -122,11 +160,14 @@ private extension TreeData {
         }
     }
 
-    func iterativeContent(
+    nonisolated static func iterativeContent(
         for pod: Pod,
         currentPrefix: Data = .init(),
         nextPrefix: Data = .init(),
-        context: CopyContext
+        isImpact: Bool,
+        nameToPodCache: [String: Pod],
+        context: CopyContext,
+        progress: (@Sendable (Int) -> Void)?
     ) throws(CopyError) {
         guard !Task.isCancelled else { throw .cancelled }
 
@@ -138,7 +179,7 @@ private extension TreeData {
             var result: String = pod.name
 
             if var nexts = pod.nextLevel(isImpact) {
-                result += format(names: &nexts)
+                result += Self.format(names: &nexts)
             }
 
             context.write(result)
@@ -156,7 +197,7 @@ private extension TreeData {
                 context.write(Constant.newline)
 
                 guard let nextNames = pod.nextLevel(isImpact), !nextNames.isEmpty else {
-                    if processed & 0x3FF == 0 { updateProgress(processed) }
+                    if processed & 0x3FF == 0 { progress?(processed) }
                     continue
                 }
 
@@ -171,7 +212,7 @@ private extension TreeData {
                     }
                 }
 
-                if processed & 0x3FF == 0 { updateProgress(processed) }
+                if processed & 0x3FF == 0 { progress?(processed) }
             }
 
         case .pruneRecursive:
@@ -188,7 +229,7 @@ private extension TreeData {
                 index += 1
             }
 
-            context.write(pod.name + format(names: &names))
+            context.write(pod.name + Self.format(names: &names))
         }
     }
 }

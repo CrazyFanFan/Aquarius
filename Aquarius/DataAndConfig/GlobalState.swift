@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-final class GlobalState: ObservableObject {
+@MainActor final class GlobalState: ObservableObject {
     static let shared = GlobalState()
 
     let settings = AppSettings.shared

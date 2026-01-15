@@ -9,7 +9,7 @@ import Cocoa
 import Foundation
 
 enum Utils {
-    static let fileManager = FileManager.default
+    static var fileManager: FileManager { .default }
 
     private static var systemCacheDirectory: URL { fileManager.temporaryDirectory }
     private static var applicationCacheDirectory: URL? {
@@ -21,10 +21,6 @@ enum Utils {
         case .system: systemCacheDirectory
         case .application: applicationCacheDirectory ?? systemCacheDirectory
         }
-    }
-
-    static func refreshCacheDir() {
-        cacheDir = rootCacheDir()
     }
 
     static func clear() {
@@ -42,9 +38,8 @@ enum Utils {
         NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: rootCacheDir().path)
     }
 
-    private(set) static var cacheDir: URL = rootCacheDir()
-
     static func cacheFile() throws -> URL {
+        let cacheDir = rootCacheDir()
         if !fileManager.fileExists(atPath: cacheDir.path) {
             try fileManager.createDirectory(at: cacheDir, withIntermediateDirectories: true)
         }
@@ -74,7 +69,7 @@ enum Utils {
         }
     }
 
-    static var userHome: URL = .init(fileURLWithPath: userHomePath, isDirectory: true)
+    static var userHome: URL { .init(fileURLWithPath: userHomePath, isDirectory: true) }
 
     static var userHomePath: String {
         let pwd = getpwuid(getuid())

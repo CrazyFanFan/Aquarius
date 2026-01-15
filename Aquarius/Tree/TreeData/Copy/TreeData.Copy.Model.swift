@@ -22,7 +22,7 @@ extension TreeData {
         case cancelled
     }
 
-    class CopyContext {
+    final class CopyContext {
         let deepMode: CopyingStrategy
 
         private let cacheSize = 128 * 1024

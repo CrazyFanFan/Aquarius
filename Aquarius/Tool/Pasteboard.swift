@@ -9,7 +9,7 @@
 import AppKit
 import Foundation
 
-enum Pasteboard {
+@MainActor enum Pasteboard {
     private static let pasteboard = NSPasteboard.general
 
     static func write(_ string: String) {

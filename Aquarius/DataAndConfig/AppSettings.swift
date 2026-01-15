@@ -23,7 +23,7 @@ extension Dictionary: @retroactive RawRepresentable where Key: Codable, Value: C
     }
 }
 
-final class AppSettings: ObservableObject {
+final class AppSettings: ObservableObject, @unchecked Sendable {
     static let shared = AppSettings()
 
     @AppStorage("detailMode") var detailMode: DetailMode = .predecessors
@@ -41,4 +41,3 @@ final class AppSettings: ObservableObject {
 
     private init() {}
 }
-

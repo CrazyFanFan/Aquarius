@@ -101,6 +101,8 @@ extension Pod {
     }
 }
 
+extension Pod: @unchecked Sendable {}
+
 // extension Pod {
 //    func details(_ isImpactMode: Bool, index: Int) -> [Detail] {
 //        let result = [Detail(index: index, content: .pod(self))]

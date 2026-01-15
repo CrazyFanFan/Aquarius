@@ -15,7 +15,7 @@ enum DisplaySectionGroupType: String, Hashable {
     case predecessors = "Requiring Modules"
 }
 
-@Observable final class RelationTreeData {
+@MainActor @Observable final class RelationTreeData {
     @ObservationIgnored private(set) var start: Pod
     private(set) var selected: Pod?
     private(set) var isReleationLoading: Bool = false
@@ -24,6 +24,7 @@ enum DisplaySectionGroupType: String, Hashable {
     @ObservationIgnored private(set) var pods: [Pod]
     @ObservationIgnored private(set) var associatedPods: [(DisplaySectionGroupType, [Pod])]?
     @ObservationIgnored private(set) var nameToPodCache: [String: Pod]
+    @ObservationIgnored private(set) var nameToSuccessors: [String: [String]]
 
     private(set) var showNames: [(group: DisplaySectionGroupType, [(pod: Pod, indices: Set<String.Index>?)])] = []
     private(set) var searchSuggestions: [(pod: Pod, indices: Set<String.Index>?)] = []
@@ -58,6 +59,9 @@ enum DisplaySectionGroupType: String, Hashable {
         self.start = start
         self.pods = pods
         self.nameToPodCache = nameToPodCache
+        nameToSuccessors = nameToPodCache.reduce(into: [:]) { partialResult, pair in
+            partialResult[pair.key] = pair.value.successors ?? []
+        }
 
         loadData()
     }
@@ -115,16 +119,15 @@ enum DisplaySectionGroupType: String, Hashable {
     static func findPaths(
         from startName: String,
         to endName: String,
-        pods: [Pod],
-        nameToPodCache: [String: Pod]
+        graph: [String: [String]]
     ) async -> [[String]] {
-        await findPaths(from: startName, to: endName, nameToPodCache: nameToPodCache, pathCache: PathCache())
+        await findPaths(from: startName, to: endName, graph: graph, pathCache: PathCache())
     }
 
     static func findPaths(
         from start: String,
         to end: String,
-        nameToPodCache: [String: Pod],
+        graph: [String: [String]],
         pathCache: PathCache
     ) async -> [[String]] {
         if Task.isCancelled { return [] }
@@ -149,9 +152,7 @@ enum DisplaySectionGroupType: String, Hashable {
                 continue
             }
 
-            guard let currentPod = nameToPodCache[currentNode],
-                  let nextNodes = currentPod.successors,
-                  !nextNodes.isEmpty else {
+            guard let nextNodes = graph[currentNode], !nextNodes.isEmpty else {
                 await pathCache.cache([], for: currentNode)
                 continue
             }
@@ -159,7 +160,7 @@ enum DisplaySectionGroupType: String, Hashable {
             let currentResult = await withTaskGroup(of: (Int, [[String]]).self) { taskGroup in
                 for (index, nextNode) in nextNodes.enumerated() {
                     taskGroup.addTask {
-                        await (index, Self.findPaths(from: nextNode, to: end, nameToPodCache: nameToPodCache, pathCache: pathCache))
+                        await (index, Self.findPaths(from: nextNode, to: end, graph: graph, pathCache: pathCache))
                     }
                 }
 
@@ -179,36 +180,37 @@ enum DisplaySectionGroupType: String, Hashable {
         return result
     }
 
-    @MainActor func select(_ group: DisplaySectionGroupType, _ pod: Pod, pods: [Pod]) async {
+    func select(_ group: DisplaySectionGroupType, _ pod: Pod) {
         guard pod != selected else { return }
         isReleationLoading = true
 
         task?.cancel()
         selected = pod
-        let start = start
-        let nameToPodCache = nameToPodCache
-        task = Task.detached(priority: .userInitiated) { [weak self] in
+        let startName = start.name
+        let endName = pod.name
+        let graph = nameToSuccessors
+        task = Task { [weak self] in
             guard let self else { return }
 
-            var paths: [[String]] = []
-            switch group {
-            case .all:
-                paths = await Self.findPaths(from: start.name, to: pod.name, pods: pods, nameToPodCache: nameToPodCache)
-                if paths.isEmpty {
-                    paths = await Self.findPaths(from: pod.name, to: start.name, pods: pods, nameToPodCache: nameToPodCache)
+            let computed = await Task.detached(priority: .userInitiated) {
+                var paths: [[String]] = []
+                switch group {
+                case .all:
+                    paths = await Self.findPaths(from: startName, to: endName, graph: graph)
+                    if paths.isEmpty {
+                        paths = await Self.findPaths(from: endName, to: startName, graph: graph)
+                    }
+                case .successors:
+                    paths = await Self.findPaths(from: startName, to: endName, graph: graph)
+                case .predecessors:
+                    paths = await Self.findPaths(from: endName, to: startName, graph: graph)
                 }
-            case .successors:
-                paths = await Self.findPaths(from: start.name, to: pod.name, pods: pods, nameToPodCache: nameToPodCache)
-            case .predecessors:
-                paths = await Self.findPaths(from: pod.name, to: start.name, pods: pods, nameToPodCache: nameToPodCache)
-            }
+                return paths
+            }.value
 
-            let tmp = paths
             if Task.isCancelled { return }
-            await MainActor.run {
-                self.paths = tmp
-                self.isReleationLoading = false
-            }
+            self.paths = computed
+            self.isReleationLoading = false
         }
     }
 
@@ -271,9 +273,7 @@ private extension RelationTreeData {
         for group in showNames {
             for pair in group.1 {
                 if pair.0.name == searchKey {
-                    Task { @MainActor in
-                        await self.select(group.group, pair.pod, pods: group.1.map(\.pod))
-                    }
+                    select(group.group, pair.pod)
                     return
                 }
             }

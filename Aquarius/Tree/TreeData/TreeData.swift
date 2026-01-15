@@ -55,7 +55,7 @@ extension String {
     }
 }
 
-@Observable final class TreeData {
+@MainActor @Observable final class TreeData {
     @ObservationIgnored private var settings: AppSettings = .shared
 
     private(set) var nodes: [TreeNode] = []
@@ -64,16 +64,18 @@ extension String {
     @ObservationIgnored private var buildTreeTask: Task<Void, Never>?
     @ObservationIgnored private var rebuildVisibleTask: Task<Void, Never>?
     @ObservationIgnored private var searchDebounceTask: Task<Void, Never>?
+    @ObservationIgnored var asyncShowPodspecTask: Task<Void, Never>?
 
-    @MainActor private(set) var showNodes: [TreeNode] = []
+    private(set) var showNodes: [TreeNode] = []
 
     private var isIgnoreLastModificationDate: Bool { settings.isIgnoreLastModificationDate }
 
-    @MainActor var currentCopyingCount: Int = 0
-    @MainActor var isCopying: Bool = false
-    @MainActor var copyMode: CopyingStrategy?
-    @ObservationIgnored var copyTask: Task<Void, Error>?
-    @MainActor var copyResult: CopyResult? {
+    var currentCopyingCount: Int = 0
+    var isCopying: Bool = false
+    var copyMode: CopyingStrategy?
+    @ObservationIgnored var copyTask: Task<CopyResult, Never>?
+    @ObservationIgnored var copyProgressTask: Task<Void, Never>?
+    var copyResult: CopyResult? {
         didSet {
             guard let copyResult else { return }
             switch copyResult {
@@ -97,7 +99,7 @@ extension String {
 
     @ObservationIgnored private var lastReadDataTime: Date?
     @ObservationIgnored var lock: PodfileLock? { isSubspeciesShow ? sourceLock : noSubspeciesLock }
-    @MainActor var isLockLoadFailed: Bool = false
+    var isLockLoadFailed: Bool = false
 
     @ObservationIgnored private(set) var sourceLock: PodfileLock?
     @ObservationIgnored private(set) var noSubspeciesLock: PodfileLock?
@@ -114,18 +116,16 @@ extension String {
 
             searchDebounceTask?.cancel()
             let snapshot = searchKey
-            searchDebounceTask = Task { [weak self] in
+            searchDebounceTask = Task { @MainActor [weak self] in
                 try? await Task.sleep(nanoseconds: 200_000_000)
                 guard let self, !Task.isCancelled else { return }
-                await MainActor.run {
-                    guard self.searchKey == snapshot else { return }
-                    if snapshot.isEmpty {
-                        self.rebuildVisibleNodes(isImpact: self.isImpact)
-                    } else {
-                        self.loadData(isImpact: self.isImpact, resetIsExpanded: false)
-                    }
-                    self.loadSearchSuggestions()
+                guard self.searchKey == snapshot else { return }
+                if snapshot.isEmpty {
+                    self.rebuildVisibleNodes(isImpact: self.isImpact)
+                } else {
+                    self.loadData(isImpact: self.isImpact, resetIsExpanded: false)
                 }
+                self.loadSearchSuggestions()
             }
         }
     }
@@ -133,12 +133,10 @@ extension String {
     var detailMode: DetailMode = AppSettings.shared.detailMode {
         didSet {
             guard detailMode != oldValue else { return }
-            runWithMainActor {
-                if self.searchKey.isEmpty {
-                    self.rebuildVisibleNodes(isImpact: self.isImpact)
-                } else {
-                    self.loadData(isImpact: self.isImpact, resetIsExpanded: false)
-                }
+            if searchKey.isEmpty {
+                rebuildVisibleNodes(isImpact: isImpact)
+            } else {
+                loadData(isImpact: isImpact, resetIsExpanded: false)
             }
         }
     }
@@ -146,12 +144,10 @@ extension String {
     var orderRule: OrderBy = AppSettings.shared.orderRule {
         didSet {
             guard orderRule != oldValue else { return }
-            runWithMainActor {
-                if self.searchKey.isEmpty {
-                    self.rebuildVisibleNodes(isImpact: self.isImpact)
-                } else {
-                    self.loadData(isImpact: self.isImpact, resetIsExpanded: false)
-                }
+            if searchKey.isEmpty {
+                rebuildVisibleNodes(isImpact: isImpact)
+            } else {
+                loadData(isImpact: isImpact, resetIsExpanded: false)
             }
         }
     }
@@ -159,14 +155,14 @@ extension String {
     var isImpact: Bool { detailMode == .predecessors }
 
     // for show Podspec
-    @MainActor var isPodspecViewShow: Bool = false
+    var isPodspecViewShow: Bool = false
     @ObservationIgnored var podspec: PodspecInfo?
     @ObservationIgnored var podspecCache: [Pod: PodspecInfo] = [:]
 
     var isSubspeciesShow: Bool {
         didSet {
             guard isSubspeciesShow != oldValue else { return }
-            runWithMainActor { self.buildTree() }
+            buildTree()
         }
     }
 
@@ -178,7 +174,7 @@ extension String {
         loadFile()
     }
 
-    @MainActor func onSelected(node: TreeNode) {
+    func onSelected(node: TreeNode) {
         rebuildVisibleTask?.cancel()
         searchDebounceTask?.cancel()
         guard node.hasMore(isImpact: isImpact) else { return }
@@ -193,12 +189,6 @@ extension String {
             updateShowNodesIncrementally(for: node, isImpact: isImpact)
         } else {
             loadData(isImpact: isImpact)
-        }
-    }
-
-    func runWithMainActor(_ action: @Sendable @escaping @MainActor () -> Void) {
-        Task {
-            await MainActor.run(body: action)
         }
     }
 }
@@ -240,20 +230,21 @@ private extension TreeData {
 
     func loadFile() {
         let file = lockFile
-        Task.detached { [weak self] in
+        Task { @MainActor [weak self] in
             guard let self else { return }
-            let result = DataReader(file: file).readData()
+            let result = await Task.detached(priority: .userInitiated) {
+                DataReader(file: file).readData()
+            }.value
             if Task.isCancelled { return }
-            await MainActor.run {
-                self.lastReadDataTime = Date()
-                if let (sourceLock, noSubspeciesLock) = result {
-                    self.sourceLock = sourceLock
-                    self.noSubspeciesLock = noSubspeciesLock
-                    self.buildTree()
-                    self.isLockLoadFailed = false
-                } else {
-                    self.isLockLoadFailed = true
-                }
+
+            self.lastReadDataTime = Date()
+            if let (sourceLock, noSubspeciesLock) = result {
+                self.sourceLock = sourceLock
+                self.noSubspeciesLock = noSubspeciesLock
+                self.buildTree()
+                self.isLockLoadFailed = false
+            } else {
+                self.isLockLoadFailed = true
             }
         }
     }
@@ -270,24 +261,25 @@ private extension TreeData {
         buildTreeTask?.cancel()
         let lockPods = lock?.pods ?? []
         let isImpactSnapshot = isImpact
-        buildTreeTask = Task.detached { [weak self] in
+        buildTreeTask = Task { @MainActor [weak self] in
             guard let self else { return }
-            var nameToPod: [String: Pod] = [:]
-            nameToPod.reserveCapacity(lockPods.count)
-            var topNodes: [TreeNode] = []
-            topNodes.reserveCapacity(lockPods.count)
+            let (nameToPod, topNodes) = await Task.detached(priority: .userInitiated) { () -> ([String: Pod], [TreeNode]) in
+                var nameToPod: [String: Pod] = [:]
+                nameToPod.reserveCapacity(lockPods.count)
+                var topNodes: [TreeNode] = []
+                topNodes.reserveCapacity(lockPods.count)
 
-            for pod in lockPods {
-                nameToPod[pod.name] = pod
-                let node = TreeNode(deep: 0, pod: pod)
-                topNodes.append(node)
-            }
+                for pod in lockPods {
+                    nameToPod[pod.name] = pod
+                    topNodes.append(TreeNode(deep: 0, pod: pod))
+                }
+                return (nameToPod, topNodes)
+            }.value
 
-            await MainActor.run {
-                self.nameToPodCache = nameToPod
-                self.nodes = topNodes
-                self.loadData(isImpact: isImpactSnapshot)
-            }
+            if Task.isCancelled { return }
+            self.nameToPodCache = nameToPod
+            self.nodes = topNodes
+            self.loadData(isImpact: isImpactSnapshot)
         }
     }
 
@@ -423,14 +415,13 @@ private extension TreeData {
         rebuildVisibleTask?.cancel()
         let roots = nodes
         let orderRule = orderRule
-        rebuildVisibleTask = Task.detached(priority: .userInitiated) { [weak self] in
-            guard let self, !Task.isCancelled else { return }
-            let result = Self.buildVisibleNodes(roots: roots, orderRule: orderRule, isImpact: isImpact)
+        rebuildVisibleTask = Task { @MainActor [weak self] in
+            guard let self else { return }
+            let result = await Task.detached(priority: .userInitiated) {
+                Self.buildVisibleNodes(roots: roots, orderRule: orderRule, isImpact: isImpact)
+            }.value
             if Task.isCancelled { return }
-            await MainActor.run {
-                guard !Task.isCancelled else { return }
-                self.showNodes = result
-            }
+            self.showNodes = result
         }
     }
 
@@ -451,7 +442,7 @@ private extension TreeData {
 }
 
 private extension TreeData {
-    static func buildVisibleNodes(
+    nonisolated static func buildVisibleNodes(
         roots: [TreeNode],
         orderRule: OrderBy,
         isImpact: Bool
@@ -478,7 +469,7 @@ private extension TreeData {
         return result
     }
 
-    static func compare(_ lhs: TreeNode, _ rhs: TreeNode, orderRule: OrderBy, isImpact: Bool) -> Bool {
+    nonisolated static func compare(_ lhs: TreeNode, _ rhs: TreeNode, orderRule: OrderBy, isImpact: Bool) -> Bool {
         switch orderRule {
         case .alphabeticalAscending:
             lhs.pod.name < rhs.pod.name

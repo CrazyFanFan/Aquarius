@@ -51,3 +51,5 @@ final class TreeNode: NSObject {
 extension TreeNode: Identifiable {
     var id: Int { ObjectIdentifier(self).hashValue }
 }
+
+extension TreeNode: @unchecked Sendable {}
