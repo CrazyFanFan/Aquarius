@@ -25,40 +25,39 @@ extension TreeData {
         copyMode = deepMode
         copyResult = nil
         currentCopyingCount = 0
+        copyToken = UUID()
 
         copyTask?.cancel()
         copyProgressTask?.cancel()
 
         let isImpact = isImpact
         let nameToPodCache = nameToPodCache
-        var progressContinuation: AsyncStream<Int>.Continuation!
-        let progressStream = AsyncStream<Int> { continuation in
-            progressContinuation = continuation
-        }
+        let token = copyToken
+        let (progressStream, progressContinuation) = AsyncStream<Int>.makeStream()
 
         copyProgressTask = Task { @MainActor [weak self] in
             guard let self else { return }
             for await processedCount in progressStream {
+                guard self.copyToken == token else { return }
                 self.currentCopyingCount = processedCount
             }
         }
 
-        let continuation = progressContinuation
         let task = Task.detached(priority: .background) { () -> CopyResult in
-            defer { continuation?.finish() }
+            defer { progressContinuation.finish() }
             return Self.copyTree(
                 for: pod,
                 with: deepMode,
                 isImpact: isImpact,
                 nameToPodCache: nameToPodCache,
-                progress: { continuation?.yield($0) }
+                progress: { progressContinuation.yield($0) }
             )
         }
         copyTask = task
         Task { @MainActor [weak self] in
             guard let self else { return }
             let result = await task.value
-            if Task.isCancelled { return }
+            guard !Task.isCancelled, self.copyToken == token else { return }
             self.resetCopyStatus()
             self.copyTask = nil
             self.copyProgressTask?.cancel()
@@ -77,6 +76,7 @@ extension TreeData {
         copyTask = nil
         copyProgressTask?.cancel()
         copyProgressTask = nil
+        copyToken = UUID()
         resetCopyStatus()
     }
 }

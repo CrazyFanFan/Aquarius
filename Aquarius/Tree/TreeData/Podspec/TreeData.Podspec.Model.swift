@@ -92,3 +92,10 @@ extension TreeData {
         case git(GitSpec)
     }
 }
+
+extension TreeData.PodspecContent: Sendable {}
+extension TreeData.PodspecFile: Sendable {}
+extension TreeData.RepoSpec: Sendable {}
+extension TreeData.GitRevision: Sendable {}
+extension TreeData.GitSpec: Sendable {}
+extension TreeData.PodspecInfo: Sendable {}

@@ -75,6 +75,7 @@ extension String {
     var copyMode: CopyingStrategy?
     @ObservationIgnored var copyTask: Task<CopyResult, Never>?
     @ObservationIgnored var copyProgressTask: Task<Void, Never>?
+    @ObservationIgnored var copyToken = UUID()
     var copyResult: CopyResult? {
         didSet {
             guard let copyResult else { return }

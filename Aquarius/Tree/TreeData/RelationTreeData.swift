@@ -189,28 +189,26 @@ enum DisplaySectionGroupType: String, Hashable {
         let startName = start.name
         let endName = pod.name
         let graph = nameToSuccessors
-        task = Task { [weak self] in
-            guard let self else { return }
-
-            let computed = await Task.detached(priority: .userInitiated) {
-                var paths: [[String]] = []
-                switch group {
-                case .all:
-                    paths = await Self.findPaths(from: startName, to: endName, graph: graph)
-                    if paths.isEmpty {
-                        paths = await Self.findPaths(from: endName, to: startName, graph: graph)
-                    }
-                case .successors:
-                    paths = await Self.findPaths(from: startName, to: endName, graph: graph)
-                case .predecessors:
+        task = Task.detached(priority: .userInitiated) { [weak self] in
+            var paths: [[String]] = []
+            switch group {
+            case .all:
+                paths = await Self.findPaths(from: startName, to: endName, graph: graph)
+                if paths.isEmpty, !Task.isCancelled {
                     paths = await Self.findPaths(from: endName, to: startName, graph: graph)
                 }
-                return paths
-            }.value
+            case .successors:
+                paths = await Self.findPaths(from: startName, to: endName, graph: graph)
+            case .predecessors:
+                paths = await Self.findPaths(from: endName, to: startName, graph: graph)
+            }
 
             if Task.isCancelled { return }
-            self.paths = computed
-            self.isReleationLoading = false
+            await MainActor.run {
+                guard let self, !Task.isCancelled else { return }
+                self.paths = paths
+                self.isReleationLoading = false
+            }
         }
     }
 

@@ -666,26 +666,7 @@
 			repositoryURL = "https://github.com/jpsim/Yams.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 6.2.0;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		63120CC827BE8C7B000A9458 /* Yams */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 63120CC727BE8C7B000A9458 /* XCRemoteSwiftPackageReference "Yams" */;
-			productName = Yams;
-		};
-/* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		63120CC727BE8C7B000A9458 /* XCRemoteSwiftPackageReference "Yams" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/jpsim/Yams.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 5.1.3;
+				minimumVersion = 6.2.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

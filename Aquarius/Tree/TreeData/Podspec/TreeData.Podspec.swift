@@ -54,8 +54,22 @@ extension TreeData {
         }
 
         asyncShowPodspecTask?.cancel()
-        asyncShowPodspecTask = Task.detached(priority: .userInitiated) {
-            await self.asyncShowPodspec(of: pod)
+        guard let lock else {
+            assertionFailure("Should never here.")
+            return
+        }
+
+        let lockFileURL = lockFile.url
+        asyncShowPodspecTask = Task.detached(priority: .userInitiated) { [weak self] in
+            guard let podspec = await Self.podspecInfo(for: pod, lock: lock, lockFileURL: lockFileURL),
+                  !Task.isCancelled else {
+                return
+            }
+
+            await MainActor.run {
+                guard !Task.isCancelled else { return }
+                self?.show(with: podspec, and: pod)
+            }
         }
     }
 }
@@ -63,35 +77,32 @@ extension TreeData {
 // MARK: - show Podspec
 
 private extension TreeData {
-    func asyncShowPodspec(of pod: Pod) async {
-        guard let lock else {
-            assertionFailure("Should never here.")
-            return
-        }
-
-        let name = normalized(name: pod.name)
+    nonisolated static func podspecInfo(for pod: Pod, lock: PodfileLock, lockFileURL: URL) async -> PodspecInfo? {
+        let name = Self.normalized(name: pod.name)
 
         if let config = lock.externalSources[name] {
             if let path = config[":path"] {
-                await loadLocalPodspec(path, name: name, pod: pod)
+                return Self.localPodspec(path, name: name, lockFileURL: lockFileURL)
             } else if config.keys.contains(":git") {
-                loadGitPodspec(config, checkoutOption: lock.checkoutOptions[name], pod: pod)
+                return Self.gitPodspec(config, checkoutOption: lock.checkoutOptions[name])
             }
         } else if let repo = lock.specRepos.first(where: { repo in repo.pods.contains(name) }) {
-            await loadRepoPodspec(repo.repo, for: pod)
+            return await Self.repoPodspec(repo.repo, for: pod)
         } else {
             assertionFailure("Should never here.")
         }
+
+        return nil
     }
 
-    func normalized(name: String) -> String {
+    nonisolated static func normalized(name: String) -> String {
         if let index = name.firstIndex(of: "/") {
             return String(name[..<index])
         }
         return name
     }
 
-    func normalized(version: String?) -> String? {
+    nonisolated static func normalized(version: String?) -> String? {
         version?.trimmingCharacters(in: .whitespacesAndNewlines.union(.init(charactersIn: "()")))
     }
 
@@ -99,32 +110,31 @@ private extension TreeData {
     /// - Parameters:
     ///   - podspec: podspec
     ///   - pod: pod use as cache key, pass nil to skip update cache.
+    @MainActor
     func show(with podspec: PodspecInfo, and pod: Pod?) {
         if let pod {
             podspecCache[pod] = podspec
         }
-        DispatchQueue.main.async {
-            self.podspec = podspec
-            self.isPodspecViewShow = true
-        }
+        self.podspec = podspec
+        self.isPodspecViewShow = true
     }
 
-    func loadLocalPodspec(_ path: String, name: String, pod: Pod) async {
-        let newURL = lockFile.url
+    nonisolated static func localPodspec(_ path: String, name: String, lockFileURL: URL) -> PodspecInfo {
+        let newURL = lockFileURL
             .deletingLastPathComponent()
             .appendingPathComponent(path)
             .appendingPathComponent("\(name).podspec")
             .resolvingSymlinksInPath()
 
         // TODO requireAccessing
-        show(with: .local(.init(url: newURL, requireAccessing: true)), and: pod)
+        return .local(.init(url: newURL, requireAccessing: true))
     }
 
-    func loadGitPodspec(_ config: [String: String], checkoutOption: [String: String]?, pod: Pod) {
+    nonisolated static func gitPodspec(_ config: [String: String], checkoutOption: [String: String]?) -> PodspecInfo? {
         guard let gitURLString = config[":git"] else {
             // todo error
             assertionFailure("Should never here.")
-            return
+            return nil
         }
 
         let revision: GitRevision
@@ -139,15 +149,15 @@ private extension TreeData {
             revision = .autoCommit(commit)
         } else {
             assertionFailure("Should never here.")
-            return
+            return nil
         }
 
-        show(with: .git(.init(gitURLString: gitURLString, revision: revision)), and: pod)
+        return .git(.init(gitURLString: gitURLString, revision: revision))
     }
 
     /// run shell
     @discardableResult
-    func shell(_ command: String, environment: [String: String]? = nil) -> (String, Int32) {
+    nonisolated static func shell(_ command: String, environment: [String: String]? = nil) -> (String, Int32) {
         let task = Process()
         let pipe = Pipe()
 
@@ -169,7 +179,7 @@ private extension TreeData {
     }
 
     /// check if repo match git url
-    func check(repo: URL, matchGitURL url: String) -> Bool {
+    nonisolated static func check(repo: URL, matchGitURL url: String) -> Bool {
         var isDirectory: ObjCBool = .init(false)
 
         guard FileManager.default.fileExists(atPath: repo.path, isDirectory: &isDirectory),
@@ -178,7 +188,7 @@ private extension TreeData {
             return false
         }
 
-        let result = shell("git -C \(repo.path) remote -v")
+        let result = Self.shell("git -C \(repo.path) remote -v")
 
         guard result.1 == 0 else {
             return false
@@ -188,17 +198,17 @@ private extension TreeData {
     }
 
     /// check if repo match git repo name
-    func check(repo: URL, matchGitRepoName name: String) -> Bool {
+    nonisolated static func check(repo: URL, matchGitRepoName name: String) -> Bool {
         repo.lastPathComponent.lowercased().hasSuffix(name)
     }
 
     /// Find podspec in repo
-    func findPod(_ pod: Pod, in repoURL: URL) -> URL? {
-        guard let version = normalized(version: pod.info?.version) else {
+    nonisolated static func findPod(_ pod: Pod, in repoURL: URL) -> URL? {
+        guard let version = Self.normalized(version: pod.info?.version) else {
             return nil
         }
 
-        let name = normalized(name: pod.name)
+        let name = Self.normalized(name: pod.name)
 
         // try simple repo first
         let tmpPath = repoURL.appendingPathComponent("\(name)/\(version)/\(name).podspec.json")
@@ -206,7 +216,7 @@ private extension TreeData {
             return tmpPath
         }
 
-        let result = shell("find \(repoURL.path) -type d -name \(name)")
+        let result = Self.shell("find \(repoURL.path) -type d -name \(name)")
 
         guard result.1 == 0 else { return nil }
 
@@ -221,11 +231,11 @@ private extension TreeData {
     }
 
     /// Find repo in repos root dir
-    func findRepoURL(at repoRootURL: URL, with repoGitURLString: String) -> URL? {
-        guard let tmpSubDirectories = subDirectories(of: repoRootURL), !tmpSubDirectories.isEmpty else { return nil }
+    nonisolated static func findRepoURL(at repoRootURL: URL, with repoGitURLString: String) -> URL? {
+        guard let tmpSubDirectories = Self.subDirectories(of: repoRootURL), !tmpSubDirectories.isEmpty else { return nil }
 
         let url = repoGitURLString.lowercased()
-        if let repo = tmpSubDirectories.first(where: { check(repo: $0, matchGitURL: url) }) { return repo }
+        if let repo = tmpSubDirectories.first(where: { Self.check(repo: $0, matchGitURL: url) }) { return repo }
 
         var repoName = repoGitURLString.lowercased()
         if repoName.hasSuffix(".git") {
@@ -233,10 +243,10 @@ private extension TreeData {
         }
         repoName = repoName.components(separatedBy: "/").last ?? repoName
 
-        return tmpSubDirectories.first(where: { check(repo: $0, matchGitRepoName: repoName) })
+        return tmpSubDirectories.first(where: { Self.check(repo: $0, matchGitRepoName: repoName) })
     }
 
-    func subDirectories(of url: URL) -> [URL]? {
+    nonisolated static func subDirectories(of url: URL) -> [URL]? {
         do {
             let contents = try FileManager.default.contentsOfDirectory(atPath: url.path)
             return contents.compactMap { element in
@@ -252,15 +262,21 @@ private extension TreeData {
         return nil
     }
 
-    func loadRepoPodspec(_ repoGitURLString: String, for pod: Pod) async {
+    nonisolated static func repoPodspec(_ repoGitURLString: String, for pod: Pod) async -> PodspecInfo? {
         func requireCocoapodsRepoReadPermission() async -> URL? {
             let cocoapodsRepoRoot = Utils.userHome.appendingPathComponent(".cocoapods")
-            if let data = AppSettings.shared.repoBookMark[cocoapodsRepoRoot], let url = BookmarkTool.url(for: data) {
+            let bookmark = await MainActor.run {
+                AppSettings.shared.repoBookMark[cocoapodsRepoRoot]
+            }
+            if let data = bookmark, let url = BookmarkTool.url(for: data) {
                 return url.0
             }
 
-            if let url = DiskAccessHelper.requireReadAccess(of: cocoapodsRepoRoot) {
-                AppSettings.shared.repoBookMark[cocoapodsRepoRoot] = BookmarkTool.bookmark(for: url)
+            if let url = await DiskAccessHelper.requireReadAccess(of: cocoapodsRepoRoot) {
+                let bookmark = BookmarkTool.bookmark(for: url)
+                await MainActor.run {
+                    AppSettings.shared.repoBookMark[cocoapodsRepoRoot] = bookmark
+                }
                 return url
             }
 
@@ -268,7 +284,7 @@ private extension TreeData {
         }
 
         guard let url = await requireCocoapodsRepoReadPermission() else {
-            return
+            return nil
         }
 
         let isAccessing = url.startAccessingSecurityScopedResource()
@@ -278,16 +294,16 @@ private extension TreeData {
             }
         }
 
-        guard let repoRoots = subDirectories(of: url), !repoRoots.isEmpty else {
+        guard let repoRoots = Self.subDirectories(of: url), !repoRoots.isEmpty else {
             // TODO: tips
-            return
+            return nil
         }
 
         for url in repoRoots {
             let podspecFileURL: URL? = if repoGitURLString == "trunk" { // trunk is key for cdn
-                findPod(pod, in: url.appendingPathComponent("trunk"))
-            } else if let repoFileURL = findRepoURL(at: url, with: repoGitURLString) {
-                findPod(pod, in: repoFileURL)
+                Self.findPod(pod, in: url.appendingPathComponent("trunk"))
+            } else if let repoFileURL = Self.findRepoURL(at: url, with: repoGitURLString) {
+                Self.findPod(pod, in: repoFileURL)
             } else {
                 // TODO: Add custom repo path support.
                 // assert(false, "Should never here.")
@@ -298,15 +314,14 @@ private extension TreeData {
                 continue
             }
 
-            show(
-                with: PodspecInfo.repo(
-                    RepoSpec(
-                        repoGitString: repoGitURLString,
-                        podspecFile: PodspecFile(url: podspecFileURL)
-                    )
-                ),
-                and: pod
+            return .repo(
+                RepoSpec(
+                    repoGitString: repoGitURLString,
+                    podspecFile: PodspecFile(url: podspecFileURL)
+                )
             )
         }
+
+        return nil
     }
 }
