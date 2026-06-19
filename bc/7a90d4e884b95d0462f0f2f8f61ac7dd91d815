@@ -1,0 +1,51 @@
+Aquarius/Resources/Localizable.xcstrings
+  s_2c60bdfbd7a09c::t_2a28567d02f7e8 589-591
+  s_2c60bdfbd7a09c::t_d8ec6b22e616e6 671-674
+  s_2c60bdfbd7a09c::t_08209e94a21c44 724-737,740-753
+  s_f8396a64f1bc8c::t_b7c9e9e107a5dc 816-818
+  s_2c60bdfbd7a09c::t_d7ffcb54514d54 902-933
+  s_2c60bdfbd7a09c::t_988cfb1ccaf126 935-943,945-948
+  s_2c60bdfbd7a09c::t_0a53a8f2f76acf 969-974,1048
+  s_2c60bdfbd7a09c::t_f9f5453e5fa4e9 1070-1071
+  s_f8396a64f1bc8c::t_261416a2c5b187 1216-1219
+  s_2c60bdfbd7a09c::t_b0e00582501398 1233
+Aquarius/Tree/TreeData/Podspec/TreeData.Podspec.swift
+  s_2c60bdfbd7a09c::t_175cdb6bc92438 128
+Aquarius/Views/Sidebar.swift
+  s_f8396a64f1bc8c::t_b5d5b1224221ed 117
+Aquarius/Tree/TreeData/RelationTreeData.swift
+  s_2c60bdfbd7a09c::t_7ed6f2bfe0cb91 57
+  s_2c60bdfbd7a09c::t_3cbecee4e2f74a 67-68,73,79-80
+  s_2c60bdfbd7a09c::t_f7d10a8625c131 83,94
+  s_2c60bdfbd7a09c::t_1c65eb3b8eb8f0 87
+  s_2c60bdfbd7a09c::t_d8f382dffa455d 101,108-109
+  s_2c60bdfbd7a09c::t_eb810fcd50b1e9 168
+Aquarius/Views/Tree/TreeContent.swift
+  s_f8396a64f1bc8c::t_be614ed6092706 51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "bc7a90d4e884b95d0462f0f2f8f61ac7dd91d815",
+  "prompts": {},
+  "sessions": {
+    "s_2c60bdfbd7a09c": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a34f78585a192916ddc0a94",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": "Crazy凡 <827799383@qq.com>"
+    },
+    "s_f8396a64f1bc8c": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a3573d8ff331508eefce84a",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": null
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}

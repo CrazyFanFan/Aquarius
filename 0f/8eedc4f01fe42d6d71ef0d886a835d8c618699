@@ -1,0 +1,74 @@
+Aquarius/Views/Feature/RubyDSLHighlightedText.swift
+  s_2c60bdfbd7a09c::t_4d4e95e4556ef6 1-7,9-14,16-17,23-25,27-31,35,37-52,54-55,57,59,61,63,65,67,69,71,73,75-195,201-298
+  s_2c60bdfbd7a09c::t_6a083f0c5fe4ac 8,15,18-22,26,32-34,36,53,56,58,60,62,64,66,68,70,72,74
+  s_2c60bdfbd7a09c::t_68a004bff40b39 196-200
+Aquarius/Views/Feature/HighlightedTextView.swift
+  s_2c60bdfbd7a09c::t_a9cac560220989 1-12,14,20-41,43-49,52-59,63-64,83-86,114-115
+  s_2c60bdfbd7a09c::t_4f110b2003a62d 13,15-19,42,50-51,65-67,70-75,77-79,81-82
+  s_2c60bdfbd7a09c::t_272bd14781dd62 60-62,87-90,97,104-113
+  s_2c60bdfbd7a09c::t_4ddb7b621ef7cc 68-69,76,80
+  s_2c60bdfbd7a09c::t_975bed29020f58 91-96,98-103
+Aquarius/Views/Feature/PodspecView.swift
+  s_2c60bdfbd7a09c::t_0afb458e097297 14-18,22,78-81,83-87,180-185,191-200
+  s_2c60bdfbd7a09c::t_2898da013108ab 47
+  s_2c60bdfbd7a09c::t_5f3fbcad6748eb 59,68,73-75,82,90,93
+  s_2c60bdfbd7a09c::t_c6dbc9a6b4ef8f 66-67
+  s_2c60bdfbd7a09c::t_8118485232ad08 171-179,211-213
+  s_2c60bdfbd7a09c::t_bb0e5dadc97c9a 186-190
+Aquarius/Resources/Localizable.xcstrings
+  s_2c60bdfbd7a09c::t_2a28567d02f7e8 595-597,604,610,615,620,626,631,636,642
+  s_2c60bdfbd7a09c::t_d8ec6b22e616e6 725-728,729,734,740
+  s_2c60bdfbd7a09c::t_08209e94a21c44 794-807,810-823,273
+  s_f8396a64f1bc8c::t_b7c9e9e107a5dc 918-920
+  s_2c60bdfbd7a09c::t_d7ffcb54514d54 1004-1035
+  s_2c60bdfbd7a09c::t_988cfb1ccaf126 1037-1045,1047-1050
+  s_2c60bdfbd7a09c::t_0a53a8f2f76acf 1135-1140,1252
+  s_2c60bdfbd7a09c::t_f9f5453e5fa4e9 1274-1275,1305
+  s_f8396a64f1bc8c::t_261416a2c5b187 1468-1471,270-272,275,778-781,784-787,790-792,858-861,864-867,870-872,874-877,880-883,886-888,1069-1072,1075-1078,1081-1083,1085-1088,1091-1094,1097-1099,1101-1104,1107-1110,1113-1115,1117-1120,1123-1126,1129-1131,1149-1152,1155-1158,1161-1163,1215-1217,1220,1230-1233,1236-1239,1242-1244,1279-1282,1285-1288,1291-1293,1295-1298,1301-1304,1307-1309,1380,1425-1428,1431-1434,1437-1439,606-609,612-614,616-619,622-625,628-630,632-635,638-641,644-646
+  s_2c60bdfbd7a09c::t_b0e00582501398 1485,274,783,789,863,869,879,885,1074,1080,1090,1096,1106,1112,1122,1128,1154,1160,1219,1235,1241,1284,1290,1300,1306,1430,1436,605,611,621,627,637,643
+  s_2c60bdfbd7a09c::t_cdafcce3532f20 766,772
+Aquarius/DataAndConfig/AppSettings.swift
+  s_2c60bdfbd7a09c::t_18bd6caf5c94d3 41
+Aquarius/Tree/TreeData/Podspec/TreeData.Podspec.swift
+  s_2c60bdfbd7a09c::t_175cdb6bc92438 131,132-134,136-138,140-142,144,147,150-154
+  s_2c60bdfbd7a09c::t_83624ae1ece3cb 124-125,145
+  s_2c60bdfbd7a09c::t_2f682de7ccbcc5 135,139,143,146,148-149,357-367
+Aquarius/Tree/TreeData/Podspec/TreeData.Podspec.Model.swift
+  s_2c60bdfbd7a09c::t_9d5bdcb0a85beb 30,36,38-39,41-42,45,50,52-53,65,70,73-75
+Aquarius/Tool/DiskAccessHelper.swift
+  s_2c60bdfbd7a09c::t_83f30d393d63ed 12-15,18,24,26-27
+  s_2c60bdfbd7a09c::t_10e9199ac9bf8a 16-17,32
+  s_2c60bdfbd7a09c::t_5e7d9a6ad53fb3 33
+  s_2c60bdfbd7a09c::t_29cb06f485dfd6 40-50
+Aquarius/Views/Feature/JSONHighlightedText.swift
+  s_2c60bdfbd7a09c::t_9bce7f3857f82c 1-7,9-15,17-18,20-24,29-31,35-37,41,43-56,58-59,61,63,65,67,69,71,73,75-202
+  s_2c60bdfbd7a09c::t_f2514433c56884 8
+  s_2c60bdfbd7a09c::t_adf141b726f746 16,19,25-28,32,38-40,42,57,60,62,64,66,68,70,72,74
+  s_2c60bdfbd7a09c::t_749f4e5c73eba9 33-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "0f8eedc4f01fe42d6d71ef0d886a835d8c618699",
+  "prompts": {},
+  "sessions": {
+    "s_2c60bdfbd7a09c": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a34f78585a192916ddc0a94",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": "Crazy凡 <827799383@qq.com>"
+    },
+    "s_f8396a64f1bc8c": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a3573d8ff331508eefce84a",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": null
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}

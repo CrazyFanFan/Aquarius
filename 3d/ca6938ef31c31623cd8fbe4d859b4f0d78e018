@@ -1,0 +1,21 @@
+Aquarius/Views/Sidebar.swift
+  s_f8396a64f1bc8c::t_b5d5b1224221ed 110
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "3dca6938ef31c31623cd8fbe4d859b4f0d78e018",
+  "prompts": {},
+  "sessions": {
+    "s_f8396a64f1bc8c": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a3573d8ff331508eefce84a",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": null
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}

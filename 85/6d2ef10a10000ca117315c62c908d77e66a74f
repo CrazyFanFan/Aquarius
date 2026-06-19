@@ -1,0 +1,22 @@
+Aquarius.xcodeproj/project.pbxproj
+  s_2c60bdfbd7a09c::t_817a9ae5cb1c86 6,53-74
+  s_2c60bdfbd7a09c::t_d98daf20ca6816 158-160,171,194-198,235
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "856d2ef10a10000ca117315c62c908d77e66a74f",
+  "prompts": {},
+  "sessions": {
+    "s_2c60bdfbd7a09c": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a34f78585a192916ddc0a94",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": "Crazy凡 <827799383@qq.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
