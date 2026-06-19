@@ -40,6 +40,7 @@
       "shouldTranslate" : false
     },
     "⇇·(%lld) " : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -51,6 +52,7 @@
       "shouldTranslate" : false
     },
     "⇉·(%lld) " : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -62,6 +64,7 @@
       "shouldTranslate" : false
     },
     "=·(0) " : {
+      "extractionState" : "stale",
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
@@ -309,6 +312,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "复制所有"
+          }
+        }
+      }
+    },
+    "Copy cancelled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy cancelled."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已取消复制"
           }
         }
       }
@@ -1097,6 +1117,23 @@
         }
       }
     },
+    "Saved to Cache File" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved to Cache File"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已写入缓存文件"
+          }
+        }
+      }
+    },
     "Search Modules" : {
       "localizations" : {
         "en" : {
@@ -1513,40 +1550,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法打开文件"
-          }
-        }
-      }
-    },
-    "Saved to Cache File" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Saved to Cache File"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已写入缓存文件"
-          }
-        }
-      }
-    },
-    "Copy cancelled" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy cancelled."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已取消复制"
           }
         }
       }

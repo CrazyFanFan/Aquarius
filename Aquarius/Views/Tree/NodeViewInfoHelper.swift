@@ -46,17 +46,37 @@ enum NodeViewInfoHelper {
         return result
     }
 
-     static func more(_ node: TreeNode, isImpactMode: Bool) -> Text {
-         let count = node.nextCount(isImpactMode)
-         return if count > 0 {
-             if node.isExpanded {
-                 Text("⇇·(\(count)) ").foregroundColor(.close)
-             } else {
-                 Text("⇉·(\(count)) ").foregroundColor(.main)
-             }
-         } else {
-            Text("=·(0) ").foregroundColor(Color.gray.opacity(0.6))
-         }
+    @ViewBuilder
+    private static func disclosureIndicator(_ node: TreeNode, isImpactMode: Bool) -> some View {
+        let count = node.nextCount(isImpactMode)
+
+        if count > 0 {
+            Image(systemName: node.isExpanded ? "chevron.down" : "chevron.right")
+                .font(.system(size: 13, weight: .bold))
+                .foregroundColor(node.isExpanded ? .close : .main)
+                .frame(width: 14)
+        } else {
+            Color.clear.frame(width: 14)
+        }
+    }
+
+    @ViewBuilder
+    private static func countBadge(_ node: TreeNode, isImpactMode: Bool) -> some View {
+        let count = node.nextCount(isImpactMode)
+
+        if count > 0 {
+            let tint = node.isExpanded ? Color.close : Color.main
+
+            Text("\(count)")
+                .font(.caption.weight(.semibold))
+                .monospacedDigit()
+                .foregroundColor(tint)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 1)
+                .background {
+                    Capsule().fill(tint.opacity(0.14))
+                }
+        }
     }
 
     @inline(__always)
@@ -70,9 +90,10 @@ enum NodeViewInfoHelper {
     }
 
     static func nameAndCount(_ node: TreeNode, isImpactMode: Bool, isIgnoreNodeDeep: Bool) -> some View {
-        HStack {
-            more(node, isImpactMode: isImpactMode).bold()
+        HStack(spacing: 6) {
+            disclosureIndicator(node, isImpactMode: isImpactMode)
             name(node)
+            countBadge(node, isImpactMode: isImpactMode)
             Spacer()
         }
         .padding(.leading, CGFloat(node.deep > 0 ? (isIgnoreNodeDeep ? 30 : node.deep * 30) : 0))

@@ -45,7 +45,14 @@ final class TreeNode: NSObject {
 }
 
 extension TreeNode: Identifiable {
-    var id: Int { ObjectIdentifier(self).hashValue }
+    var id: ViewIdentity {
+        ViewIdentity(object: ObjectIdentifier(self), isExpanded: isExpanded)
+    }
+
+    struct ViewIdentity: Hashable {
+        let object: ObjectIdentifier
+        let isExpanded: Bool
+    }
 }
 
 extension TreeNode: @unchecked Sendable {}
