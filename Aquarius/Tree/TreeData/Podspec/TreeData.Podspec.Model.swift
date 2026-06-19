@@ -27,27 +27,30 @@ extension TreeData {
     enum PodspecContent {
         case content(String)
         case error(String)
+        case permissionRequired(String)
     }
 
     struct PodspecFile {
         var url: URL
         var content: PodspecContent
+        var accessURL: URL?
 
-        init(url: URL, content: String? = nil, requireAccessing: Bool = false) {
-            func urlContent(of url: URL) -> PodspecContent {
+        init(url: URL, content: String? = nil, accessURL: URL? = nil, requireAccessing: Bool = false) {
+            func urlContent(of url: URL, accessURL: URL?) -> PodspecContent {
                 do {
-                    let isAcccessing = requireAccessing && url.startAccessingSecurityScopedResource()
+                    let scopedURL = accessURL ?? url
+                    let isAcccessing = requireAccessing && scopedURL.startAccessingSecurityScopedResource()
                     defer {
                         if isAcccessing {
-                            url.stopAccessingSecurityScopedResource()
+                            scopedURL.stopAccessingSecurityScopedResource()
                         }
                     }
 
                     guard !requireAccessing || isAcccessing else {
-                        return .error(NSLocalizedString("""
+                        return .permissionRequired(NSLocalizedString("""
                         Load podspec content failed.
-                        Sorry, you do not have permission to access the podspec file. \
-                        Please use the 'Show in Finder' to view the file yourself.
+                        Aquarius does not have permission to access this podspec file. \
+                        Grant access to the project directory to view the content.
                         """, comment: ""))
                     }
 
@@ -59,12 +62,17 @@ extension TreeData {
             }
 
             self.url = url
+            self.accessURL = accessURL
 
             if let string = content {
                 self.content = .content(string)
             } else {
-                self.content = urlContent(of: url)
+                self.content = urlContent(of: url, accessURL: accessURL)
             }
+        }
+
+        func reloaded(with accessURL: URL? = nil) -> PodspecFile {
+            PodspecFile(url: url, accessURL: accessURL ?? self.accessURL, requireAccessing: true)
         }
     }
 

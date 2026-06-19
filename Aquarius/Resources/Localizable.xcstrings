@@ -596,6 +596,54 @@
         }
       }
     },
+    "Grant Access" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grant Access"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授权"
+          }
+        }
+      }
+    },
+    "Grant Podspec Access" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grant Podspec Access"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授权 Podspec 访问"
+          }
+        }
+      }
+    },
+    "Grant Project Folder Access" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grant Project Folder Access"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授权项目目录"
+          }
+        }
+      }
+    },
     "Hidden" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -678,6 +726,22 @@
         }
       }
     },
+    "Load All Paths" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load All Paths"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载全部路径"
+          }
+        }
+      }
+    },
     "Load podspec content failed." : {
       "localizations" : {
         "en" : {
@@ -694,18 +758,18 @@
         }
       }
     },
-    "Load podspec content failed.\nSorry, you do not have permission to access the podspec file. Please use the 'Show in Finder' to view the file yourself." : {
+    "Load podspec content failed.\nAquarius does not have permission to access this podspec file. Grant access to the project directory to view the content." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Failed to load podspec content.\nYou don’t have permission to access the podspec file. Use Show in Finder to open it."
+            "value" : "Failed to load podspec content.\nAquarius does not have permission to access this podspec file. Grant access to the project directory to view the content."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "读取 Podspec 内容失败\n抱歉，当前没有 Podspec 文件的访问权限，请使用“在文件夹中显示”功能自行打开文件。"
+            "value" : "读取 Podspec 内容失败\nAquarius 当前没有这个 Podspec 文件的访问权限。授权项目目录后即可查看内容。"
           }
         }
       }
@@ -722,22 +786,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加载中"
-          }
-        }
-      }
-    },
-    "Load All Paths" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Load All Paths"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "加载全部路径"
           }
         }
       }

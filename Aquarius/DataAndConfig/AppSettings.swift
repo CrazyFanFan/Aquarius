@@ -38,6 +38,7 @@ final class AppSettings: ObservableObject, @unchecked Sendable {
     @AppStorage("newListStyle") var useNewListStyle: Bool = false
 
     @AppStorage("repoBookMark") var repoBookMark: [URL: Data] = [:]
+    @AppStorage("podspecAccessBookmarks") var podspecAccessBookmarks: [URL: Data] = [:]
 
     private init() {}
 }

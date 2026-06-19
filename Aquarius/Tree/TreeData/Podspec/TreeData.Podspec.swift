@@ -116,18 +116,42 @@ private extension TreeData {
             podspecCache[pod.name] = podspec
         }
         self.podspec = podspec
-        self.isPodspecViewShow = true
+        isPodspecViewShow = true
     }
 
     nonisolated static func localPodspec(_ path: String, name: String, lockFileURL: URL) -> PodspecInfo {
+        let projectURL = lockFileURL
+            .deletingLastPathComponent()
+            .resolvingSymlinksInPath()
         let newURL = lockFileURL
             .deletingLastPathComponent()
             .appendingPathComponent(path)
             .appendingPathComponent("\(name).podspec")
             .resolvingSymlinksInPath()
 
-        // TODO requireAccessing
-        return .local(.init(url: newURL, requireAccessing: true))
+        func resolvedBookmark(containing url: URL) -> URL? {
+            let bookmarks = AppSettings.shared.podspecAccessBookmarks
+            for (bookmarkURL, bookmark) in bookmarks {
+                guard url.isDescendant(of: bookmarkURL),
+                      let resolved = BookmarkTool.resolve(bookmark) else {
+                    continue
+                }
+
+                if let refreshedBookmark = resolved.refreshedBookmark {
+                    AppSettings.shared.podspecAccessBookmarks[bookmarkURL] = refreshedBookmark
+                }
+
+                return resolved.url
+            }
+
+            return nil
+        }
+
+        return .local(.init(
+            url: newURL,
+            accessURL: resolvedBookmark(containing: newURL) ?? projectURL,
+            requireAccessing: true
+        ))
     }
 
     nonisolated static func gitPodspec(_ config: [String: String], checkoutOption: [String: String]?) -> PodspecInfo? {
@@ -204,7 +228,7 @@ private extension TreeData {
 
     /// Find podspec in repo
     nonisolated static func findPod(_ pod: Pod, in repoURL: URL) -> URL? {
-        guard let version = Self.normalized(version: pod.info?.version) else {
+        guard let version = normalized(version: pod.info?.version) else {
             return nil
         }
 
@@ -232,7 +256,7 @@ private extension TreeData {
 
     /// Find repo in repos root dir
     nonisolated static func findRepoURL(at repoRootURL: URL, with repoGitURLString: String) -> URL? {
-        guard let tmpSubDirectories = Self.subDirectories(of: repoRootURL), !tmpSubDirectories.isEmpty else { return nil }
+        guard let tmpSubDirectories = subDirectories(of: repoRootURL), !tmpSubDirectories.isEmpty else { return nil }
 
         let url = repoGitURLString.lowercased()
         if let repo = tmpSubDirectories.first(where: { Self.check(repo: $0, matchGitURL: url) }) { return repo }
@@ -328,5 +352,18 @@ private extension TreeData {
         }
 
         return nil
+    }
+}
+
+private extension URL {
+    func isDescendant(of directoryURL: URL) -> Bool {
+        let pathComponents = standardizedFileURL.pathComponents
+        let directoryPathComponents = directoryURL.standardizedFileURL.pathComponents
+
+        guard pathComponents.count >= directoryPathComponents.count else {
+            return false
+        }
+
+        return zip(pathComponents, directoryPathComponents).allSatisfy(==)
     }
 }

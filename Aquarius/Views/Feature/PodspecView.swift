@@ -11,10 +11,15 @@ struct PodspecView: View {
     @Environment(\.presentationMode) var presentationMode
 
     var podspec: TreeData.PodspecInfo?
+    @State private var reloadedPodspec: TreeData.PodspecInfo?
+
+    private var currentPodspec: TreeData.PodspecInfo? {
+        reloadedPodspec ?? podspec
+    }
 
     var body: some View {
         Group {
-            switch podspec {
+            switch currentPodspec {
             case .none:
                 Text("Empty")
                     .toolbar {
@@ -39,7 +44,7 @@ struct PodspecView: View {
         .frame(
             minWidth: 700,
             maxWidth: 700,
-            minHeight: 350,
+            minHeight: 500,
             maxHeight: 700,
             alignment: .center
         )
@@ -51,23 +56,38 @@ private extension PodspecView {
         VStack(alignment: .leading) {
             HStack {
                 Text(spec.url.path)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
 
             Divider()
 
             switch spec.content {
             case let .content(contents):
-                ScrollView {
-                    Text(contents)
-                        .textSelection(.enabled)
-                }
+                highlightedPodspecContents(contents)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             case let .error(error):
                 Group {
-                    Text(error).foregroundColor(.close)
+                    Text(error)
+                        .foregroundColor(.close)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     QLPreview(url: spec.url)
                 }
+            case let .permissionRequired(message):
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(message)
+                        .foregroundColor(.close)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+
+                    Button("Grant Project Folder Access") {
+                        grantAccess(for: spec)
+                    }
+
+                    QLPreview(url: spec.url)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .toolbar {
             ToolbarItemGroup(placement: .automatic) {
                 Button("Copy path") {
@@ -146,6 +166,51 @@ private extension PodspecView {
 
             localView(for: spec.podspecFile)
         }
+    }
+
+    @ViewBuilder
+    func highlightedPodspecContents(_ contents: String) -> some View {
+        if contents.firstNonWhitespace == "{" || contents.firstNonWhitespace == "[" {
+            JSONHighlightedText(contents: contents)
+        } else {
+            RubyDSLHighlightedText(contents: contents)
+        }
+    }
+
+    func grantAccess(for spec: TreeData.PodspecFile) {
+        let podspecDirectoryURL = spec.url.deletingLastPathComponent()
+        guard let selectedURL = DiskAccessHelper.requireReadAccess(
+            of: podspecDirectoryURL,
+            directoryURL: spec.accessURL ?? podspecDirectoryURL,
+            title: NSLocalizedString("Grant Podspec Access", comment: ""),
+            prompt: NSLocalizedString("Grant Access", comment: ""),
+            allowsEnclosingDirectory: true
+        ) else {
+            return
+        }
+
+        guard let bookmark = BookmarkTool.bookmark(for: selectedURL) else {
+            return
+        }
+
+        AppSettings.shared.podspecAccessBookmarks[selectedURL] = bookmark
+        let reloadedSpec = spec.reloaded(with: selectedURL)
+
+        switch currentPodspec {
+        case let .repo(repoSpec):
+            reloadedPodspec = .repo(.init(
+                repoGitString: repoSpec.repoGitString,
+                podspecFile: reloadedSpec
+            ))
+        default:
+            reloadedPodspec = .local(reloadedSpec)
+        }
+    }
+}
+
+private extension String {
+    var firstNonWhitespace: Character? {
+        first { !$0.isWhitespace }
     }
 }
 

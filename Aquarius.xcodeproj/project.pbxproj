@@ -11,6 +11,9 @@
 		0DF83352560332CFE6F11993A311C9C3 /* GlobalState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31C0D31171741D4D80905B5C97528737 /* GlobalState.swift */; };
 		18B2CD5C6ED2823429A420200D412D3E /* NodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76EB096455D84CCC0B81786C92F611C8 /* NodeView.swift */; };
 		1E3E1494E17845CECFB79617A326409F /* PodspecView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */; };
+		64A1C0A12E1B4C2D0000B004 /* JSONHighlightedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A1C0A12E1B4C2D0000A004 /* JSONHighlightedText.swift */; };
+		64A1C0A12E1B4C2D0000B005 /* RubyDSLHighlightedText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A1C0A12E1B4C2D0000A005 /* RubyDSLHighlightedText.swift */; };
+		64A1C0A12E1B4C2D0000B006 /* HighlightedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A1C0A12E1B4C2D0000A006 /* HighlightedTextView.swift */; };
 		2E5171C21EFAA76463F7149B2BB75DEC /* README_CN.md in Resources */ = {isa = PBXBuildFile; fileRef = 7AA331021A9A32BDF804E477A2DE02DA /* README_CN.md */; };
 		320306E38D46E9057798768D8AA5A891 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1951EF075364A96ECB20A7F6BB2D5994 /* Persistence.swift */; };
 		33CDFC27ACD4BC44840A03E3BCCC65F0 /* Aquarius.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 02FA363A9E65F76535E065C4CCB348E6 /* Aquarius.xcdatamodeld */; };
@@ -86,6 +89,9 @@
 		64A1C0A12E1B4C2D0000A001 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		64A1C0A12E1B4C2D0000A002 /* AppSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSession.swift; sourceTree = "<group>"; };
 		64A1C0A12E1B4C2D0000A003 /* TreeDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeDataStore.swift; sourceTree = "<group>"; };
+		64A1C0A12E1B4C2D0000A004 /* JSONHighlightedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONHighlightedText.swift; sourceTree = "<group>"; };
+		64A1C0A12E1B4C2D0000A005 /* RubyDSLHighlightedText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RubyDSLHighlightedText.swift; sourceTree = "<group>"; };
+		64A1C0A12E1B4C2D0000A006 /* HighlightedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightedTextView.swift; sourceTree = "<group>"; };
 		6B8F5A52192C95321FB019A5F85A046A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		76B5BFD9BFDE193F60E5F0F787A55CB5 /* Details.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		76EB096455D84CCC0B81786C92F611C8 /* NodeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NodeView.swift; sourceTree = "<group>"; };
@@ -165,6 +171,9 @@
 		639694DD2CC9424E00DA3AF6 /* Feature */ = {
 			isa = PBXGroup;
 			children = (
+				64A1C0A12E1B4C2D0000A006 /* HighlightedTextView.swift */,
+				64A1C0A12E1B4C2D0000A004 /* JSONHighlightedText.swift */,
+				64A1C0A12E1B4C2D0000A005 /* RubyDSLHighlightedText.swift */,
 				6328D5262D93E2F8001F6CDC /* TreeContent.Copy.swift */,
 				9F21FBD3B73D514CE72E2622F731AFEE /* PodspecView.swift */,
 				639694DF2CC9426A00DA3AF6 /* RelationView.swift */,
@@ -423,6 +432,9 @@
 				46B4872964F3C2FAD610231489467006 /* PodfileLock.swift in Sources */,
 				639694E02CC9426A00DA3AF6 /* RelationView.swift in Sources */,
 				63CF6CBF2A0782ED0082CFE7 /* TreeData.Podspec.Model.swift in Sources */,
+				64A1C0A12E1B4C2D0000B004 /* JSONHighlightedText.swift in Sources */,
+				64A1C0A12E1B4C2D0000B005 /* RubyDSLHighlightedText.swift in Sources */,
+				64A1C0A12E1B4C2D0000B006 /* HighlightedTextView.swift in Sources */,
 				A0A4801B4905C485302DFE8CB9CCD9E3 /* LockFileInfo.swift in Sources */,
 				63969CFC2906D1B3002C76C9 /* NodeViewModifier.swift in Sources */,
 				636182FD292938BB00819F31 /* QLPreview.swift in Sources */,
