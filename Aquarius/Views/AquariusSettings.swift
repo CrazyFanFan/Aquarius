@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AquariusSettings: View {
-    @StateObject var settings: AppSettings
+    @ObservedObject var settings: AppSettings
 
     var body: some View {
         Form {

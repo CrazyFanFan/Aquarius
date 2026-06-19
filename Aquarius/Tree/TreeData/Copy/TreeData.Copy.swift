@@ -16,6 +16,13 @@ private enum Constant {
     static let newline = Data("\n".utf8)
 }
 
+private struct RecursiveCopyFrame {
+    let names: [String]
+    var nextIndex: Int
+    let lastExistingIndex: Int
+    let removesPrefixOnExit: Bool
+}
+
 // MARK: - Data Copy
 
 extension TreeData {
@@ -149,14 +156,34 @@ private extension TreeData {
         }
     }
 
-    nonisolated static func format(names: inout [String]) -> String {
-        if names.isEmpty { return "" }
+    nonisolated static func writeFormatted(names: [String], to context: CopyContext) {
+        guard let last = names.last else { return }
 
-        if names.count == 1 {
-            return "\n└── " + names.joined()
-        } else {
-            let last = names.removeLast()
-            return "\n├── " + names.joined(separator: "\n├── ") + "\n└── " + last
+        for name in names.dropLast() {
+            context.write(Constant.newline)
+            context.write(Constant.tConnector)
+            context.write(name)
+        }
+
+        context.write(Constant.newline)
+        context.write(Constant.lConnector)
+        context.write(last)
+    }
+
+    nonisolated static func lastExistingIndex(in names: [String], nameToPodCache: [String: Pod]) -> Int? {
+        var index = names.count - 1
+        while index >= 0 {
+            if nameToPodCache[names[index]] != nil {
+                return index
+            }
+            index -= 1
+        }
+        return nil
+    }
+
+    nonisolated static func write(_ prefixSegments: [Data], to context: CopyContext) {
+        for segment in prefixSegments {
+            context.write(segment)
         }
     }
 
@@ -176,60 +203,92 @@ private extension TreeData {
             context.write(pod.name)
 
         case .children:
-            var result: String = pod.name
+            context.write(pod.name)
 
-            if var nexts = pod.nextLevel(isImpact) {
-                result += Self.format(names: &nexts)
+            let nexts = pod.nextLevel(isImpact)
+            if !nexts.isEmpty {
+                Self.writeFormatted(names: nexts, to: context)
             }
 
-            context.write(result)
-
         case .recursive:
-            var nodes: [(pod: Pod, current: Data, next: Data)] = [(pod, currentPrefix, nextPrefix)]
-            var processed = 0
+            context.write(currentPrefix)
+            context.write(pod.nameData)
+            context.write(Constant.newline)
 
-            while let (pod, currentPrefix, nextPrefix) = nodes.popLast() {
+            var processed = 1
+            var prefixSegments: [Data] = []
+            prefixSegments.reserveCapacity(64)
+            if !nextPrefix.isEmpty {
+                prefixSegments.append(nextPrefix)
+            }
+
+            let rootNextNames = pod.nextLevel(isImpact)
+            var frames: [RecursiveCopyFrame] = []
+            frames.reserveCapacity(64)
+            if let lastExistingIndex = Self.lastExistingIndex(in: rootNextNames, nameToPodCache: nameToPodCache) {
+                frames.append(.init(
+                    names: rootNextNames,
+                    nextIndex: 0,
+                    lastExistingIndex: lastExistingIndex,
+                    removesPrefixOnExit: false
+                ))
+            }
+
+            while var frame = frames.popLast() {
                 guard !Task.isCancelled else { throw CopyError.cancelled }
 
-                processed += 1
-                context.write(currentPrefix)
-                context.write(pod.nameData)
-                context.write(Constant.newline)
+                var childIndex = frame.nextIndex
+                while childIndex < frame.names.count, nameToPodCache[frame.names[childIndex]] == nil {
+                    childIndex += 1
+                }
 
-                guard let nextNames = pod.nextLevel(isImpact), !nextNames.isEmpty else {
-                    if processed & 0x3FF == 0 { progress?(processed) }
+                guard childIndex < frame.names.count else {
+                    if frame.removesPrefixOnExit {
+                        prefixSegments.removeLast()
+                    }
                     continue
                 }
 
-                var pushedLast = false
-                for name in nextNames.reversed() {
-                    guard let child = nameToPodCache[name] else { continue }
-                    if !pushedLast {
-                        nodes.append((child, nextPrefix + Constant.lConnector, nextPrefix + Constant.lastPrefix))
-                        pushedLast = true
-                    } else {
-                        nodes.append((child, nextPrefix + Constant.tConnector, nextPrefix + Constant.middlePrefix))
-                    }
+                frame.nextIndex = childIndex + 1
+                frames.append(frame)
+
+                let isLast = childIndex == frame.lastExistingIndex
+                let child = nameToPodCache[frame.names[childIndex]]!
+                Self.write(prefixSegments, to: context)
+                context.write(isLast ? Constant.lConnector : Constant.tConnector)
+                context.write(child.nameData)
+                context.write(Constant.newline)
+
+                let childNextNames = child.nextLevel(isImpact)
+                if let childLastExistingIndex = Self.lastExistingIndex(in: childNextNames, nameToPodCache: nameToPodCache) {
+                    prefixSegments.append(isLast ? Constant.lastPrefix : Constant.middlePrefix)
+                    frames.append(.init(
+                        names: childNextNames,
+                        nextIndex: 0,
+                        lastExistingIndex: childLastExistingIndex,
+                        removesPrefixOnExit: true
+                    ))
                 }
 
+                processed += 1
                 if processed & 0x3FF == 0 { progress?(processed) }
             }
 
         case .pruneRecursive:
-            var names = pod.nextLevel(isImpact) ?? []
+            var names = pod.nextLevel(isImpact)
             var visited = Set(names)
             var index = 0
 
             while index < names.count {
-                if let nexts = nameToPodCache[names[index]]?.nextLevel(isImpact) {
-                    for name in nexts where visited.insert(name).inserted {
-                        names.append(name)
-                    }
+                let nexts = nameToPodCache[names[index]]?.nextLevel(isImpact) ?? []
+                for name in nexts where visited.insert(name).inserted {
+                    names.append(name)
                 }
                 index += 1
             }
 
-            context.write(pod.name + Self.format(names: &names))
+            context.write(pod.name)
+            Self.writeFormatted(names: names, to: context)
         }
     }
 }

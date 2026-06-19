@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct NodeView: View {
-    @StateObject var settings: AppSettings
+    @ObservedObject var settings: AppSettings
 
     var node: TreeNode
     var isImpactMode: Bool

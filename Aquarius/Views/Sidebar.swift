@@ -22,11 +22,11 @@ struct Sidebar: View {
     @Query(sort: \LockBookmark.timestamp, order: .forward)
     private var newItems: [LockBookmark]
 
-    @StateObject var settings: AppSettings
-    @StateObject var session: AppSession
-    @StateObject var store: TreeDataStore
+    @ObservedObject var settings: AppSettings
+    @ObservedObject var session: AppSession
 
     @State private var isPresented: Bool = false
+    @State private var didRunInitialUpdate = false
 
     var body: some View {
         List(newItems, id: \.self, selection: $session.selection) {
@@ -47,12 +47,17 @@ struct Sidebar: View {
         }
         .frame(minWidth: 250, alignment: .leading)
         .onAppear {
-            // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
-            migrateFromCoreData()
-            if settings.isBookmarkEnable {
-                session.selection = newItems.first
-            } else {
-                delete(items: Array(newItems))
+            guard !didRunInitialUpdate else { return }
+            didRunInitialUpdate = true
+            Task { @MainActor in
+                await Task.yield()
+                // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+                migrateFromCoreData()
+                if settings.isBookmarkEnable {
+                    session.selection = newItems.first
+                } else {
+                    delete(items: Array(newItems))
+                }
             }
         }
     }
@@ -65,16 +70,7 @@ struct Sidebar: View {
 
 private extension Sidebar {
     func view(for item: LockBookmark) -> some View {
-        NavigationLink {
-            if let data = store.data(for: item) {
-                TreeContent(settings: settings, treeData: data)
-            } else {
-                Text("""
-                    Failed to parse Podfile.lock.
-                    Check the files for conflicts or other formatting exceptions.
-                    """)
-            }
-        } label: {
+        NavigationLink(value: item) {
             Text(item.name ?? "Unknown")
         }
         .contextMenu {
@@ -127,10 +123,10 @@ private extension Sidebar {
 
 struct Sidebar_Previews: PreviewProvider {
     static var previews: some View {
-        Sidebar(settings: .shared, session: .shared, store: .shared)
+        Sidebar(settings: .shared, session: .shared)
     }
 }
 
 #Preview {
-    Sidebar(settings: .shared, session: .shared, store: .shared)
+    Sidebar(settings: .shared, session: .shared)
 }

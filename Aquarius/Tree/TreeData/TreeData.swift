@@ -123,10 +123,10 @@ extension String {
                 guard self.searchKey == snapshot else { return }
                 if snapshot.isEmpty {
                     self.rebuildVisibleNodes(isImpact: self.isImpact)
+                    self.searchSuggestions = []
                 } else {
                     self.loadData(isImpact: self.isImpact, resetIsExpanded: false)
                 }
-                self.loadSearchSuggestions()
             }
         }
     }
@@ -158,7 +158,7 @@ extension String {
     // for show Podspec
     var isPodspecViewShow: Bool = false
     @ObservationIgnored var podspec: PodspecInfo?
-    @ObservationIgnored var podspecCache: [Pod: PodspecInfo] = [:]
+    @ObservationIgnored var podspecCache: [String: PodspecInfo] = [:]
 
     var isSubspeciesShow: Bool {
         didSet {
@@ -284,8 +284,8 @@ private extension TreeData {
         }
     }
 
-    @MainActor func namesToNodes(deep: Int, names: [String]?) -> [TreeNode]? {
-        names?.compactMap { dependence -> TreeNode? in
+    @MainActor func namesToNodes(deep: Int, names: [String]) -> [TreeNode] {
+        names.compactMap { dependence -> TreeNode? in
             if let pod = nameToPodCache[dependence],
                let node = Optional(TreeNode(deep: deep, pod: pod)) {
                 return node
@@ -320,19 +320,16 @@ private extension TreeData {
             resetExpandedState(nodes)
         }
 
-        var tmpNodes = nodes
+        var tmpNodes: [TreeNode]
 
         if !searchKey.isEmpty {
-            let lowerKey = searchKey.lowercased()
-            tmpNodes = nodes.compactMap { node in
-                guard let indices = node.pod.lowercasedName.fuzzyMatch(lowerKey) else { return nil }
-                node.indices = indices
-                return node
-            }
+            tmpNodes = applySearch(searchKey)
         } else {
             for node in nodes {
                 node.indices = nil
             }
+            searchSuggestions = []
+            tmpNodes = nodes
         }
 
         let sortClosure = orderRule.sortClosure(isImpact: isImpact)
@@ -343,6 +340,37 @@ private extension TreeData {
         result.reserveCapacity(tmpNodes.count)
         traverse(tmpNodes, isImpact: isImpact, sortClosure: sortClosure, output: &result)
         showNodes = result
+    }
+
+    @MainActor func applySearch(_ searchKey: String) -> [TreeNode] {
+        let lowerKey = searchKey.lowercased()
+        var matchedNodes: [TreeNode] = []
+        matchedNodes.reserveCapacity(nodes.count)
+        var suggestions: [TreeNode] = []
+        suggestions.reserveCapacity(25)
+        var suggestionOverflow = false
+
+        for node in nodes {
+            guard let indices = node.pod.lowercasedName.fuzzyMatch(lowerKey) else {
+                node.indices = nil
+                continue
+            }
+
+            node.indices = indices
+            matchedNodes.append(node)
+
+            if !suggestionOverflow {
+                if suggestions.count < 25 {
+                    suggestions.append(node)
+                } else {
+                    suggestions.removeAll(keepingCapacity: true)
+                    suggestionOverflow = true
+                }
+            }
+        }
+
+        searchSuggestions = suggestionOverflow ? [] : suggestions
+        return matchedNodes
     }
 
     @MainActor private func traverse(
@@ -426,20 +454,6 @@ private extension TreeData {
         }
     }
 
-    @MainActor func loadSearchSuggestions() {
-        guard !searchKey.isEmpty else {
-            searchSuggestions = []
-            return
-        }
-
-        let lowercasedSearchKey = searchKey.lowercased()
-        let searchSuggestions = nodes.filter { $0.pod.lowercasedName.fuzzyMatch(lowercasedSearchKey) != nil }
-        if searchSuggestions.count <= 25 {
-            self.searchSuggestions = searchSuggestions
-        } else {
-            self.searchSuggestions = []
-        }
-    }
 }
 
 private extension TreeData {
@@ -477,18 +491,10 @@ private extension TreeData {
         case .alphabeticalDescending:
             lhs.pod.name > rhs.pod.name
         case .numberAscending:
-            (lhs.pod.nextLevel(isImpact)?.count ?? 0) < (rhs.pod.nextLevel(isImpact)?.count ?? 0)
+            lhs.pod.nextLevel(isImpact).count < rhs.pod.nextLevel(isImpact).count
         case .numberDescending:
-            !((lhs.pod.nextLevel(isImpact)?.count ?? 0) < (rhs.pod.nextLevel(isImpact)?.count ?? 0))
+            lhs.pod.nextLevel(isImpact).count > rhs.pod.nextLevel(isImpact).count
         }
-    }
-}
-
-private func < (lhs: Int?, rhs: Int?) -> Bool {
-    switch (lhs, rhs) {
-    case (.some, .none), (.none, .none): false
-    case (.none, .some): true
-    case let (.some(lhsValue), .some(rhsValue)): lhsValue < rhsValue
     }
 }
 
@@ -499,8 +505,8 @@ private extension OrderBy {
         switch self {
         case .alphabeticalAscending: { $0.pod.name < $1.pod.name }
         case .alphabeticalDescending: { $0.pod.name > $1.pod.name }
-        case .numberAscending: { $0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count }
-        case .numberDescending: { !($0.pod.nextLevel(isImpact)?.count < $1.pod.nextLevel(isImpact)?.count) }
+        case .numberAscending: { $0.pod.nextLevel(isImpact).count < $1.pod.nextLevel(isImpact).count }
+        case .numberDescending: { $0.pod.nextLevel(isImpact).count > $1.pod.nextLevel(isImpact).count }
         }
     }
 }

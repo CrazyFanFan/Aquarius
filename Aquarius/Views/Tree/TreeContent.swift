@@ -9,8 +9,8 @@
 import SwiftUI
 
 struct TreeContent: View {
-    @State var settings: AppSettings
-    @State var treeData: TreeData
+    @ObservedObject var settings: AppSettings
+    @Bindable var treeData: TreeData
 
     @State private var isFullVersionShow: Bool = false
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PageMenu: View {
-    @State var treeData: TreeData
+    @Bindable var treeData: TreeData
     @State private var isShow: Bool = false
 
     var body: some View {

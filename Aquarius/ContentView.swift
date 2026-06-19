@@ -9,21 +9,22 @@ import CoreData
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var session = AppSession.shared
-    @StateObject private var settings = AppSettings.shared
-    @StateObject private var store = TreeDataStore.shared
+    @ObservedObject private var session = AppSession.shared
+    @ObservedObject private var settings = AppSettings.shared
+    private let store = TreeDataStore.shared
+    @State private var selectedData: TreeData?
 
     var body: some View {
         ZStack {
-            NavigationView {
-                Sidebar(settings: settings, session: session, store: store)
-
-                if let selection = session.selection, let data = store.data(for: selection) {
+            NavigationSplitView {
+                Sidebar(settings: settings, session: session)
+            } detail: {
+                if let data = selectedData {
                     TreeContent(settings: settings, treeData: data)
                 } else {
                     ContentUnavailableView(
                         "Select a Podfile.lock",
-                        image: "paperplane"
+                        systemImage: "paperplane"
                     )
                 }
             }
@@ -35,6 +36,14 @@ struct ContentView: View {
             }
         }
         .modifier(DropModifier(session: session))
+        .task(id: session.selection?.persistentModelID) {
+            guard let selection = session.selection else {
+                selectedData = nil
+                return
+            }
+            selection.refreshBookmarkIfNeeded()
+            selectedData = store.data(for: selection)
+        }
     }
 }
 

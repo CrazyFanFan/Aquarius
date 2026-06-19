@@ -47,7 +47,8 @@ enum NodeViewInfoHelper {
     }
 
      static func more(_ node: TreeNode, isImpactMode: Bool) -> Text {
-         if let count = node.nextCount(isImpactMode) {
+         let count = node.nextCount(isImpactMode)
+         return if count > 0 {
              if node.isExpanded {
                  Text("⇇·(\(count)) ").foregroundColor(.close)
              } else {

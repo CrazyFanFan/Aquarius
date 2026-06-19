@@ -49,7 +49,7 @@ extension TreeData {
             isPodspecViewShow = false
         }
 
-        if let cache = podspecCache[pod] {
+        if let cache = podspecCache[pod.name] {
             show(with: cache, and: nil)
         }
 
@@ -113,7 +113,7 @@ private extension TreeData {
     @MainActor
     func show(with podspec: PodspecInfo, and pod: Pod?) {
         if let pod {
-            podspecCache[pod] = podspec
+            podspecCache[pod.name] = podspec
         }
         self.podspec = podspec
         self.isPodspecViewShow = true
@@ -268,8 +268,13 @@ private extension TreeData {
             let bookmark = await MainActor.run {
                 AppSettings.shared.repoBookMark[cocoapodsRepoRoot]
             }
-            if let data = bookmark, let url = BookmarkTool.url(for: data) {
-                return url.0
+            if let data = bookmark, let resolved = BookmarkTool.resolve(data) {
+                if let refreshedBookmark = resolved.refreshedBookmark {
+                    await MainActor.run {
+                        AppSettings.shared.repoBookMark[cocoapodsRepoRoot] = refreshedBookmark
+                    }
+                }
+                return resolved.url
             }
 
             if let url = await DiskAccessHelper.requireReadAccess(of: cocoapodsRepoRoot) {

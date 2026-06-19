@@ -40,6 +40,7 @@ extension TreeData {
             self.deepMode = deepMode
             self.fileHandle = fileHandle
             self.fileURL = fileURL
+            cache.reserveCapacity(cacheSize)
         }
 
         @inline(__always) private func flushCache(_ append: Data? = nil) {

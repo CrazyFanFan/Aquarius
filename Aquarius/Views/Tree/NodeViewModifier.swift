@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NodeViewModifier: ViewModifier {
-    @State var treeData: TreeData
+    let treeData: TreeData
     var node: TreeNode
 
     @State private var isReleationShow: Bool = false

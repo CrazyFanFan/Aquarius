@@ -8,11 +8,24 @@
 import Foundation
 
 extension LockBookmark {
-    var url: URL? {
-        guard let (url, _) = BookmarkTool.url(for: bookmark) else {
+    func resolvedURL(refreshingStaleBookmark: Bool = false) -> URL? {
+        guard let resolved = BookmarkTool.resolve(bookmark) else {
             return nil
         }
 
-        return url
+        if refreshingStaleBookmark, let refreshedBookmark = resolved.refreshedBookmark {
+            bookmark = refreshedBookmark
+        }
+
+        return resolved.url
+    }
+
+    @discardableResult
+    func refreshBookmarkIfNeeded() -> URL? {
+        resolvedURL(refreshingStaleBookmark: true)
+    }
+
+    var url: URL? {
+        resolvedURL()
     }
 }

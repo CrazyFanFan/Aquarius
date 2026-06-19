@@ -69,13 +69,16 @@ final class DataReader {
     @discardableResult
     private func readPods(from pods: [Any], with lock: inout PodfileLock) -> Bool {
         var predecessors = [String: [String]]()
+        var parsedPods: [Pod] = []
+        parsedPods.reserveCapacity(pods.count)
+
         for content in pods {
             if let string = content as? String {
-                lock.pods.append(Pod(podValue: string))
+                parsedPods.append(Pod(podValue: string))
             } else if let map = content as? [String: [String]] {
                 if let pod = Pod(map: map) {
-                    lock.pods.append(pod)
-                    pod.successors?.forEach { name in
+                    parsedPods.append(pod)
+                    pod.successors.forEach { name in
                         var content = predecessors[name] ?? []
                         content.append(pod.name)
                         predecessors[name] = content
@@ -86,11 +89,14 @@ final class DataReader {
             }
         }
 
-        for arg in predecessors {
-            if let index = lock.pods.firstIndex(where: { $0.name == arg.key }) {
-                lock.pods[index].predecessors = arg.value
+        lock.pods = parsedPods.map { pod in
+            if let predecessors = predecessors[pod.name] {
+                Pod(name: pod.name, info: pod.info, successors: pod.successors, predecessors: predecessors)
+            } else {
+                pod
             }
         }
+
         return true
     }
 
@@ -102,52 +108,43 @@ final class DataReader {
             return name
         }
 
-        let pods = lock.pods.map { $0.copy() }.reduce(into: [String: Pod]()) { partialResult, pod in
-            if let index = pod.name.firstIndex(of: "/") {
-                let name = rootName(of: pod.name, splitIndex: index)
-
-                let mainPod = partialResult[name] ?? pod
-
-                if !partialResult.keys.contains(name) {
-                    pod.name = rootName(of: pod.name)
-                    partialResult[name] = mainPod
-                }
-
-                var successors = mainPod.successors ?? []
-                var predecessors = mainPod.predecessors ?? []
-
-                if let subspeciesSuccessors = pod.successors {
-                    successors.append(contentsOf: subspeciesSuccessors)
-                }
-
-                if let subspeciesPredecessors = pod.predecessors {
-                    predecessors.append(contentsOf: subspeciesPredecessors)
-                }
-
-                mainPod.successors = successors
-                mainPod.predecessors = predecessors
-
-            } else {
-                partialResult[pod.name] = pod
-            }
+        struct PodAggregate {
+            var info: Pod.Info?
+            var hasRootInfo = false
+            var successors: [String] = []
+            var predecessors: [String] = []
         }
-        .values
-        .sorted(by: { $0.name < $1.name })
 
-        func removeDuplicates(_ strings: [String], podName: String) -> [String]? {
+        let aggregates = lock.pods.reduce(into: [String: PodAggregate]()) { partialResult, pod in
+            let name = rootName(of: pod.name)
+            let isRootPod = name == pod.name
+            var aggregate = partialResult[name] ?? PodAggregate(info: pod.info)
+
+            if isRootPod || (!aggregate.hasRootInfo && aggregate.info == nil) {
+                aggregate.info = pod.info
+                aggregate.hasRootInfo = isRootPod
+            }
+
+            aggregate.successors.append(contentsOf: pod.successors)
+            aggregate.predecessors.append(contentsOf: pod.predecessors)
+            partialResult[name] = aggregate
+        }
+
+        func removeDuplicates(_ strings: [String], podName: String) -> [String] {
             var names = Set(strings.map { rootName(of: $0) })
             names.remove(podName)
-            return names.isEmpty ? nil : names.sorted()
+            return names.sorted()
         }
 
-        for index in pods.indices {
-            if let successors = pods[index].successors {
-                pods[index].successors = removeDuplicates(successors, podName: pods[index].name)
-            }
-            if let predecessors = pods[index].predecessors {
-                pods[index].predecessors = removeDuplicates(predecessors, podName: pods[index].name)
-            }
+        let pods = aggregates.map { name, aggregate in
+            Pod(
+                name: name,
+                info: aggregate.info,
+                successors: removeDuplicates(aggregate.successors, podName: name),
+                predecessors: removeDuplicates(aggregate.predecessors, podName: name)
+            )
         }
+        .sorted(by: { $0.name < $1.name })
 
         var lock = lock
         lock.pods = pods

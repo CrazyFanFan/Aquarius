@@ -16,7 +16,7 @@ struct DropModifier: ViewModifier {
     @Query(sort: \LockBookmark.timestamp, order: .forward)
     private var items: [LockBookmark]
 
-    @StateObject var session: AppSession
+    @ObservedObject var session: AppSession
     @State private var isTargeted: Bool = false
 
     private static let supportType = UTType.fileURL
@@ -81,7 +81,9 @@ private extension DropModifier {
                       return
                   }
 
-            addItem(with: url)
+            Task { @MainActor in
+                addItem(with: url)
+            }
         }
         return true
     }

@@ -31,37 +31,37 @@ extension Pod {
 }
 
 final class Pod {
-    var name: String
-    lazy var nameData: Data = .init(name.utf8)
-    var lowercasedName: String
-    var info: Info?
-    var successors: [String]?
-    var predecessors: [String]?
+    let name: String
+    let nameData: Data
+    let lowercasedName: String
+    let info: Info?
+    let successors: [String]
+    let predecessors: [String]
 
-    init(podValue: String) {
-        (name, info) = Self.format(podValue: podValue)
+    init(name: String, info: Info?, successors: [String] = [], predecessors: [String] = []) {
+        self.name = name
+        nameData = .init(name.utf8)
         lowercasedName = name.lowercased()
+        self.info = info
+        self.successors = successors
+        self.predecessors = predecessors
     }
 
-    init?(map: [String: [String]]) {
+    convenience init(podValue: String) {
+        let (name, info) = Self.format(podValue: podValue)
+        self.init(name: name, info: info)
+    }
+
+    convenience init?(map: [String: [String]]) {
         if let podValue = map.keys.first {
-            (name, info) = Self.format(podValue: podValue)
-            successors = map[podValue]?.map { Self.format(podValue: $0).name }
+            let (name, info) = Self.format(podValue: podValue)
+            let successors = map[podValue, default: []].map { Self.format(podValue: $0).name }
+            self.init(name: name, info: info, successors: successors)
         } else {
             return nil
         }
-        lowercasedName = name.lowercased()
     }
 
-    func copy() -> Pod {
-        let new = Pod(podValue: name)
-
-        new.info = info
-        new.successors = successors
-        new.predecessors = predecessors
-
-        return new
-    }
 }
 
 extension Pod: Hashable {
@@ -96,7 +96,7 @@ private extension Pod {
 }
 
 extension Pod {
-    func nextLevel(_ isImpactMode: Bool) -> [String]? {
+    func nextLevel(_ isImpactMode: Bool) -> [String] {
         isImpactMode ? predecessors : successors
     }
 }

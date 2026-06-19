@@ -60,7 +60,7 @@ enum DisplaySectionGroupType: String, Hashable {
         self.pods = pods
         self.nameToPodCache = nameToPodCache
         nameToSuccessors = nameToPodCache.reduce(into: [:]) { partialResult, pair in
-            partialResult[pair.key] = pair.value.successors ?? []
+            partialResult[pair.key] = pair.value.successors
         }
 
         loadData()
@@ -225,12 +225,12 @@ private extension RelationTreeData {
             if let associatedPods {
                 tmpShowNodes = associatedPods
             } else {
-                func associatedPods(start: Pod, keyPath: KeyPath<Pod, [String]?>) -> [Pod] {
+                func collectAssociatedPods(start: Pod, keyPath: KeyPath<Pod, [String]>) -> [Pod] {
                     var result = Set(arrayLiteral: start)
                     var nexts = [start]
 
                     while !nexts.isEmpty {
-                        let nextNames = Set(nexts.compactMap { $0[keyPath: keyPath] }.flatMap { $0 })
+                        let nextNames = Set(nexts.flatMap { $0[keyPath: keyPath] })
                             .subtracting(result.map(\.name))
 
                         if nextNames.isEmpty {
@@ -245,9 +245,10 @@ private extension RelationTreeData {
                 }
 
                 tmpShowNodes = [
-                    (.successors, associatedPods(start: start, keyPath: \.successors)),
-                    (.predecessors, associatedPods(start: start, keyPath: \.predecessors))
+                    (.successors, collectAssociatedPods(start: start, keyPath: \.successors)),
+                    (.predecessors, collectAssociatedPods(start: start, keyPath: \.predecessors))
                 ]
+                associatedPods = tmpShowNodes
             }
         } else {
             tmpShowNodes = [(.all, pods)]

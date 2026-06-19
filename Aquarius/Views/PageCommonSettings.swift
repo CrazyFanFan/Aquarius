@@ -16,7 +16,8 @@ struct PageCommonSettings: View {
         Group {
             Picker("Sort by:", selection: $orderRule) {
                 ForEach(OrderBy.allCases, id: \.self) { rule in
-                    Text("\(Image(systemName: "arrow.down")) \(rule.rawValue)").tag(rule)
+                    Label(rule.rawValue, systemImage: rule.systemImage)
+                        .tag(rule)
                 }
             }
 

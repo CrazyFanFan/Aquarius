@@ -19,6 +19,7 @@
       "shouldTranslate" : false
     },
     "%@ %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

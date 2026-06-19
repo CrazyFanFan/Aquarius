@@ -20,4 +20,13 @@ enum OrderBy: String, CaseIterable {
     case alphabeticalDescending = "Z → A"
     case numberAscending = "0 → 9"
     case numberDescending = "9 → 0"
+
+    var systemImage: String {
+        switch self {
+        case .alphabeticalAscending, .numberAscending:
+            "arrow.up"
+        case .alphabeticalDescending, .numberDescending:
+            "arrow.down"
+        }
+    }
 }
