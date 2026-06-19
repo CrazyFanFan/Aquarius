@@ -15,8 +15,8 @@ A tool to obtain dependencies by analyzing "Podfile.lock"
 
 ## Environment
 
-- Xcode: version ≥ Xcode16 (Task.detached)
-- OSX: version ≥ 15.0
+- Xcode: version ≥ 26.3
+- macOS: version ≥ 14.0
 
 ## Preview
 
@@ -39,6 +39,29 @@ open Aquarius.xcodeproj
 Crazy凡, [ccrazyfan@gmail.com](mailto:ccrazyfan@gmail.com)
 
 ## ChangeLog
+
+### [2026-06-20]
+
+- **Feature**
+  - Add Podspec access guidance and syntax highlighting.
+  - Improve relation view with better layout, localization, and path loading.
+- **Optimize**
+  - Improve tree rendering, search, pathfinding, and tree copy performance.
+  - Reduce memory use when copying recursive trees.
+  - Modernize SwiftUI navigation and startup data flow.
+  - Improve CoreData to SwiftData migration safety.
+  - Show errors when opening or dropping unsupported files.
+  - Use lightweight copy success toasts with automatic dismissal.
+  - Rename predecessor tree to reverse dependencies.
+  - Update the required Xcode version to 26.3.
+  - Update the Xcode project group structure.
+- **Fix**
+  - Resolve Yams update issues and async task races.
+  - Defer startup state updates to avoid initial state conflicts.
+  - Reuse the main window and select the opened Podfile.lock when opening files from the command line.
+  - Fix fuzzy matching behavior.
+  - Update English localizations and typo fixes.
+  - Correctly show the cancellation error when copying is cancelled.
 
 ### [2025-03-26]
 
