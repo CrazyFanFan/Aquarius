@@ -13,6 +13,7 @@ struct TreeContent: View {
     @Bindable var treeData: TreeData
 
     @State private var isFullVersionShow: Bool = false
+    @State private var relationNode: TreeNode?
 
     var body: some View {
 #if DEBUG
@@ -52,6 +53,16 @@ private extension TreeContent {
         .sheet(isPresented: $treeData.isPodspecViewShow) {
             PodspecView(podspec: treeData.podspec)
         }
+        .sheet(item: $relationNode) { node in
+            RelationView(
+                pod: node.pod,
+                data: .init(
+                    start: node.pod,
+                    pods: treeData.lock?.pods ?? [],
+                    nameToPodCache: treeData.nameToPodCache
+                )
+            )
+        }
         .searchable(text: $treeData.searchKey) {
             if !treeData.searchSuggestions.isEmpty {
                 ForEach(treeData.searchSuggestions, id: \.self) { node in
@@ -73,7 +84,9 @@ private extension TreeContent {
                     isImpactMode: treeData.isImpact,
                     isIgnoreNodeDeep: settings.isIgnoreNodeDeep
                 )
-                .modifier(NodeViewModifier(treeData: treeData, node: node))
+                .modifier(NodeViewModifier(treeData: treeData, node: node) {
+                    relationNode = $0
+                })
             }
 
             TableColumn("Version") { node in
@@ -81,7 +94,6 @@ private extension TreeContent {
             }
             .width(ideal: 60, max: 220)
         }
-        .animation(.linear, value: treeData.showNodes)
     }
 
     /// Single column
@@ -96,7 +108,9 @@ private extension TreeContent {
             ) {
                 ForEach(treeData.showNodes) { node in
                     NodeView(settings: settings, node: node, isImpactMode: self.treeData.isImpact)
-                        .modifier(NodeViewModifier(treeData: treeData, node: node))
+                        .modifier(NodeViewModifier(treeData: treeData, node: node) {
+                            relationNode = $0
+                        })
                 }
             }
             .padding(5)

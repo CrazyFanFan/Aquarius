@@ -267,6 +267,12 @@
     },
     "Copy (Prune)" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy (Prune)"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
@@ -720,6 +726,22 @@
         }
       }
     },
+    "Load All Paths" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Load All Paths"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "加载全部路径"
+          }
+        }
+      }
+    },
     "Location of cache file" : {
       "localizations" : {
         "en" : {
@@ -780,6 +802,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "没有关联"
+          }
+        }
+      }
+    },
+    "No matching paths" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No matching paths"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有匹配路径"
+          }
+        }
+      }
+    },
+    "No Modules" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No modules"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有匹配组件"
           }
         }
       }
@@ -963,6 +1017,70 @@
         }
       }
     },
+    "Search Modules" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Modules"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索组件"
+          }
+        }
+      }
+    },
+    "Search Paths" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search Paths"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搜索路径"
+          }
+        }
+      }
+    },
+    "Select a Module" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a Module"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "选择组件"
+          }
+        }
+      }
+    },
+    "Select a module on the left to inspect its connection with %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a module on the left to inspect its connection with %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请在左侧选择一个组件，查看它与 %@ 的关联。"
+          }
+        }
+      }
+    },
     "Select a Podfile.lock" : {
       "localizations" : {
         "en" : {
@@ -975,6 +1093,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请选择一个 Podfile.lock"
+          }
+        }
+      }
+    },
+    "Shortest Depth" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shortest Depth"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最短深度"
           }
         }
       }
@@ -1030,10 +1164,32 @@
     },
     "Show Related Nodes Only" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Related Nodes Only"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "仅展示关联结点"
+          }
+        }
+      }
+    },
+    "Showing the first %lld shortest paths. Use search to narrow the result." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Showing the first %lld shortest paths. Use search to narrow the result."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅展示前 %lld 条最短路径。可使用搜索缩小结果范围。"
           }
         }
       }
@@ -1067,6 +1223,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "排序"
+          }
+        }
+      }
+    },
+    "Subgraph Edges" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subgraph Edges"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "子图边数"
+          }
+        }
+      }
+    },
+    "Subgraph Nodes" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subgraph Nodes"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "子图节点"
           }
         }
       }
@@ -1141,7 +1329,7 @@
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
+            "state" : "translated",
             "value" : "The connection between **%1$@** and **%2$@** is as follows"
           }
         },
@@ -1181,6 +1369,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "共计: %lld"
+          }
+        }
+      }
+    },
+    "Total: %lld / %lld path(s)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total: %1$lld / %2$lld path(s)"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共计: %1$lld / %2$lld 路径"
           }
         }
       }

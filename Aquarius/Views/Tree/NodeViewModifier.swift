@@ -10,8 +10,7 @@ import SwiftUI
 struct NodeViewModifier: ViewModifier {
     let treeData: TreeData
     var node: TreeNode
-
-    @State private var isReleationShow: Bool = false
+    let onShowRelation: (TreeNode) -> Void
 
     func body(content: Self.Content) -> some View {
         content
@@ -23,16 +22,6 @@ struct NodeViewModifier: ViewModifier {
                 menus(node.pod)
             }
             .frame(maxWidth: .infinity)
-            .sheet(isPresented: $isReleationShow) {
-                RelationView(
-                    pod: node.pod,
-                    data: .init(
-                        start: node.pod,
-                        pods: treeData.lock?.pods ?? [],
-                        nameToPodCache: treeData.nameToPodCache
-                    )
-                )
-            }
     }
 }
 
@@ -70,7 +59,7 @@ private extension NodeViewModifier {
             Divider()
             Text("Relation Management").font(.headline)
             Button("Relation") {
-                isReleationShow.toggle()
+                onShowRelation(node)
             }
         }
     }
