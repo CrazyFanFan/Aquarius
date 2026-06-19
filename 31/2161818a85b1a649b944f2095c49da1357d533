@@ -1,0 +1,55 @@
+Aquarius/Tree/TreeData/Copy/TreeData.Copy.swift
+  s_f8396a64f1bc8c::t_0b89b719b91c97 81,88-90
+  s_f8396a64f1bc8c::t_4c8a461a4e5d4b 103
+Aquarius/Views/Tree/TreeContent.swift
+  s_f8396a64f1bc8c::t_13bbe44af3a6d0 12
+  s_f8396a64f1bc8c::t_19c918d08c983c 13
+  s_f8396a64f1bc8c::t_b16ad2b72f2ee3 43
+  s_f8396a64f1bc8c::t_be614ed6092706 55-59
+Aquarius/Views/Tree/NodeViewModifier.swift
+  s_f8396a64f1bc8c::t_c576953ae89477 69
+Aquarius/Views/Sidebar.swift
+  s_f8396a64f1bc8c::t_b5d5b1224221ed 12,16,52,98,100-102,105-107,116-118,120-126
+  s_f8396a64f1bc8c::t_acb15153ac6c63 55
+Aquarius/Resources/Localizable.xcstrings
+  s_f8396a64f1bc8c::t_b7c9e9e107a5dc 104-117,939-952,1505-1518
+  s_f8396a64f1bc8c::t_261416a2c5b187 377,383,389,1520-1536,1549
+  s_f8396a64f1bc8c::t_ea4c3e02ed7f5e 507,1002,1078
+  s_f8396a64f1bc8c::t_f7e35f23e5fad6 556
+  s_f8396a64f1bc8c::t_82e93218b6aa58 1008
+  s_f8396a64f1bc8c::t_4bb5c77349ba55 1089,1095
+  s_f8396a64f1bc8c::t_9544206379e08a 1537
+Aquarius/Views/Feature/TreeContent.Copy.swift
+  s_f8396a64f1bc8c::t_7b3b211a8fdd6a 11-12,64-66,75-76,121,123
+  s_f8396a64f1bc8c::t_1df740d0b0543f 13-15,17,19-21,63
+  s_f8396a64f1bc8c::t_39978cf2a0e0fd 16,18
+  s_f8396a64f1bc8c::t_b9c56efb1fbc69 22,27,31,37,106,119
+  s_f8396a64f1bc8c::t_9b7712ba01d3d0 67,69,72-74,77-89,91-93,95,98,107,120
+  s_f8396a64f1bc8c::t_e77b36b3bb54e3 68,70,90,102-105,108
+  s_f8396a64f1bc8c::t_b17547cf2ba394 71
+  s_f8396a64f1bc8c::t_96d09914831eb1 94,96
+Aquarius/AquariusApp.swift
+  s_f8396a64f1bc8c::t_1c88a01b86f018 16
+  s_f8396a64f1bc8c::t_7e0fceed6ec9a5 18
+Aquarius/Views/DropModifier.swift
+  s_f8396a64f1bc8c::t_878a843408200a 20,33-37,42-52,54-58,66,92-96,98-101,109-111
+  s_f8396a64f1bc8c::t_e3a2b4a175a994 60-61,85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "312161818a85b1a649b944f2095c49da1357d533",
+  "prompts": {},
+  "sessions": {
+    "s_f8396a64f1bc8c": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a3573d8ff331508eefce84a",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": null
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
