@@ -34,8 +34,6 @@ struct Sidebar: View {
         }
         .listStyle(SidebarListStyle())
         .toolbar {
-            Spacer()
-            Button(action: toggleSidebar, label: { Image(systemName: "sidebar.left") })
             Button {
                 isPresented.toggle()
             } label: {
@@ -60,11 +58,6 @@ struct Sidebar: View {
                 }
             }
         }
-    }
-
-    func toggleSidebar() {
-        NSApp.keyWindow?.firstResponder?
-            .tryToPerform(#selector(NSSplitViewController.toggleSidebar(_:)), with: nil)
     }
 }
 
