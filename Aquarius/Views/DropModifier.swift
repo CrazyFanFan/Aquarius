@@ -5,7 +5,6 @@
 //  Created by Crazy凡 on 2022/10/23.
 //
 
-import CoreData
 import SwiftData
 import SwiftUI
 import UniformTypeIdentifiers
@@ -18,6 +17,7 @@ struct DropModifier: ViewModifier {
 
     @ObservedObject var session: AppSession
     @State private var isTargeted: Bool = false
+    @State private var errorMessage: String?
 
     private static let supportType = UTType.fileURL
 
@@ -30,18 +30,40 @@ struct DropModifier: ViewModifier {
         ) {
             loadPath(from: $0)
         }
+        .alert("Unable to Open File", isPresented: errorPresented) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(errorMessage ?? "")
+        }
     }
 }
 
 private extension DropModifier {
+    var errorPresented: Binding<Bool> {
+        Binding(
+            get: { errorMessage != nil },
+            set: { isPresented in
+                if !isPresented {
+                    errorMessage = nil
+                }
+            }
+        )
+    }
+
     func addItem(with url: URL) {
+        guard url.lastPathComponent == "Podfile.lock" else {
+            errorMessage = "Please open a Podfile.lock file."
+            return
+        }
+
         withAnimation {
-            if items.contains(where: { $0.url?.absoluteString == url.absoluteString }) {
+            if let existingItem = items.first(where: { $0.url?.absoluteString == url.absoluteString }) {
+                session.selection = existingItem
                 return
             }
 
             guard let bookmark = BookmarkTool.bookmark(for: url) else {
-                // tod, show error.
+                errorMessage = "Aquarius could not get permission to access this file."
                 return
             }
 
@@ -60,16 +82,23 @@ private extension DropModifier {
             items.last?.next = newItem.id
 
             swiftDataViewContext.insert(newItem)
+            session.selection = newItem
         }
     }
 }
 
 private extension DropModifier {
     private func loadPath(from items: [NSItemProvider]) -> Bool {
-        guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else { return false }
+        guard let item = items.first(where: { $0.canLoadObject(ofClass: URL.self) }) else {
+            errorMessage = "The dropped item is not a file URL."
+            return false
+        }
+
         item.loadItem(forTypeIdentifier: Self.supportType.identifier, options: nil) { data, error in
-            if error != nil {
-                // TODO error
+            if let error {
+                Task { @MainActor in
+                    errorMessage = error.localizedDescription
+                }
                 return
             }
 
@@ -77,7 +106,9 @@ private extension DropModifier {
                   let urlString = String(data: urlData, encoding: .utf8),
                   let url = URL(string: urlString),
                   url.lastPathComponent == "Podfile.lock" else {
-                      // TODO error
+                      Task { @MainActor in
+                          errorMessage = "Please drop a Podfile.lock file."
+                      }
                       return
                   }
 

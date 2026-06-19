@@ -66,7 +66,7 @@ private extension NodeViewModifier {
 
     @MainActor
     func copy(with pod: Pod, and type: TreeData.CopyingStrategy) {
-        treeData.cancelCurrentCopyTask()
+        treeData.cancelCurrentCopyTask(reportsCancellation: false)
         treeData.startCopyStatus(with: pod, and: type)
     }
 }

@@ -13,9 +13,9 @@ struct AquariusApp: App {
     let persistenceController = PersistenceController.shared
 
     var body: some Scene {
-        WindowGroup(id: "main") {
+        Window("Aquarius", id: "main") {
             ContentView()
-                // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+                // TODO: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .modelContainer(for: LockBookmark.self)
                  #if DEBUG

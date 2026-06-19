@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct TreeContent: View {
+    @Environment(\.colorScheme) var colorScheme
+
     @ObservedObject var settings: AppSettings
     @Bindable var treeData: TreeData
 
@@ -38,7 +40,7 @@ struct TreeContent: View {
 private extension TreeContent {
     @MainActor func mainContent() -> some View {
         VStack {
-            tips().animation(.easeInOut, value: treeData.copyResult)
+            blockingTips().animation(.easeInOut, value: treeData.copyResult)
 
             PageMenu(treeData: treeData) // Top operation bar
 
@@ -49,6 +51,11 @@ private extension TreeContent {
             } else {
                 singleColumn()
             }
+        }
+        .overlay(alignment: .top) {
+            floatingTips()
+                .padding(.top, 8)
+                .animation(.easeInOut, value: treeData.copyResult)
         }
         .sheet(isPresented: $treeData.isPodspecViewShow) {
             PodspecView(podspec: treeData.podspec)

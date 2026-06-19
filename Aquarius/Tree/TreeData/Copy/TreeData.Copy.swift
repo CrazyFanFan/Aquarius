@@ -78,13 +78,16 @@ extension TreeData {
         copyMode = nil
     }
 
-    @MainActor func cancelCurrentCopyTask() {
+    @MainActor func cancelCurrentCopyTask(reportsCancellation: Bool = true) {
         copyTask?.cancel()
         copyTask = nil
         copyProgressTask?.cancel()
         copyProgressTask = nil
         copyToken = UUID()
         resetCopyStatus()
+        if reportsCancellation {
+            copyResult = .cancelled
+        }
     }
 }
 
@@ -97,7 +100,7 @@ private extension TreeData {
         progress: (@Sendable (Int) -> Void)?
     ) -> CopyResult {
         var context: CopyContext?
-        lazy var defaultErrorMessage = String(format: String(localized: "Faile to create tree of %@"), pod.name)
+        lazy var defaultErrorMessage = String(format: String(localized: "Failed to create tree of %@"), pod.name)
 
         do {
             let treeURL = try Utils.cacheFile()

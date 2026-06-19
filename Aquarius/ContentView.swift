@@ -49,7 +49,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+    // TODO: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
         .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
         .modelContainer(for: LockBookmark.self)
 #if DEBUG

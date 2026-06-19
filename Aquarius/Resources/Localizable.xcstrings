@@ -100,6 +100,22 @@
         }
       }
     },
+    "Aquarius" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquarius"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aquarius"
+          }
+        }
+      }
+    },
     "Automatic" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -358,19 +374,19 @@
         }
       }
     },
-    "Copy failed! 😢 " : {
+    "Copy Failed" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy failed."
+            "value" : "Copy Failed"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制失败！ 😢"
+            "value" : "复制失败"
           }
         }
       }
@@ -488,7 +504,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "依赖于"
+            "value" : "依赖项"
           }
         }
       }
@@ -537,7 +553,7 @@
         }
       }
     },
-    "Faile to create tree of %@" : {
+    "Failed to create tree of %@" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -919,6 +935,22 @@
         }
       }
     },
+    "OK" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "确定"
+          }
+        }
+      }
+    },
     "Open" : {
       "localizations" : {
         "zh-Hans" : {
@@ -967,13 +999,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Predecessors"
+            "value" : "Reverse Dependencies"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "影响树"
+            "value" : "反向依赖树"
           }
         }
       }
@@ -1043,7 +1075,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "被依赖"
+            "value" : "依赖方"
           }
         }
       }
@@ -1054,13 +1086,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copied to the clipboard."
+            "value" : "Copied."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制结果已经写到剪贴板"
+            "value" : "复制成功"
           }
         }
       }
@@ -1469,7 +1501,40 @@
         }
       }
     },
-    "User cancel copy!" : {
+    "Unable to Open File" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unable to Open File"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法打开文件"
+          }
+        }
+      }
+    },
+    "Saved to Cache File" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved to Cache File"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已写入缓存文件"
+          }
+        }
+      }
+    },
+    "Copy cancelled" : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
@@ -1481,7 +1546,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "用户取消了复制！"
+            "value" : "已取消复制"
           }
         }
       }

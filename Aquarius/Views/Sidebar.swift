@@ -9,11 +9,11 @@ import SwiftData
 import SwiftUI
 
 struct Sidebar: View {
-    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+    // TODO: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.modelContext) private var swiftDataViewContext
 
-    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+    // TODO: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Lock.timestamp, ascending: true)],
         animation: .default
@@ -49,10 +49,10 @@ struct Sidebar: View {
             didRunInitialUpdate = true
             Task { @MainActor in
                 await Task.yield()
-                // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+                // TODO: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
                 migrateFromCoreData()
                 if settings.isBookmarkEnable {
-                    session.selection = newItems.first
+                    session.selection = session.selection ?? newItems.first
                 } else {
                     delete(items: Array(newItems))
                 }
@@ -95,10 +95,16 @@ private extension Sidebar {
         }
     }
 
-    // TOOD: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
+    // TODO: CoreData 迁移到 SwiftData 的代码，未来某一天应该删除
     private func migrateFromCoreData() {
+        let existingIDs = Set(newItems.map(\.id))
+        var migratedLocks: [Lock] = []
+
         for lock in items {
             guard let bookmark = lock.bookmark, let id = lock.id, let timestamp = lock.timestamp else { continue }
+            migratedLocks.append(lock)
+
+            guard !existingIDs.contains(id) else { continue }
             swiftDataViewContext.insert(LockBookmark(
                 bookmark: bookmark,
                 id: id,
@@ -107,10 +113,18 @@ private extension Sidebar {
                 previous: lock.previous,
                 timestamp: timestamp
             ))
-
-            viewContext.delete(lock)
         }
-        try? viewContext.save()
+
+        guard !migratedLocks.isEmpty else { return }
+
+        do {
+            try swiftDataViewContext.save()
+            migratedLocks.forEach(viewContext.delete)
+            try viewContext.save()
+        } catch {
+            swiftDataViewContext.rollback()
+            viewContext.rollback()
+        }
     }
 }
 
