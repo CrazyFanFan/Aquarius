@@ -10,9 +10,17 @@ import SwiftUI
 
 struct RubyDSLHighlightedText: View {
     let contents: String
+    var searchText = ""
+    var searchNavigationToken = 0
+    var searchNavigationDirection = 1
 
     var body: some View {
-        HighlightedTextView(attributedString: highlightedRubyDSL)
+        HighlightedTextView(
+            attributedString: highlightedRubyDSL,
+            searchText: searchText,
+            searchNavigationToken: searchNavigationToken,
+            searchNavigationDirection: searchNavigationDirection
+        )
     }
 
     private var highlightedRubyDSL: NSAttributedString {

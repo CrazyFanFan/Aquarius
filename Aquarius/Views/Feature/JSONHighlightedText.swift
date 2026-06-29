@@ -11,9 +11,17 @@ import SwiftUI
 
 struct JSONHighlightedText: View {
     let contents: String
+    var searchText = ""
+    var searchNavigationToken = 0
+    var searchNavigationDirection = 1
 
     var body: some View {
-        HighlightedTextView(attributedString: highlightedJSON ?? HighlightedTextStyle.plain(contents))
+        HighlightedTextView(
+            attributedString: highlightedJSON ?? HighlightedTextStyle.plain(contents),
+            searchText: searchText,
+            searchNavigationToken: searchNavigationToken,
+            searchNavigationDirection: searchNavigationDirection
+        )
     }
 
     private var highlightedJSON: NSAttributedString? {

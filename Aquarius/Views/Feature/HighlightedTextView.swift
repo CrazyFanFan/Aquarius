@@ -11,10 +11,22 @@ import SwiftUI
 struct HighlightedTextView: NSViewRepresentable {
     let attributedString: NSAttributedString
     let wrapsLines: Bool
+    let searchText: String
+    let searchNavigationToken: Int
+    let searchNavigationDirection: Int
 
-    init(attributedString: NSAttributedString, wrapsLines: Bool = true) {
+    init(
+        attributedString: NSAttributedString,
+        wrapsLines: Bool = true,
+        searchText: String = "",
+        searchNavigationToken: Int = 0,
+        searchNavigationDirection: Int = 1
+    ) {
         self.attributedString = attributedString
         self.wrapsLines = wrapsLines
+        self.searchText = searchText
+        self.searchNavigationToken = searchNavigationToken
+        self.searchNavigationDirection = searchNavigationDirection
     }
 
     func makeCoordinator() -> Coordinator {
@@ -50,18 +62,28 @@ struct HighlightedTextView: NSViewRepresentable {
 
         configureWrapping(for: textView, in: scrollView)
 
-        guard context.coordinator.renderedAttributedString?.isEqual(to: attributedString) != true else {
-            return
+        let didUpdateContent = context.coordinator.renderedAttributedString?.isEqual(to: attributedString) != true
+        if didUpdateContent {
+            let selectedRanges = textView.selectedRanges
+            textView.textStorage?.setAttributedString(attributedString)
+            textView.selectedRanges = selectedRanges.filter { range in
+                let nsRange = range.rangeValue
+                return nsRange.location != NSNotFound &&
+                    nsRange.location + nsRange.length <= attributedString.length
+            }
+            context.coordinator.renderedAttributedString = attributedString
         }
 
-        let selectedRanges = textView.selectedRanges
-        textView.textStorage?.setAttributedString(attributedString)
-        textView.selectedRanges = selectedRanges.filter { range in
-            let nsRange = range.rangeValue
-            return nsRange.location != NSNotFound &&
-                nsRange.location + nsRange.length <= attributedString.length
+        let didUpdateSearch = context.coordinator.searchText != searchText
+        let didNavigate = context.coordinator.searchNavigationToken != searchNavigationToken
+        if didUpdateContent || didUpdateSearch || didNavigate {
+            applySearch(
+                in: textView,
+                coordinator: context.coordinator,
+                navigates: didNavigate && !didUpdateSearch,
+                direction: searchNavigationDirection
+            )
         }
-        context.coordinator.renderedAttributedString = attributedString
     }
 
     private func configureWrapping(for textView: NSTextView, in scrollView: NSScrollView) {
@@ -84,6 +106,79 @@ struct HighlightedTextView: NSViewRepresentable {
 
     final class Coordinator {
         var renderedAttributedString: NSAttributedString?
+        var searchText = ""
+        var searchNavigationToken = 0
+        var selectedMatchIndex = 0
+        var matchRanges: [NSRange] = []
+    }
+}
+
+private extension HighlightedTextView {
+    static var searchHighlightColor: NSColor {
+        NSColor.systemYellow.withAlphaComponent(0.35)
+    }
+
+    static var selectedSearchHighlightColor: NSColor {
+        NSColor.systemOrange.withAlphaComponent(0.45)
+    }
+
+    func applySearch(in textView: NSTextView, coordinator: Coordinator, navigates: Bool, direction: Int) {
+        let fullRange = NSRange(location: 0, length: attributedString.length)
+        textView.textStorage?.removeAttribute(.backgroundColor, range: fullRange)
+
+        let didClearSearch = !coordinator.searchText.isEmpty && searchText.isEmpty
+        coordinator.searchText = searchText
+        coordinator.searchNavigationToken = searchNavigationToken
+        coordinator.matchRanges = searchRanges(in: textView.string, searchText: searchText)
+
+        guard !coordinator.matchRanges.isEmpty else {
+            coordinator.selectedMatchIndex = 0
+            if didClearSearch {
+                textView.setSelectedRange(NSRange(location: 0, length: 0))
+            }
+            return
+        }
+
+        if navigates {
+            let offset = direction >= 0 ? 1 : -1
+            coordinator.selectedMatchIndex = (
+                coordinator.selectedMatchIndex + offset + coordinator.matchRanges.count
+            ) % coordinator.matchRanges.count
+        } else {
+            coordinator.selectedMatchIndex = 0
+        }
+
+        for range in coordinator.matchRanges {
+            textView.textStorage?.addAttribute(
+                .backgroundColor,
+                value: Self.searchHighlightColor,
+                range: range
+            )
+        }
+
+        let selectedRange = coordinator.matchRanges[coordinator.selectedMatchIndex]
+        textView.textStorage?.addAttribute(
+            .backgroundColor,
+            value: Self.selectedSearchHighlightColor,
+            range: selectedRange
+        )
+        textView.setSelectedRange(selectedRange)
+        textView.scrollRangeToVisible(selectedRange)
+    }
+
+    func searchRanges(in string: String, searchText: String) -> [NSRange] {
+        guard !searchText.isEmpty else {
+            return []
+        }
+
+        var ranges: [NSRange] = []
+        var start = string.startIndex
+        while start < string.endIndex,
+              let range = string[start...].range(of: searchText, options: [.caseInsensitive, .diacriticInsensitive]) {
+            ranges.append(NSRange(range, in: string))
+            start = range.upperBound < string.endIndex ? range.upperBound : string.endIndex
+        }
+        return ranges
     }
 }
 
