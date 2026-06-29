@@ -111,7 +111,7 @@ extension TreeContent {
                         NSWorkspace.shared.open(url)
                     }
 
-                    Button("Show in finder") {
+                    Button("Show in Finder") {
                         NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
                     }
                 }

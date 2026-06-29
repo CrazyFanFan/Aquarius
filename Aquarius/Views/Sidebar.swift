@@ -74,12 +74,12 @@ private extension Sidebar {
                 }
             }
 
-            Button("Copy path") {
+            Button("Copy Path") {
                 Pasteboard.write(item.url?.path ?? "")
             }
 
             if let url = item.url {
-                Button("Show in finder") {
+                Button("Show in Finder") {
                     NSWorkspace.shared.selectFile(url.path, inFileViewerRootedAtPath: "")
                 }
             }

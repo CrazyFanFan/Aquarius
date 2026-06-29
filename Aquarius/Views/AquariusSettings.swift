@@ -14,7 +14,7 @@ struct AquariusSettings: View {
         Form {
             Section {
                 Toggle("Bookmark", isOn: $settings.isBookmarkEnable) // 书签
-                Toggle("Ignore Last Modified time", isOn: $settings.isIgnoreLastModificationDate) // 忽略最后修改时间
+                Toggle("Ignore Modification Date", isOn: $settings.isIgnoreLastModificationDate) // 忽略修改时间
 
                 Picker("Indentation", selection: $settings.isIgnoreNodeDeep) { // 缩进
                     ForEach([true, false], id: \.self) {
@@ -22,7 +22,7 @@ struct AquariusSettings: View {
                     }
                 }
 
-                Picker("Location of cache file", selection: $settings.locationOfCacheFile) { // 缓存路径
+                Picker("Cache Location", selection: $settings.locationOfCacheFile) { // 缓存位置
                     ForEach(LocationOfCacheFile.allCases, id: \.rawValue) {
                         text($0 == .system, ("gear", $0.rawValue.capitalized), ("app", $0.rawValue.capitalized), $0)
                     }
@@ -56,10 +56,9 @@ struct AquariusSettings: View {
                     .foregroundColor(.secondary)
             } footer: {
                 Text("""
-                    This is the default setting that will be followed
-                    when a new file is opened.
-                    The Settings on the details page will override the
-                    global Settings, but killing the app will lose this.
+                    These are the defaults used when you open a new file.
+                    Changes made on the details page won't modify the global settings.
+                    Detail-page changes reset when you quit the app.
                     """
                 )
                 .font(.footnote)
@@ -68,11 +67,11 @@ struct AquariusSettings: View {
 
             Divider()
 
-            Button("Clean the cache") {
+            Button("Clear Cache") {
                 Utils.clear()
             }
 
-            Button("Open the cache directory") {
+            Button("Open Cache Folder") {
                 Utils.openTheCacheDirectory()
             }
         }

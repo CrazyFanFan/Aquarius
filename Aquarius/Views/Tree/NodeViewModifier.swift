@@ -35,10 +35,10 @@ private extension NodeViewModifier {
         typealias MenuItem = (name: String, type: TreeData.CopyingStrategy)
 
         let menus: [MenuItem] = [
-            ("Copy", TreeData.CopyingStrategy.nameOnly),
-            ("Copy child nodes", .children),
-            ("Copy child nodes (Recursive)", .recursive),
-            ("Copy child nodes (Recursive, Prune)", .pruneRecursive)
+            ("Copy Name", TreeData.CopyingStrategy.nameOnly),
+            ("Copy Direct Dependencies", .children),
+            ("Copy Dependency Tree", .recursive),
+            ("Copy Deduplicated Dependencies", .pruneRecursive)
         ]
 
         return Group {
@@ -57,8 +57,8 @@ private extension NodeViewModifier {
             }
 
             Divider()
-            Text("Relation Management").font(.headline)
-            Button("Relation") {
+            Text("Dependency Analysis").font(.headline)
+            Button("Show Dependency Paths") {
                 onShowRelation(node)
             }
         }

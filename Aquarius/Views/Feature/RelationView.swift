@@ -205,7 +205,7 @@ private extension RelationView {
                 Pasteboard.write(data.paths.map { $0.joined(separator: "\n") }.joined(separator: "\n- - - - - -\n"))
             }
 
-            Button("Copy (Prune)") {
+            Button("Copy Deduplicated") {
                 Pasteboard.write(
                     data.paths
                         .reduce(into: Set<String>()) { $0.formUnion($1) }
@@ -270,7 +270,7 @@ private extension RelationView {
             ProgressView("Loading")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if data.paths.isEmpty {
-            ContentUnavailableView("No connection", systemImage: "point.3.connected.trianglepath.dotted")
+            ContentUnavailableView("No dependency path found", systemImage: "point.3.connected.trianglepath.dotted")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else if filteredPaths.isEmpty {
             ContentUnavailableView("No matching paths", systemImage: "magnifyingglass")

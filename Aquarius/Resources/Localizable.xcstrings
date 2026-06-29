@@ -18,61 +18,7 @@
       },
       "shouldTranslate" : false
     },
-    "%@ %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$@ %2$@"
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
     "%lld" : {
-      "shouldTranslate" : false
-    },
-    "⇇·(%lld) " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⇇·(%lld) "
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
-    "⇉·(%lld) " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "⇉·(%lld) "
-          }
-        }
-      },
-      "shouldTranslate" : false
-    },
-    "=·(0) " : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "=·(0) "
-          }
-        }
-      },
       "shouldTranslate" : false
     },
     "All Modules" : {
@@ -152,6 +98,9 @@
         }
       }
     },
+    "Branch" : {
+
+    },
     "Branch: %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -170,6 +119,7 @@
       }
     },
     "Branch: %@, Commit: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -181,6 +131,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分支: %1$@, 提交: %2$@"
+          }
+        }
+      }
+    },
+    "Cache Location" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cache Location"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "缓存位置"
           }
         }
       }
@@ -202,12 +168,12 @@
         }
       }
     },
-    "Clean the cache" : {
+    "Clear Cache" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Clear cache"
+            "value" : "Clear Cache"
           }
         },
         "zh-Hans" : {
@@ -251,7 +217,11 @@
         }
       }
     },
+    "Commit" : {
+
+    },
     "Commit: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -280,22 +250,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "复制"
-          }
-        }
-      }
-    },
-    "Copy (Prune)" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy (Prune)"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "复制(裁剪)"
           }
         }
       }
@@ -333,63 +287,69 @@
         }
       }
     },
-    "Copy child nodes" : {
-      "extractionState" : "manual",
+    "Copy Deduplicated" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy child nodes"
+            "value" : "Copy Deduplicated"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制子节点"
+            "value" : "复制去重结果"
           }
         }
       }
     },
-    "Copy child nodes (Recursive, Prune)" : {
-      "extractionState" : "manual",
+    "Copy Deduplicated Dependencies" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy child nodes (Recursive, Prune)"
+            "value" : "Copy Deduplicated Dependencies"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制子节点(递归、裁剪)"
+            "value" : "复制去重依赖"
           }
         }
       }
     },
-    "Copy child nodes (Recursive)" : {
-      "extractionState" : "manual",
+    "Copy Dependency Tree" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy child nodes (recursive)"
+            "value" : "Copy Dependency Tree"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "复制子节点(递归)"
+            "value" : "复制依赖树"
           }
         }
       }
     },
-    "Copy content" : {
+    "Copy Direct Dependencies" : {
+      "extractionState" : "stale",
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Direct Dependencies"
+          }
+        },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拷贝内容"
+            "value" : "复制直接依赖"
           }
         }
       }
@@ -422,7 +382,24 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拷贝文件内容"
+            "value" : "复制文件内容"
+          }
+        }
+      }
+    },
+    "Copy Name" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Name"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制名称"
           }
         }
       }
@@ -448,23 +425,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拷贝路径"
-          }
-        }
-      }
-    },
-    "Copy path" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy path"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拷贝路径"
+            "value" : "复制路径"
           }
         }
       }
@@ -480,23 +441,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "拷贝仓库地址"
-          }
-        }
-      }
-    },
-    "Copy repo URL" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy repo URL"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "拷贝Repo地址"
+            "value" : "复制仓库地址"
           }
         }
       }
@@ -566,6 +511,22 @@
         }
       }
     },
+    "Dependency Analysis" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dependency Analysis"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "依赖分析"
+          }
+        }
+      }
+    },
     "Dependent Modules" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -607,32 +568,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "将“Podfile.lock”拖到这里"
-          }
-        }
-      }
-    },
-    "Empty" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "空空如也"
-          }
-        }
-      }
-    },
-    "No Podspec Selected" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Podspec Selected"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "未选择 Podspec"
           }
         }
       }
@@ -681,7 +616,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "读取 Podspec 内容失败。\nAquarius 没有读取这个 Podspec 文件的权限。授权项目文件夹后即可预览。"
+            "value" : "读取 Podspec 内容失败。\nAquarius 没有读取此 Podspec 文件的权限。授权访问项目文件夹后即可预览。"
           }
         }
       }
@@ -702,17 +637,8 @@
         }
       }
     },
-    "Git: %@" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Git: %@"
-          }
-        }
-      }
-    },
     "Git Source" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -724,6 +650,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Git 源"
+          }
+        }
+      }
+    },
+    "Git: %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Git: %@"
           }
         }
       }
@@ -771,7 +708,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "授权文件夹访问"
+            "value" : "授权访问文件夹"
           }
         }
       }
@@ -788,22 +725,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "授权 Podspec 访问"
-          }
-        }
-      }
-    },
-    "Grant Project Folder Access" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Grant Project Folder Access"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "授权项目目录"
           }
         }
       }
@@ -842,18 +763,18 @@
         }
       }
     },
-    "Ignore Last Modified time" : {
+    "Ignore Modification Date" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ignore modification date"
+            "value" : "Ignore Modification Date"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "忽略最后修改时间"
+            "value" : "忽略修改时间"
           }
         }
       }
@@ -906,38 +827,6 @@
         }
       }
     },
-    "Load podspec content failed." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Failed to load podspec content."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "读取 Podspec 内容失败"
-          }
-        }
-      }
-    },
-    "Load podspec content failed.\nAquarius does not have permission to access this podspec file. Grant access to the project directory to view the content." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Failed to load podspec content.\nAquarius does not have permission to access this podspec file. Grant access to the project directory to view the content."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "读取 Podspec 内容失败\nAquarius 当前没有这个 Podspec 文件的访问权限。授权项目目录后即可查看内容。"
-          }
-        }
-      }
-    },
     "Loading" : {
       "localizations" : {
         "en" : {
@@ -950,22 +839,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "加载中"
-          }
-        }
-      }
-    },
-    "Location of cache file" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cache path"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "缓存"
           }
         }
       }
@@ -987,6 +860,7 @@
       }
     },
     "No branch tag or commit specified, automatic checkout commit: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1002,18 +876,18 @@
         }
       }
     },
-    "No connection" : {
+    "No dependency path found" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "No connection found."
+            "value" : "No dependency path found"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "没有关联"
+            "value" : "未找到依赖路径"
           }
         }
       }
@@ -1050,6 +924,22 @@
         }
       }
     },
+    "No Podspec Selected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Podspec Selected"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未选择 Podspec"
+          }
+        }
+      }
+    },
     "Nodes" : {
       "localizations" : {
         "en" : {
@@ -1061,7 +951,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "结点"
+            "value" : "节点"
           }
         }
       }
@@ -1109,18 +999,18 @@
         }
       }
     },
-    "Open the cache directory" : {
+    "Open Cache Folder" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Open cache folder"
+            "value" : "Open Cache Folder"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开缓存目录"
+            "value" : "打开缓存文件夹"
           }
         }
       }
@@ -1137,6 +1027,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "路径: %1$lld, 节点数: %2$lld  (↓)"
+          }
+        }
+      }
+    },
+    "Podspec preview is not available for Git sources." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podspec preview is not available for Git sources."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂不支持预览 Git 源中的 Podspec。"
           }
         }
       }
@@ -1191,31 +1097,8 @@
         }
       }
     },
-    "Relation" : {
-      "localizations" : {
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "关联"
-          }
-        }
-      }
-    },
-    "Relation Management" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Relation Management"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "关联查询"
-          }
-        }
-      }
+    "Repository" : {
+
     },
     "Requiring Modules" : {
       "extractionState" : "manual",
@@ -1224,6 +1107,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "依赖方"
+          }
+        }
+      }
+    },
+    "Resolved Commit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resolved Commit"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解析到的 Commit"
           }
         }
       }
@@ -1290,22 +1189,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "搜索路径"
-          }
-        }
-      }
-    },
-    "Resolved Commit" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Resolved Commit"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "解析后的 Commit"
           }
         }
       }
@@ -1386,23 +1269,23 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "展示"
+            "value" : "显示"
           }
         }
       }
     },
-    "Show in finder" : {
+    "Show Dependency Paths" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Show in Finder"
+            "value" : "Show Dependency Paths"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "在文件夹中显示"
+            "value" : "查看依赖路径"
           }
         }
       }
@@ -1434,7 +1317,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "展示 Podspec"
+            "value" : "查看 Podspec"
           }
         }
       }
@@ -1450,7 +1333,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅展示关联结点"
+            "value" : "仅显示关联节点"
           }
         }
       }
@@ -1466,7 +1349,7 @@
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅展示前 %lld 条最短路径。可使用搜索缩小结果范围。"
+            "value" : "仅显示前 %lld 条最短路径。可使用搜索缩小结果范围。"
           }
         }
       }
@@ -1586,7 +1469,11 @@
         }
       }
     },
+    "Tag" : {
+
+    },
     "Tag: %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1618,18 +1505,18 @@
         }
       }
     },
-    "This is the default setting that will be followed\nwhen a new file is opened.\nThe Settings on the details page will override the\nglobal Settings, but killing the app will lose this." : {
+    "These are the defaults used when you open a new file.\nChanges made on the details page won't modify the global settings.\nDetail-page changes reset when you quit the app." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "These are the defaults used when you open a new file.\nChanges made on the details page won’t modify the global settings.\nDetail-page changes reset when you quit the app."
+            "value" : "These are the defaults used when you open a new file.\nChanges made on the details page won't modify the global settings.\nDetail-page changes reset when you quit the app."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "这里是默认设置，会在首次打开文件时使用.\n在详情页的变更不会覆盖全局设置；\n关闭应用会丢失页面内修改的设置。"
+            "value" : "这些是打开新文件时使用的默认设置。\n详情页中的修改不会覆盖全局设置；退出应用后会重置。"
           }
         }
       }
@@ -1736,38 +1623,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "属性"
-          }
-        }
-      }
-    },
-    "Podspec preview is not available for Git sources." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Podspec preview is not available for Git sources."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暂不支持预览 Git 源中的 Podspec。"
-          }
-        }
-      }
-    },
-    "Viewing PodSpecs in Git sources is not supported currently." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Viewing podspecs from Git sources is not currently supported."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "暂不支持查看Git源中的Podspec。"
           }
         }
       }
