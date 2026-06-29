@@ -24,7 +24,7 @@ struct PodspecView: View {
         Group {
             switch currentPodspec {
             case .none:
-                Text("Empty")
+                Text("No Podspec Selected")
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Close") {
@@ -68,7 +68,7 @@ private extension PodspecView {
     func gitView(for spec: TreeData.GitSpec) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             headerView(
-                title: "Git Podspec",
+                title: "Git Source",
                 subtitle: spec.gitURLString,
                 systemImage: "point.3.connected.trianglepath.dotted"
             )
@@ -83,7 +83,7 @@ private extension PodspecView {
                 case let .tag(tag):
                     metadataRow("Tag", tag)
                 case let .autoCommit(commit):
-                    metadataRow("Auto checkout commit", commit)
+                    metadataRow("Resolved Commit", commit)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -91,7 +91,7 @@ private extension PodspecView {
             Divider()
 
             ContentUnavailableView(
-                "Viewing PodSpecs in Git sources is not supported currently.",
+                "Podspec preview is not available for Git sources.",
                 systemImage: "doc.text.magnifyingglass"
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -99,7 +99,7 @@ private extension PodspecView {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .toolbar {
             ToolbarItemGroup(placement: .automatic) {
-                Button("Copy path") {
+                Button("Copy Path") {
                     Pasteboard.write(spec.gitURLString)
                 }
             }
@@ -124,7 +124,7 @@ private extension PodspecView {
 
     func podspecDetailView(
         file spec: TreeData.PodspecFile,
-        source: (title: String, value: String)? = nil,
+        source: (title: LocalizedStringKey, value: String)? = nil,
         copyRepoURLAction: (() -> Void)? = nil
     ) -> some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -146,23 +146,23 @@ private extension PodspecView {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .toolbar {
             ToolbarItemGroup(placement: .automatic) {
-                Button("Copy path") {
+                Button("Copy Path") {
                     Pasteboard.write(spec.url.path)
                 }
 
                 if let copyRepoURLAction {
-                    Button("Copy repo URL") {
+                    Button("Copy Repository URL") {
                         copyRepoURLAction()
                     }
                 }
 
                 if case let .content(contents) = spec.content {
-                    Button("Copy content") {
+                    Button("Copy File Contents") {
                         Pasteboard.write(contents)
                     }
                 }
 
-                Button("Show in finder") {
+                Button("Show in Finder") {
                     NSWorkspace.shared.selectFile(spec.url.path, inFileViewerRootedAtPath: "")
                 }
             }
@@ -198,7 +198,7 @@ private extension PodspecView {
             VStack(alignment: .leading, spacing: 12) {
                 statusMessage(message, systemImage: "lock")
 
-                Button("Grant Project Folder Access") {
+                Button("Grant Folder Access") {
                     grantAccess(for: spec)
                 }
 
@@ -233,7 +233,7 @@ private extension PodspecView {
         }
     }
 
-    func metadataRow(_ title: String, _ value: String) -> some View {
+    func metadataRow(_ title: LocalizedStringKey, _ value: String) -> some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text(title)
                 .font(.caption)
@@ -314,7 +314,7 @@ private extension PodspecView {
                             .foregroundColor(.secondary)
                     }
                     .buttonStyle(.plain)
-                    .help(Text(verbatim: "Clear search"))
+                    .help(Text(verbatim: "Clear Search"))
                 }
             }
             .padding(.horizontal, 8)
@@ -332,7 +332,7 @@ private extension PodspecView {
             .buttonStyle(.borderless)
             .controlSize(.small)
             .disabled(podspecSearchText.isEmpty)
-            .help(Text(verbatim: "Previous match"))
+            .help(Text(verbatim: "Previous Match"))
 
             Button {
                 navigateSearch(direction: 1)
@@ -343,7 +343,7 @@ private extension PodspecView {
             .buttonStyle(.borderless)
             .controlSize(.small)
             .disabled(podspecSearchText.isEmpty)
-            .help(Text(verbatim: "Next match"))
+            .help(Text(verbatim: "Next Match"))
 
         }
         .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)

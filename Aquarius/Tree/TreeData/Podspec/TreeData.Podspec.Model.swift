@@ -48,16 +48,16 @@ extension TreeData {
 
                     guard !requireAccessing || isAcccessing else {
                         return .permissionRequired(NSLocalizedString("""
-                        Load podspec content failed.
-                        Aquarius does not have permission to access this podspec file. \
-                        Grant access to the project directory to view the content.
+                        Failed to load podspec contents.
+                        Aquarius does not have permission to read this podspec file. \
+                        Grant access to the project folder to preview it.
                         """, comment: ""))
                     }
 
                     return try .content(String(contentsOf: url).prettied())
                 } catch {
                     print(error)
-                    return .error(NSLocalizedString("Load podspec content failed.", comment: ""))
+                    return .error(NSLocalizedString("Failed to load podspec contents.", comment: ""))
                 }
             }
 

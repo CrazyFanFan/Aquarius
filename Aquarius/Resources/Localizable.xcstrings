@@ -411,12 +411,44 @@
         }
       }
     },
+    "Copy File Contents" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy File Contents"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷贝文件内容"
+          }
+        }
+      }
+    },
     "Copy Operations" : {
       "localizations" : {
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "复制操作"
+          }
+        }
+      }
+    },
+    "Copy Path" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Path"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷贝路径"
           }
         }
       }
@@ -433,6 +465,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "拷贝路径"
+          }
+        }
+      }
+    },
+    "Copy Repository URL" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Repository URL"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拷贝仓库地址"
           }
         }
       }
@@ -573,6 +621,22 @@
         }
       }
     },
+    "No Podspec Selected" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Podspec Selected"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未选择 Podspec"
+          }
+        }
+      }
+    },
     "Failed to create tree of %@" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -586,6 +650,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%@的依赖树创建失败"
+          }
+        }
+      }
+    },
+    "Failed to load podspec contents." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to load podspec contents."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "读取 Podspec 内容失败。"
+          }
+        }
+      }
+    },
+    "Failed to load podspec contents.\nAquarius does not have permission to read this podspec file. Grant access to the project folder to preview it." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed to load podspec contents.\nAquarius does not have permission to read this podspec file. Grant access to the project folder to preview it."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "读取 Podspec 内容失败。\nAquarius 没有读取这个 Podspec 文件的权限。授权项目文件夹后即可预览。"
           }
         }
       }
@@ -612,6 +708,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Git: %@"
+          }
+        }
+      }
+    },
+    "Git Source" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Git Source"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Git 源"
           }
         }
       }
@@ -644,6 +756,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "授权"
+          }
+        }
+      }
+    },
+    "Grant Folder Access" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grant Folder Access"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "授权文件夹访问"
           }
         }
       }
@@ -1166,6 +1294,22 @@
         }
       }
     },
+    "Resolved Commit" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resolved Commit"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "解析后的 Commit"
+          }
+        }
+      }
+    },
     "Select a Module" : {
       "localizations" : {
         "en" : {
@@ -1259,6 +1403,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在文件夹中显示"
+          }
+        }
+      }
+    },
+    "Show in Finder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show in Finder"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在 Finder 中显示"
           }
         }
       }
@@ -1576,6 +1736,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "属性"
+          }
+        }
+      }
+    },
+    "Podspec preview is not available for Git sources." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Podspec preview is not available for Git sources."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暂不支持预览 Git 源中的 Podspec。"
           }
         }
       }
