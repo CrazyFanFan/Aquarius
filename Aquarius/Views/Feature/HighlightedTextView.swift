@@ -10,20 +10,17 @@ import SwiftUI
 
 struct HighlightedTextView: NSViewRepresentable {
     let attributedString: NSAttributedString
-    let wrapsLines: Bool
     let searchText: String
     let searchNavigationToken: Int
     let searchNavigationDirection: Int
 
     init(
         attributedString: NSAttributedString,
-        wrapsLines: Bool = true,
         searchText: String = "",
         searchNavigationToken: Int = 0,
         searchNavigationDirection: Int = 1
     ) {
         self.attributedString = attributedString
-        self.wrapsLines = wrapsLines
         self.searchText = searchText
         self.searchNavigationToken = searchNavigationToken
         self.searchNavigationDirection = searchNavigationDirection
@@ -38,7 +35,12 @@ struct HighlightedTextView: NSViewRepresentable {
         scrollView.borderType = .noBorder
         scrollView.drawsBackground = false
         scrollView.hasVerticalScroller = true
+        scrollView.hasHorizontalScroller = false
         scrollView.autohidesScrollers = true
+        scrollView.wantsLayer = true
+        scrollView.layer?.masksToBounds = true
+        scrollView.contentView.wantsLayer = true
+        scrollView.contentView.layer?.masksToBounds = true
 
         let textView = NSTextView()
         textView.isEditable = false
@@ -48,9 +50,16 @@ struct HighlightedTextView: NSViewRepresentable {
         textView.allowsUndo = false
         textView.textContainerInset = .zero
         textView.minSize = .zero
+        textView.isHorizontallyResizable = false
         textView.isVerticallyResizable = true
+        textView.autoresizingMask = [.width]
+        textView.textContainer?.widthTracksTextView = true
 
         scrollView.documentView = textView
+        let lineNumberRuler = LineNumberRulerView(textView: textView)
+        scrollView.hasVerticalRuler = true
+        scrollView.rulersVisible = true
+        scrollView.verticalRulerView = lineNumberRuler
         configureWrapping(for: textView, in: scrollView)
         return scrollView
     }
@@ -84,22 +93,17 @@ struct HighlightedTextView: NSViewRepresentable {
                 direction: searchNavigationDirection
             )
         }
+
+        (scrollView.verticalRulerView as? LineNumberRulerView)?.refresh()
     }
 
     private func configureWrapping(for textView: NSTextView, in scrollView: NSScrollView) {
         let wrappingWidth = max(scrollView.contentSize.width, 1)
 
-        scrollView.hasHorizontalScroller = !wrapsLines
-        textView.isHorizontallyResizable = !wrapsLines
-        textView.autoresizingMask = wrapsLines ? [.width] : []
-        textView.textContainer?.widthTracksTextView = wrapsLines
-
-        textView.maxSize = NSSize(
-            width: wrapsLines ? wrappingWidth : CGFloat.greatestFiniteMagnitude,
-            height: CGFloat.greatestFiniteMagnitude
-        )
+        textView.maxSize = NSSize(width: wrappingWidth, height: CGFloat.greatestFiniteMagnitude)
+        textView.frame.size.width = wrappingWidth
         textView.textContainer?.containerSize = NSSize(
-            width: wrapsLines ? wrappingWidth : CGFloat.greatestFiniteMagnitude,
+            width: wrappingWidth,
             height: CGFloat.greatestFiniteMagnitude
         )
     }
@@ -110,6 +114,159 @@ struct HighlightedTextView: NSViewRepresentable {
         var searchNavigationToken = 0
         var selectedMatchIndex = 0
         var matchRanges: [NSRange] = []
+    }
+}
+
+private final class LineNumberRulerView: NSRulerView {
+    private weak var textView: NSTextView?
+
+    private var textAttributes: [NSAttributedString.Key: Any] {
+        [
+            .font: NSFont.monospacedDigitSystemFont(ofSize: NSFont.smallSystemFontSize, weight: .regular),
+            .foregroundColor: NSColor.secondaryLabelColor,
+        ]
+    }
+
+    private var backgroundColor: NSColor {
+        NSColor.secondaryLabelColor.withAlphaComponent(0.07)
+    }
+
+    init(textView: NSTextView) {
+        self.textView = textView
+        super.init(scrollView: textView.enclosingScrollView, orientation: .verticalRuler)
+        clientView = textView
+        updateRuleThickness()
+        observeScrollBounds()
+    }
+
+    @available(*, unavailable)
+    required init(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    func refresh() {
+        updateRuleThickness()
+        needsDisplay = true
+    }
+
+    override func drawHashMarksAndLabels(in rect: NSRect) {
+        backgroundColor.setFill()
+        bounds.fill()
+
+        guard let textView,
+              let layoutManager = textView.layoutManager,
+              let textContainer = textView.textContainer else {
+            return
+        }
+
+        let text = textView.string as NSString
+        guard text.length > 0 else {
+            drawLineNumber(1, lineRect: textView.visibleRect, in: textView)
+            return
+        }
+
+        layoutManager.ensureLayout(for: textContainer)
+
+        let visibleGlyphRange = layoutManager.glyphRange(forBoundingRect: textView.visibleRect, in: textContainer)
+        guard visibleGlyphRange.location != NSNotFound else {
+            return
+        }
+
+        let visibleCharacterRange = layoutManager.characterRange(forGlyphRange: visibleGlyphRange, actualGlyphRange: nil)
+        let visibleLineRange = text.lineRange(for: visibleCharacterRange)
+        var lineStart = visibleLineRange.location
+        var lineNumber = text.lineNumber(at: lineStart)
+
+        while lineStart < NSMaxRange(visibleLineRange), lineStart < text.length {
+            let glyphIndex = layoutManager.glyphIndexForCharacter(at: lineStart)
+            let lineRect = layoutManager.lineFragmentRect(forGlyphAt: glyphIndex, effectiveRange: nil)
+            drawLineNumber(lineNumber, lineRect: lineRect, in: textView)
+
+            var nextLineStart = 0
+            text.getLineStart(nil, end: &nextLineStart, contentsEnd: nil, for: NSRange(location: lineStart, length: 0))
+            guard nextLineStart > lineStart else {
+                break
+            }
+
+            lineStart = nextLineStart
+            lineNumber += 1
+        }
+    }
+
+    private func drawLineNumber(_ lineNumber: Int, lineRect: NSRect, in textView: NSTextView) {
+        let label = "\(lineNumber)" as NSString
+        let labelSize = label.size(withAttributes: textAttributes)
+        let textContainerOrigin = textView.textContainerOrigin
+        let lineOriginInTextView = NSPoint(
+            x: textContainerOrigin.x + lineRect.minX,
+            y: textContainerOrigin.y + lineRect.minY
+        )
+        let lineOrigin = convert(lineOriginInTextView, from: textView)
+        let labelX = max(2, ruleThickness - labelSize.width - 7)
+        let labelY = lineOrigin.y + max(0, (lineRect.height - labelSize.height) / 2)
+
+        label.draw(
+            at: NSPoint(x: labelX, y: labelY),
+            withAttributes: textAttributes
+        )
+    }
+
+    private func updateRuleThickness() {
+        let lineCount = max(1, textView?.string.lineCount ?? 1)
+        let digits = max(2, String(lineCount).count)
+        let sampleLabel = String(repeating: "8", count: digits) as NSString
+        let desiredThickness = ceil(sampleLabel.size(withAttributes: textAttributes).width + 14)
+
+        if abs(ruleThickness - desiredThickness) > 0.5 {
+            ruleThickness = desiredThickness
+        }
+    }
+
+    private func observeScrollBounds() {
+        guard let contentView = scrollView?.contentView else {
+            return
+        }
+
+        contentView.postsBoundsChangedNotifications = true
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(scrollBoundsDidChange(_:)),
+            name: NSView.boundsDidChangeNotification,
+            object: contentView
+        )
+    }
+
+    @objc private func scrollBoundsDidChange(_: Notification) {
+        needsDisplay = true
+    }
+}
+
+private extension NSString {
+    func lineNumber(at location: Int) -> Int {
+        guard location > 0 else {
+            return 1
+        }
+
+        var lineNumber = 1
+        let prefixRange = NSRange(location: 0, length: min(location, length))
+        enumerateSubstrings(in: prefixRange, options: [.byLines, .substringNotRequired]) { _, _, enclosingRange, _ in
+            if NSMaxRange(enclosingRange) <= location {
+                lineNumber += 1
+            }
+        }
+        return lineNumber
+    }
+}
+
+private extension String {
+    var lineCount: Int {
+        reduce(1) { count, character in
+            character == "\n" ? count + 1 : count
+        }
     }
 }
 

@@ -51,10 +51,12 @@ struct PodspecView: View {
         }
         .padding()
         .frame(
-            minWidth: 700,
-            maxWidth: 700,
-            minHeight: 500,
-            maxHeight: 700,
+            minWidth: 900,
+            idealWidth: 1100,
+            maxWidth: 1400,
+            minHeight: 600,
+            idealHeight: 760,
+            maxHeight: 1000,
             alignment: .center
         )
     }
@@ -344,7 +346,6 @@ private extension PodspecView {
             .controlSize(.small)
             .disabled(podspecSearchText.isEmpty)
             .help(Text(verbatim: "Next Match"))
-
         }
         .frame(maxWidth: .infinity, minHeight: 30, alignment: .leading)
     }
